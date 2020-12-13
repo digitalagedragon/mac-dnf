@@ -1,0 +1,6 @@
+{
+    "files.exclude": {
+        "rpmbuild/BUILD": true,
+        "rpmbuild/BUILDROOT": true
+    }
+}
