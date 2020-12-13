@@ -1,5 +1,7 @@
 bootstrap/
-rpmbuild
+rpmbuild/*
 !rpmbuild/SPECS
+!rpmbuild/SOURCES
+rpmbuild/SOURCES/*
 !rpmbuild/SOURCES/*.patch
 repo/

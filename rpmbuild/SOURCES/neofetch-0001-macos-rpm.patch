@@ -1,0 +1,10 @@
+--- neofetch	2020-12-13 10:07:16.000000000 -0800
++++ neofetch	2020-12-13 10:07:51.000000000 -0800
+@@ -1571,6 +1571,7 @@
+             has port  && tot port installed && ((packages-=1))
+             has brew  && dir /usr/local/Cellar/*
+             has pkgin && tot pkgin list
++            has rpm   && tot rpm -qa
+ 
+             has nix-store && {
+                 manager=nix-system && tot nix-store -q --requisites "/run/current-system/sw"

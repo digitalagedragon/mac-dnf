@@ -1,0 +1,11 @@
+--- dnf/util.py	2020-12-13 09:48:26.000000000 -0800
++++ dnf/util.py	2020-12-13 09:48:38.000000000 -0800
+@@ -127,7 +127,7 @@
+ 
+ def am_i_root():
+     # used by ansible (lib/ansible/modules/packaging/os/dnf.py)
+-    return os.geteuid() == 0
++    return True
+ 
+ def clear_dir(path):
+     """Remove all files and dirs under `path`

@@ -1,0 +1,42 @@
+--- libdnf/hy-util.cpp 2020-12-12 22:12:46.000000000 -0800
++++ libdnf/hy-util.cpp	2020-12-12 22:14:06.000000000 -0800
+@@ -24,7 +24,6 @@
+ #include <ctype.h>
+ #include <sys/utsname.h>
+ #include <sys/stat.h>
+-#include <sys/auxv.h>
+ 
+ // hawkey
+ #include "dnf-types.h"
+@@ -101,29 +100,14 @@
+     if (uname(&un) < 0)
+         return DNF_ERROR_FAILED;
+ 
+-    if (!strncmp(un.machine, "armv", 4)) {
+-        /* un.machine is armvXE, where X is version number and E is
+-         * endianness (b or l); we need to add modifiers such as
+-         * h (hardfloat), n (neon). Neon is a requirement of armv8 so
+-         * as far as rpm is concerned armv8l is the equivilent of armv7hnl
+-         * (or 7hnb) so we don't explicitly add 'n' for 8+ as it's expected. */
+-        char endian = un.machine[strlen(un.machine)-1];
+-        char *modifier = un.machine + 5;
+-        while(isdigit(*modifier)) /* keep armv7, armv8, armv9, armv10, armv100, ... */
+-            modifier++;
+-        if (getauxval(AT_HWCAP) & HWCAP_ARM_VFP)
+-            *modifier++ = 'h';
+-        if ((atoi(un.machine+4) == 7) && (getauxval(AT_HWCAP) & HWCAP_ARM_NEON))
+-            *modifier++ = 'n';
+-        *modifier++ = endian;
+-        *modifier = 0;
+-    }
+ #ifdef __MIPSEL__
+     if (!strcmp(un.machine, "mips"))
+         strcpy(un.machine, "mipsel");
+     else if (!strcmp(un.machine, "mips64"))
+         strcpy(un.machine, "mips64el");
+ #endif
++    if (!strcmp(un.machine, "arm64"))
++        strcpy(un.machine, "aarch64");
+     *arch = g_strdup(un.machine);
+     return 0;
+ }

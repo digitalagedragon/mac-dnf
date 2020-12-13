@@ -1,0 +1,47 @@
+--- ./dnf/conf/config.py	2020-12-13 09:51:00.000000000 -0800
++++ ./dnf/conf/config.py	2020-12-13 09:51:37.000000000 -0800
+@@ -218,7 +218,7 @@
+         # setup different cache and log for non-privileged users
+         if dnf.util.am_i_root():
+             cachedir = dnf.const.SYSTEM_CACHEDIR
+-            logdir = '/var/log'
++            logdir = '/usr/local/var/log'
+         else:
+             try:
+                 cachedir = logdir = misc.getCacheDir()
+--- dnf/const.py.in	2020-12-13 09:55:20.000000000 -0800
++++ dnf/const.py.in	2020-12-13 09:56:02.000000000 -0800
+@@ -21,8 +21,8 @@
+ from __future__ import unicode_literals
+ import distutils.sysconfig
+ 
+-CONF_FILENAME='/etc/dnf/dnf.conf' # :api
+-CONF_AUTOMATIC_FILENAME='/etc/dnf/automatic.conf'
++CONF_FILENAME='/usr/local/etc/dnf/dnf.conf' # :api
++CONF_AUTOMATIC_FILENAME='/usr/local/etc/dnf/automatic.conf'
+ DISTROVERPKG=('system-release(releasever)', 'system-release',
+               'distribution-release(releasever)', 'distribution-release',
+               'redhat-release', 'suse-release')
+@@ -38,18 +38,18 @@
+ LOG_MARKER='--- logging initialized ---'
+ LOG_RPM='dnf.rpm.log'
+ NAME='DNF'
+-PERSISTDIR='/var/lib/dnf' # :api
+-PID_FILENAME = '/var/run/dnf.pid'
++PERSISTDIR='/usr/local/var/lib/dnf' # :api
++PID_FILENAME = '/usr/local/var/run/dnf.pid'
+ RUNDIR='/run'
+ USER_RUNDIR='/run/user'
+-SYSTEM_CACHEDIR='/var/cache/dnf'
++SYSTEM_CACHEDIR='/usr/local/var/cache/dnf'
+ TMPDIR='/var/tmp/'
+ # CLI verbose values greater or equal to this are considered "verbose":
+ VERBOSE_LEVEL=6
+ 
+ PREFIX=NAME.lower()
+ PROGRAM_NAME=NAME.lower()  # Deprecated - no longer used, Argparser prints program name based on sys.argv
+-PLUGINCONFPATH = '/etc/dnf/plugins'  # :api
++PLUGINCONFPATH = '/usr/local/etc/dnf/plugins'  # :api
+ PLUGINPATH = '%s/dnf-plugins' % distutils.sysconfig.get_python_lib()
+ VERSION='@DNF_VERSION@'
+ USER_AGENT = "dnf/%s" % VERSION

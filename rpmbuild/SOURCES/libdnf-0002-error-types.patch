@@ -1,0 +1,21 @@
+--- libdnf/goal/Goal.hpp	2020-12-12 22:10:51.000000000 -0800
++++ libdnf/goal/Goal.hpp	2020-12-12 22:11:02.000000000 -0800
+@@ -24,6 +24,7 @@
+ #include <memory>
+ #include <stdexcept>
+ #include <vector>
++#include <string>
+
+ #include "../dnf-types.h"
+ #include "../error.hpp"
+--- bindings/swig/catch_error.i	2020-12-12 22:31:16.000000000 -0800
++++ bindings/swig/catch_error.i	2020-12-12 22:31:25.000000000 -0800
+@@ -7,7 +7,7 @@
+
+ %{
+     #include "libdnf/error.hpp"
+-    extern PyObject* libdnf_error;
++    PyObject* libdnf_error;
+ %}
+
+ %exception {

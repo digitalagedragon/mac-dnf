@@ -1,0 +1,31 @@
+--- libdnf/conf/Const.hpp	2020-12-13 09:43:30.000000000 -0800
++++ libdnf/conf/Const.hpp	2020-12-13 09:43:52.000000000 -0800
+@@ -26,13 +26,13 @@
+ 
+ namespace libdnf {
+ 
+-constexpr const char * PERSISTDIR = "/var/lib/dnf";
+-constexpr const char * SYSTEM_CACHEDIR = "/var/cache/dnf";
++constexpr const char * PERSISTDIR = "/usr/local/var/lib/dnf";
++constexpr const char * SYSTEM_CACHEDIR = "/usr/local/var/cache/dnf";
+ 
+-constexpr const char * CONF_FILENAME = "/etc/dnf/dnf.conf";
++constexpr const char * CONF_FILENAME = "/usr/local/etc/dnf/dnf.conf";
+ 
+ // More important varsdirs must be on the end of vector
+-const std::vector<std::string> VARS_DIRS{"/etc/yum/vars", "/etc/dnf/vars"};
++const std::vector<std::string> VARS_DIRS{"/usr/local/etc/yum/vars", "/usr/local/etc/dnf/vars"};
+ 
+ const std::vector<std::string> GROUP_PACKAGE_TYPES{"mandatory", "default", "conditional"};
+ const std::vector<std::string> INSTALLONLYPKGS{"kernel", "kernel-PAE",
+--- ./libdnf/conf/ConfigMain.cpp	2020-12-13 09:45:19.000000000 -0800
++++ ./libdnf/conf/ConfigMain.cpp	2020-12-13 09:45:47.000000000 -0800
+@@ -187,7 +187,7 @@
+     OptionNumber<std::int32_t> log_rotate{4, 0};
+     OptionBool log_compress{false};
+     OptionStringList varsdir{VARS_DIRS};
+-    OptionStringList reposdir{{"/etc/yum.repos.d", "/etc/yum/repos.d", "/etc/distro.repos.d"}};
++    OptionStringList reposdir{{"/usr/local/etc/yum.repos.d", "/usr/local/etc/yum/repos.d", "/usr/local/etc/distro.repos.d"}};
+     OptionBool debug_solver{false};
+     OptionStringList installonlypkgs{INSTALLONLYPKGS};
+     OptionStringList group_package_types{GROUP_PACKAGE_TYPES};

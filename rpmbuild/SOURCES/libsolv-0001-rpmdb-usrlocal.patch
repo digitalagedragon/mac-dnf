@@ -1,0 +1,14 @@
+--- ext/repo_rpmdb_librpm.h	2020-12-13 09:10:28.000000000 -0800
++++ ext/repo_rpmdb_librpm.h	2020-12-13 09:27:53.000000000 -0800
+@@ -45,9 +44,9 @@
+ static void
+ detect_dbpath(struct rpmdbstate *state)
+ {
+-  state->dbpath = access_rootdir(state, "/var/lib/rpm", W_OK) == -1
++  state->dbpath = access_rootdir(state, "/usr/local/var/lib/rpm", W_OK) == -1
+                   && (access_rootdir(state, "/usr/share/rpm/Packages", R_OK) == 0 || access_rootdir(state, "/usr/share/rpm/rpmdb.sqlite", R_OK) == 0)
+-                  ? "/usr/share/rpm" : "/var/lib/rpm";
++                  ? "/usr/share/rpm" : "/usr/local/var/lib/rpm";
+ }
+ 
+ static int

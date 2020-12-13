@@ -1,0 +1,11 @@
+--- libdnf/hy-iutil.cpp	2020-12-12 22:04:48.000000000 -0800
++++ libdnf/hy-iutil.cpp	2020-12-12 22:04:59.000000000 -0800
+@@ -22,7 +22,7 @@
+ #include <errno.h>
+ #include <dirent.h>
+ #include <fcntl.h>
+-#include <linux/limits.h>
++#include <limits.h>
+ #include <pwd.h>
+ #include <unistd.h>
+ #include <stdio.h>
