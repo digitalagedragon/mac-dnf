@@ -29,6 +29,17 @@ BuildRequires: libjson-c-devel
 BuildRequires: libgpgme-devel
 BuildRequires: libzchunk-devel
 BuildRequires: python-sphinx
+BuildRequires: libmodulemd-devel
+
+Requires:      glib2
+Requires:      libsmartcols
+Requires:      libsolv
+Requires:      librepo
+Requires:      libpython%{system_python}
+Requires:      libjson-c
+Requires:      libgpgme
+Requires:      libzchunk
+Requires:      libmodulemd
 
 %undefine _annotated_build
 %global debug_package %{nil}

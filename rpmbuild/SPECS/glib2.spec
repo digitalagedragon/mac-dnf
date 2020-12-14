@@ -18,6 +18,10 @@ BuildRequires:  xz
 BuildRequires:  meson
 BuildRequires:  ninja-build
 BuildRequires:  libffi-devel
+BuildRequires:  libpcre-devel
+
+Requires:       libpcre
+Requires:       libffi
 
 %description
 

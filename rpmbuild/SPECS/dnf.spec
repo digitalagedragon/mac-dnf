@@ -26,9 +26,10 @@ BuildRequires:  libcomps-devel
 BuildRequires:  cmake
 BuildRequires:  python%{system_python}
 
-Requires:       libdnf
-Requires:       libcomps
 Requires:       rpm
+Requires:       libsolv
+Requires:       libcomps
+Requires:       libdnf
 
 %description
 

@@ -78,6 +78,7 @@ echo "%SHA256SUM0  %SOURCE0" | shasum -a256 -c -
 %install
 %make_install
 
+find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %find_lang util-linux
 
 %files -f util-linux.lang

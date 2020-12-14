@@ -29,6 +29,13 @@ BuildRequires:  xz
 
 Requires:       xz
 Requires:       librpm = %{version}-%{release}
+Requires:       libintl
+Requires:       libmagic
+Requires:       libpopt
+Requires:       libarchive
+Requires:       libsqlite
+Requires:       liblua
+Requires:       libgcrypt
 
 %undefine _annotated_build
 
@@ -85,6 +92,7 @@ cat >%{buildroot}%{_prefix}/lib/rpm/macros.d/macros.macrpm <<EOF
   FCFLAGS="\${FCFLAGS:-%%{?build_fflags}}" ; export FCFLAGS ; \\
   LDFLAGS="\${LDFLAGS:-%%{?build_ldflags}}" ; export LDFLAGS ; \\
   CPPFLAGS=-I%%{_includedir} ; export CPPFLAGS
+%%_invalid_encoding_terminates_build 0
 EOF
 
 echo '%%_prefix /usr/local' >>%{buildroot}%{_prefix}/lib/rpm/platform/%(uname -m | sed -e 's/arm64/aarch64/')-%(uname -s | tr '[:upper:]' '[:lower:]')/macros

@@ -24,7 +24,10 @@ BuildRequires:  libcurl-devel
 BuildRequires:  libzstd-devel
 BuildRequires:  libargp-devel
 
-Requires: libcurl libopenssl
+Requires:       libopenssl
+Requires:       libcurl
+Requires:       libzstd
+Requires:       libargp
 
 %undefine _annotated_build
 %global debug_package %{nil}

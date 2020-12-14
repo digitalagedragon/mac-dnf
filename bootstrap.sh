@@ -184,6 +184,8 @@ unset PKG_CONFIG_PATH
 unset CPPFLAGS
 unset LDFLAGS
 
+REBUILD_PKGS="$PACKAGES"
+
 # now start building with installed rpm
 # important because bootstrap rpm doesn't have working xz
 PACKAGES="cmake libsolv setuptools meson asciidoc ninja-build"
@@ -204,3 +206,30 @@ for pkg in $PACKAGES; do
     }
 done
 
+for pkg in $REBUILD_PKGS; do
+    echo $pkg
+    [ -e ../rpmbuild/SRPMS/"$(/usr/local/bin/rpmspec -q --srpm ../rpmbuild/SPECS/$pkg.spec | sed -E 's|\.[^.]*$||')".src.rpm ] \
+        || /usr/local/bin/rpmbuild -ba ../rpmbuild/SPECS/$pkg.spec
+done
+
+cat > /usr/local/etc/yum.repos.d/local.repo <<EOF
+[local]
+name=local
+baseurl=file:///Users/morgan/src/rpm/repo
+enabled=1
+metadata_expire=1d
+gpgcheck=0
+EOF
+
+cd ..
+mkdir -p repo
+cd repo
+rm -r *
+cp -r ../rpmbuild/RPMS/* .
+createrepo_c .
+dnf makecache
+
+rpm -qa | xargs dnf mark remove
+dnf mark install dnf
+dnf mark install system-release
+dnf autoremove

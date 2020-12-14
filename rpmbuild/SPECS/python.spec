@@ -20,6 +20,8 @@ Requires:       libpython = %{version}-%{release}
 Provides:       python%{pybasever} = %{version}-%{release}
 Provides:       python(abi) = %{pybasever}
 
+Requires:       libintl
+
 # TODO is this stuff even kind of relevant on macOS
 %undefine _annotated_build
 %global debug_package %{nil}

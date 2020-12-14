@@ -11,7 +11,7 @@ Source0:        https://ftp.gnu.org/pub/gnu/%{name}/%{name}-%{version}.tar.gz
 
 # X10-Update-Spec: { "type": "webscrape", "url": "https://ftp.gnu.org/gnu/gettext/"}
 
-%undefine _annotated_build
+Provides: libintl
 
 %description
 

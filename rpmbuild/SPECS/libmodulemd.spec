@@ -21,6 +21,9 @@ BuildRequires: glib2-devel libyaml-devel
 BuildRequires: librpm-devel libmagic-devel
 BuildRequires: python%{system_python}
 
+Requires:      glib2
+Requires:      libyaml
+Requires:      librpm
 Requires:      libmagic
 
 %undefine _annotated_build
