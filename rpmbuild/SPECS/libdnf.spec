@@ -2,7 +2,7 @@
 
 Name:           libdnf
 Version:        0.55.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        This library provides a high level package-manager.
 
 License:        LGPLv2+
