@@ -1,0 +1,119 @@
+%_db_backend sqlite
+%_usr /usr/local/
+%build_ldflags -L%{_prefix}/lib
+%set_build_flags \
+  CFLAGS="${CFLAGS:-%{?build_cflags}}" ; export CFLAGS ; \
+  CXXFLAGS="${CXXFLAGS:-%{?build_cxxflags}}" ; export CXXFLAGS ; \
+  FFLAGS="${FFLAGS:-%{?build_fflags}}" ; export FFLAGS ; \
+  FCFLAGS="${FCFLAGS:-%{?build_fflags}}" ; export FCFLAGS ; \
+  LDFLAGS="${LDFLAGS:-%{?build_ldflags}}" ; export LDFLAGS ; \
+  CPPFLAGS=-I%{_includedir} ; export CPPFLAGS
+%_invalid_encoding_terminates_build 0
+
+##### Universal binary setup - assumes out-of-tree build is supported.
+%_universal_architectures x86_64 arm64
+%enable_universal \
+%bcond_with universal \
+%define __universal %{?with_universal:-universal}%{!?with_universal:%{nil}} \
+%global _isa %{?with_universal?%{nil}}%{!?with_universal:%{_isa}} \
+%%if %{with universal} \
+BuildArch: noarch \
+%%endif
+
+%universal() %{1}%{?__universal}
+%ubuildroot %{buildroot}%{?with_universal:.$__arch}
+%uarch %{?with_universal:.$__arch}
+%uarchdir() %{1}%uarch
+
+# I'd like this to use Conflicts: (%{1} without universal) but dnf doesn't like that
+%uprovides() \
+Provides: %{universal %{1}}%{?2:-%{2}} = %{version}-%{release} \
+%if %{with universal} \
+Provides: %{1}%{?2:-%{2}} = %{version}-%{release} \
+Conflicts: %{1}%{?2:-%{2}} \
+%else \
+Conflicts: %{1}-universal%{?2:-%{2}} \
+%endif
+
+# +--------
+# | Run part of a script for all architectures. Pass -n to not generate / use per-arch directories.
+# | (if you do, use %%uarch / %%uarchdir in the inner part to differentiate)
+%ufor(n) \
+__UFOR_MADE_DIRS=%{-n:false}%{!-n:true} \
+%if %{with universal} \
+%global _configure ../%{_configure} \
+ORIG_CFLAGS="${CFLAGS:-%{?build_cflags}}" ; \
+ORIG_CXXFLAGS="${CXXFLAGS:-%{?build_cxxflags}}" ; \
+ORIG_LDFLAGS="${LDFLAGS:-%{?build_ldflags}}" ; \
+for __arch in %_universal_architectures ; do \
+  __linux_arch=$(echo $__arch | sed -e 's/arm64/aarch64/') ; \
+  %{!-n:mkdir %{uarchdir build} ;} \
+  %{!-n:cd %{uarchdir build} ;} \
+  export CFLAGS="$ORIG_CFLAGS -arch $__arch" ; \
+  export CXXFLAGS="$ORIG_CXXFLAGS -arch $__arch" ; \
+  export LDFLAGS="$ORIG_LDFLAGS -arch $__arch" ; \
+  export OBJCFLAGS="$CFLAGS" ; \
+  echo "--> Architecture: $__arch" \
+%else \
+%{!-n:mkdir %{uarchdir build} ;} \
+%{!-n:cd %{uarchdir build} ;} \
+%endif
+
+%udone \
+%if %{with universal} \
+  if $__UFOR_MADE_DIRS; then cd ..; fi \
+done \
+%else \
+if $__UFOR_MADE_DIRS; then cd ..; fi \
+%endif
+# |
+# +--------
+
+# +--------
+# | Run make install (or provided command) on all architectures and merge the results.
+%uinstall() \
+    %umakeinstall %{**} \
+    %umerge %{**}
+
+%umakeinstall(n) \
+__UFOR_MADE_DIRS=%{-n:false}%{!-n:true} \
+%if %{with universal} \
+for __arch in %_universal_architectures; do \
+  if $__UFOR_MADE_DIRS; then cd %{uarchdir build}; fi \
+  rm -rf %{ubuildroot} ; \
+  %{?*}%{!?1:%{__make} install DESTDIR=%{ubuildroot} INSTALL="%{__install} -p"} ; \
+  __lastarch=$__arch; \
+  if $__UFOR_MADE_DIRS; then cd ..; fi \
+done ; \
+%else \
+echo $__UFOR_MADE_DIRS \
+if $__UFOR_MADE_DIRS; then cd %{uarchdir build}; fi \
+%{?*}%{!?1:%make_install} \
+if $__UFOR_MADE_DIRS; then cd ..; fi \
+%endif
+
+%umerge(n) \
+%if %{with universal} \
+__UFOR_MADE_DIRS=%{-n:false}%{!-n:true} \
+set +x \
+rsync -a --include='*/' --exclude='*' %{buildroot}.$__lastarch/* %{buildroot} ; \
+for f in $(find %{buildroot}.$__lastarch | sed -e "s:^%{buildroot}.$__lastarch::"); do \
+  if readlink $f >/dev/null ; then \
+    echo "--> Symlink: $f -> $(readlink $f)" ; \
+    ln -s $(readlink $f) %{buildroot}/$f ; \
+  elif [ -x $f ] && file %{buildroot}.$__lastarch/$f | grep -q Mach-O ; then \
+    echo "--> Merging architectures: $f" ; \
+    FILES="" ; \
+    for arch in %_universal_architectures; do \
+      FILES="$FILES %{buildroot}.$arch/$f" ; \
+    done ; \
+    lipo -create -output %{buildroot}/"$f" $FILES ; \
+  elif [ ! -d $f ] ; then \
+    echo "--> Copying: $f" ; \
+    cp -pP %{buildroot}.$__lastarch/$f %{buildroot}/$f ; \
+  fi \
+done ; \
+set -x \
+%endif
+# |
+# +--------

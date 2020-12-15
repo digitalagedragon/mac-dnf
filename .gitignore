@@ -4,4 +4,5 @@ rpmbuild/*
 !rpmbuild/SOURCES
 rpmbuild/SOURCES/*
 !rpmbuild/SOURCES/*.patch
+!rpmbuild/SOURCES/*.src
 repo/

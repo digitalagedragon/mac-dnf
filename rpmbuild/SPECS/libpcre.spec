@@ -1,8 +1,10 @@
+%enable_universal
+
 %define libname pcre
 
-Name:           lib%{libname}
+Name:           %{universal lib%{libname}}
 Version:        8.44
-Release:        1%{?dist}
+Release:        3%{?dist}
 Summary:        Perl Compatible Regular Expressions
 
 License:        BSD
@@ -15,21 +17,25 @@ Source0:        https://ftp.pcre.org/pub/pcre/%{libname}-%{version}.tar.bz2
 # X10-Update-Spec:   "url": "https://ftp.pcre.org/pub/pcre/",
 # X10-Update-Spec:   "pattern": "(?:href=\"|/)\\w+-(\\d\\.(?:\\d+\\.)*\\d+)\\.tar\\..z2?\"" }
 
+%uprovides libpcre
+
 %description
 
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
+%uprovides libpcre devel
 
 %description    devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
-%package     -n pcre
+%package     -n %{universal pcre}
 Summary:        Command-line utilities for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
+%uprovides pcre
 
-%description -n pcre
+%description -n %{universal pcre}
 
 %prep
 echo "%SHA256SUM0  %SOURCE0" | shasum -a256 -c -
@@ -37,15 +43,13 @@ echo "%SHA256SUM0  %SOURCE0" | shasum -a256 -c -
 
 %build
 
-mkdir build
-cd build
-%define _configure ../configure
+%ufor
 %configure --libdir=%{_prefix}/lib --disable-static
 %make_build
+%udone
 
 %install
-cd build
-%make_install
+%uinstall
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
@@ -66,7 +70,7 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %doc %{_mandir}/man3/*
 %doc %{_mandir}/man1/pcre-config.1*
 
-%files -n pcre
+%files -n %{universal pcre}
 %{_bindir}/pcretest
 %{_bindir}/pcregrep
 %doc %{_mandir}/man1/pcregrep.1*

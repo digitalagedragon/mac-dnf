@@ -2,7 +2,7 @@
 
 Name:           rpm
 Version:        4.16.1
-Release:        1%{?dist}
+Release:        11%{?dist}
 Summary:        The RPM Package Manager (RPM) is a powerful package management system.
 
 License:        GPLv2
@@ -16,6 +16,8 @@ Source0:        http://ftp.rpm.org/releases/rpm-4.16.x/rpm-%{version}.tar.bz2
 Patch0:         rpm-0001-macos-arm64.patch
 Patch1:         rpm-0002-lua-rawlen.patch
 Patch2:         rpm-0003-bsd-sed.patch
+
+Source1:        rpm-1000-macros.src
 
 BuildRequires:  libgcrypt-devel
 BuildRequires:  libmagic-devel
@@ -81,19 +83,7 @@ find %{buildroot} -name '*.sed_orig' -exec rm -f {} ';'
 ## begin random path fixes
 # TODO should we have a /usr/local/bin/clang wrapper or something
 
-cat >%{buildroot}%{_prefix}/lib/rpm/macros.d/macros.macrpm <<EOF
-%%_db_backend sqlite
-%%_usr /usr/local/
-%%build_ldflags -L%%{_prefix}/lib
-%%set_build_flags \\
-  CFLAGS="\${CFLAGS:-%%{?build_cflags}}" ; export CFLAGS ; \\
-  CXXFLAGS="\${CXXFLAGS:-%%{?build_cxxflags}}" ; export CXXFLAGS ; \\
-  FFLAGS="\${FFLAGS:-%%{?build_fflags}}" ; export FFLAGS ; \\
-  FCFLAGS="\${FCFLAGS:-%%{?build_fflags}}" ; export FCFLAGS ; \\
-  LDFLAGS="\${LDFLAGS:-%%{?build_ldflags}}" ; export LDFLAGS ; \\
-  CPPFLAGS=-I%%{_includedir} ; export CPPFLAGS
-%%_invalid_encoding_terminates_build 0
-EOF
+%{__install} -m644 -v %SOURCE1 %{buildroot}%{_prefix}/lib/rpm/macros.d/macros.macrpm
 
 echo '%%_prefix /usr/local' >>%{buildroot}%{_prefix}/lib/rpm/platform/%(uname -m | sed -e 's/arm64/aarch64/')-%(uname -s | tr '[:upper:]' '[:lower:]')/macros
 

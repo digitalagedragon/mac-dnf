@@ -1,30 +1,38 @@
-Name:           gettext
+%enable_universal
+
+%define libname gettext
+
+Name:           %{universal %{libname}}
 Version:        0.21
-Release:        1%{?dist}
+Release:        3%{?dist}
 Summary:        An internationalization library
 
 License:        GPLv3+
 URL:            https://gnu.org/software/gettext
 %undefine       _disable_source_fetch
-Source0:        https://ftp.gnu.org/pub/gnu/%{name}/%{name}-%{version}.tar.gz
+Source0:        https://ftp.gnu.org/pub/gnu/%{libname}/%{libname}-%{version}.tar.gz
 %define         SHA256SUM0 c77d0da3102aec9c07f43671e60611ebff89a996ef159497ce8e59d075786b12
 
 # X10-Update-Spec: { "type": "webscrape", "url": "https://ftp.gnu.org/gnu/gettext/"}
 
-Provides: libintl
+%uprovides gettext
+%uprovides libintl
 
 %description
 
 %prep
 echo "%SHA256SUM0  %SOURCE0" | shasum -a256 -c -
-%autosetup
+%autosetup -n %{libname}-%{version}
 
 %build
+
+%ufor
 %configure --disable-static --libdir=%{_prefix}/lib
 %make_build
+%udone
 
 %install
-%make_install
+%uinstall %{__make} install DESTDIR=%{ubuildroot} INSTALL="%{__install} -p" && chmod +x %{ubuildroot}/%{_libdir}/libintl.8.dylib
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 rm -f %{buildroot}%{_infodir}/dir

@@ -1,9 +1,10 @@
 %define major_version 2.67
 %define patch_version 0
+%enable_universal
 
-Name:           glib2
+Name:           %{universal glib2}
 Version:        %{major_version}.%{patch_version}
-Release:        1%{?dist}
+Release:        3%{?dist}
 Summary:        GLib library of C routines
 
 License:        GPLv2+
@@ -14,21 +15,24 @@ Source0:        https://download.gnome.org/sources/glib/%{major_version}/glib-%{
 
 # X10-Update-Spec: { "type": "webscrape", "url": "https://download.gnome.org/sources/glib/cache.json"}
 
+%uprovides      glib2
+
 BuildRequires:  xz
 BuildRequires:  meson
 BuildRequires:  ninja-build
-BuildRequires:  libffi-devel
-BuildRequires:  libpcre-devel
+BuildRequires:  %{universal libffi}-devel
+BuildRequires:  %{universal libpcre}-devel
 
-Requires:       libpcre
-Requires:       libffi
+Requires:       %{universal libpcre}
+Requires:       %{universal libffi}
 
 %description
 
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-Requires:       libffi-devel
+Requires:       %{universal libffi}-devel
+Requires:       %{universal libpcre}-devel
 
 %description    devel
 The %{name}-devel package contains libraries and header files for
@@ -46,12 +50,14 @@ echo "%SHA256SUM0  %SOURCE0" | shasum -a256 -c -
 
 %build
 
-mkdir build
-meson -Dbuildtype=release --prefix=%{_prefix}  build/
-ninja %{?_smp_mflags} -C build
+%ufor -n
+mkdir %{uarchdir build}
+meson -Dbuildtype=release --prefix=%{_prefix} %{uarchdir build}
+ninja %{?_smp_mflags} -C %{uarchdir build} --verbose
+%udone
 
 %install
-DESTDIR=%{buildroot} ninja -C build install
+%uinstall -n DESTDIR=%{ubuildroot} ninja -C %{uarchdir build} install
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 

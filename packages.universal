@@ -1,0 +1,7 @@
+gettext
+glib2
+libffi
+libpcre
+libpixman
+libgpg-error
+libgcrypt
