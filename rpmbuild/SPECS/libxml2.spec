@@ -12,7 +12,7 @@ Source0:        ftp://xmlsoft.org/%{name}/%{name}-%{version}.tar.gz
 %define         SHA256SUM0 aafee193ffb8fe0c82d4afef6ef91972cbaf5feea100edc2f262750611b4be1f
 
 # upstream commit e4fb36841800038c289997432ca547c9bfef9db1, not yet released
-Patch0:         libxml2-0001-python-parentheses.spec
+Patch0:         libxml2-0001-python-parentheses.patch
 
 # X10-Update-Spec: { "type": "git-tags",
 # X10-Update-Spec:   "repo": "https://gitlab.gnome.org/GNOME/libxml2.git",
