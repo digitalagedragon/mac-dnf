@@ -156,14 +156,16 @@ cat >$PREFIX/lib/rpm/macros.d/macros.bootstrap <<EOF
 %_usr /usr/local/
 EOF
 
+cp ../rpmbuild/SOURCES/rpm-1000-macros.src $PREFIX/lib/rpm/macros.d/macros.macdnf
+
 echo '%_prefix /usr/local' >>$PREFIX/lib/rpm/platform/$(uname -m | sed -e 's/arm64/aarch64/')-$(uname -s | tr '[:upper:]' '[:lower:]')/macros
 
 sed -e "s|^/usr|$PREFIX|" -Iold $PREFIX/lib/rpm/find-provides
 sed -e "s|^/usr|$PREFIX|" -Iold $PREFIX/lib/rpm/find-requires
 rm -f $PREFIX/lib/rpm/perl.req
 
-PACKAGES="apple-m4 apple-make apple-perl apple-bsdutils gettext autoconf automake"
-PACKAGES="$PACKAGES apple-clang libtool pkgconf file libgpg-error libgcrypt"
+PACKAGES="apple-perl apple-bsdutils gettext autoconf automake"
+PACKAGES="$PACKAGES libtool pkgconf file libgpg-error libgcrypt"
 PACKAGES="$PACKAGES libpopt libarchive libsqlite lua python xz libpcre rpm"
 
 for pkg in $PACKAGES; do

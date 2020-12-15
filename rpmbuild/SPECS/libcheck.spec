@@ -15,7 +15,7 @@ Source0:        https://github.com/libcheck/%{libname}/releases/download/%{versi
 # X10-Update-Spec:   "repo": "https://github.com/libcheck/check.git",
 # X10-Update-Spec:   "pattern": "^(\\d+\\.\\d+\\.\\d+)$" }
 
-BuildRequires:  make autoconf automake libtool
+BuildRequires:  autoconf automake libtool
 BuildRequires:  libpkgconf-devel
 
 %description

@@ -71,7 +71,7 @@ if $__UFOR_MADE_DIRS; then cd ..; fi \
 
 # +--------
 # | Run make install (or provided command) on all architectures and merge the results.
-%uinstall() \
+%uinstall(n) \
     %umakeinstall %{**} \
     %umerge %{**}
 

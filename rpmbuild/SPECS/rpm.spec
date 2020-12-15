@@ -2,7 +2,7 @@
 
 Name:           rpm
 Version:        4.16.1
-Release:        11%{?dist}
+Release:        12%{?dist}
 Summary:        The RPM Package Manager (RPM) is a powerful package management system.
 
 License:        GPLv2
