@@ -189,7 +189,7 @@ unset LDFLAGS
 REBUILD_PKGS="$PACKAGES"
 
 pushd ../rpmbuild
-echo "_topdir $PWD" >~/.rpmmacros
+echo "%_topdir $PWD" >~/.rpmmacros
 popd
 
 # now start building with installed rpm
