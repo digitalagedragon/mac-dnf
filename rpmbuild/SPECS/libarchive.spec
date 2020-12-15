@@ -11,12 +11,6 @@ Source0:        http://www.libarchive.org/downloads/%{name}-%{version}.tar.gz
 
 # X10-Update-Spec: { "type": "webscrape", "url": "http://www.libarchive.org/downloads/"}
 
-BuildRequires:  make
-BuildRequires:  clang
-
-%undefine _annotated_build
-%global debug_package %{nil}
-
 %description
 
 %package        devel

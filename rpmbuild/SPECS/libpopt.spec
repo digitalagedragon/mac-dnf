@@ -15,12 +15,6 @@ Source0:        http://ftp.rpm.org/%{libname}/releases/%{libname}-1.x/%{libname}
 # X10-Update-Spec:   "repo": "https://github.com/rpm-software-management/popt.git",
 # X10-Update-Spec:   "pattern": "^popt-((?:\\d+\\.?)+)-release$" }
 
-BuildRequires:  make
-BuildRequires:  clang
-
-%undefine _annotated_build
-%global debug_package %{nil}
-
 %description
 
 %package        devel

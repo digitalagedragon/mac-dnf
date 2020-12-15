@@ -16,7 +16,6 @@ BuildArch:      noarch
 # X10-Update-Spec:   "repo": "https://github.com/sphinx-doc/sphinx.git",
 # X10-Update-Spec:   "pattern": "^v((?:\\d+\\.?)+)$" }
 
-BuildRequires:  make
 BuildRequires:  python%{system_python}
 BuildRequires:  python-setuptools
 

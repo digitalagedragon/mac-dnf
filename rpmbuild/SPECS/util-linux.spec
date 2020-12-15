@@ -19,7 +19,6 @@ Source0:        https://mirrors.edge.kernel.org/pub/linux/utils/%{name}/v%{major
 # X10-Update-Spec:   "repo": "https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git",
 # X10-Update-Spec:   "pattern": "^v((?:\\d+\\.?)+)$" }
 
-BuildRequires:  make
 BuildRequires:  autoconf
 BuildRequires:  automake
 BuildRequires:  gettext

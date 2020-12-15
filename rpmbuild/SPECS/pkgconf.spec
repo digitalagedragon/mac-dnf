@@ -13,16 +13,12 @@ Source0:        https://github.com/pkgconf/%{name}/archive/%{name}-%{version}.ta
 # X10-Update-Spec:   "repo": "https://github.com/pkgconf/pkgconf.git",
 # X10-Update-Spec:   "pattern": "^pkgconf-((?:\\d+\\.?)+)$" }
 
-BuildRequires:  clang
-BuildRequires:  make
 BuildRequires:  autoconf
 BuildRequires:  automake
 BuildRequires:  libtool
 
 Provides:       pkg-config = %{version}-%{release}
 Requires:       libpkgconf%{?_isa} = %{version}-%{release}
-
-%undefine _annotated_build
 
 %description
 

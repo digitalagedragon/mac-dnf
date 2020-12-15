@@ -13,14 +13,6 @@ BuildArch:      noarch
 
 # X10-Update-Spec: { "type": "webscrape", "url": "https://ftp.gnu.org/gnu/autoconf/"}
 
-BuildRequires:  make
-BuildRequires:  m4
-BuildRequires:  perl
-
-Requires:       m4
-
-%undefine _annotated_build
-
 %description
 
 %prep

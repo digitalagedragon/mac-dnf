@@ -11,13 +11,6 @@ Source0:        https://ftpmirror.gnu.org/libtool/libtool-%{version}.tar.gz
 
 # X10-Update-Spec: { "type": "webscrape", "url": "https://ftp.gnu.org/gnu/libtool/"}
 
-BuildRequires:  clang
-BuildRequires:  make
-BuildRequires:  m4
-
-%undefine _annotated_build
-%define debug_package %{nil}
-
 %description
 
 %package     -n libltdl

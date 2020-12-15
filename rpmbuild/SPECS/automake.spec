@@ -12,8 +12,6 @@ BuildArch:      noarch
 
 # X10-Update-Spec: { "type": "webscrape", "url": "https://ftp.gnu.org/gnu/automake/"}
 
-BuildRequires:  make
-BuildRequires:  perl
 BuildRequires:  autoconf
 
 Requires:       autoconf

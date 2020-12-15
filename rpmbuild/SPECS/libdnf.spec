@@ -20,7 +20,7 @@ Patch3:         libdnf-0004-usrlocal.patch
 # X10-Update-Spec:   "repo": "https://github.com/rpm-software-management/libdnf.git",
 # X10-Update-Spec:   "pattern": "^(\\d+\\.\\d+\\.\\d+)$" }
 
-BuildRequires:  cmake make swig gettext
+BuildRequires:  cmake swig gettext
 
 BuildRequires: glib2-devel libsmartcols-devel
 BuildRequires: libsolv-devel libcheck-devel librepo-devel

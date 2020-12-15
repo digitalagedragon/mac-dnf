@@ -13,12 +13,6 @@ Source0:        https://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.xz
 
 BuildArch:      noarch
 
-BuildRequires:  clang
-BuildRequires:  make
-BuildRequires:  perl
-
-%undefine _annotated_build
-
 %description
 
 %prep

@@ -22,7 +22,6 @@ Provides:       python-setuptools = %{version}-%{release}
 %define host_tool_prefix %{_host}-
 %endif
 
-BuildRequires:  make
 BuildRequires:  python%{system_python}
 
 %undefine _annotated_build

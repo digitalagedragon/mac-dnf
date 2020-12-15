@@ -11,12 +11,7 @@ Source0:        http://astron.com/pub/%{name}/%{name}-%{version}.tar.gz
 
 # X10-Update-Spec: { "type": "webscrape", "url": "http://astron.com/pub/file/"}
 
-BuildRequires:  clang
-BuildRequires:  make
-
 Requires:       libmagic
-
-%undefine _annotated_build
 
 %description
 

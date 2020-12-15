@@ -17,7 +17,6 @@ Patch0:         libsolv-0001-rpmdb-usrlocal.patch
 # X10-Update-Spec:   "repo": "https://github.com/openSUSE/libsolv.git",
 # X10-Update-Spec:   "pattern": "^((?:\\d+\\.?)+)$" }
 
-BuildRequires:  make
 BuildRequires:  cmake%{system_cmake}
 BuildRequires:  librpm-devel
 
