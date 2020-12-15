@@ -188,6 +188,10 @@ unset LDFLAGS
 
 REBUILD_PKGS="$PACKAGES"
 
+pushd ../rpmbuild
+echo "_topdir $PWD" >~/.rpmmacros
+popd
+
 # now start building with installed rpm
 # important because bootstrap rpm doesn't have working xz
 PACKAGES="cmake libsolv setuptools meson asciidoc ninja-build"
