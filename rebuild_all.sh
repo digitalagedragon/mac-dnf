@@ -13,7 +13,8 @@ for pkg in $(cat packages.order); do
             rm -rf *
             cp -r ../rpmbuild/RPMS/* .
             createrepo_c .
-            dnf makecache
+            dnf makecache --repo local
+            cd ..
         }
 done
 

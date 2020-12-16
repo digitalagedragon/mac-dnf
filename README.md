@@ -31,7 +31,7 @@ brew pkg | status | dnf pkg
 python@3.9 | ✔ | `python3.9`
 openssl@1.1 | ✔ | `libopenssl`
 sqlite | ✔ | `libsqlite`, `sqlite`
-readline | ✘
+readline | ✔ | `libreadline`
 node | ✘
 gmp | ✘
 gdbm | ✘
