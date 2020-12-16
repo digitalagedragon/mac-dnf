@@ -7,3 +7,4 @@ rpmbuild/SOURCES/*
 !rpmbuild/SOURCES/*.src
 repo/
 preinstall_root
+preinstall-*.tar.gz

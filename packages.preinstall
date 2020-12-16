@@ -33,3 +33,5 @@ python
 rpm
 xz
 dnf
+system-release
+repository
