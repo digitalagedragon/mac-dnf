@@ -2,7 +2,7 @@
 
 Name:           libxml2
 Version:        2.9.10
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Libxml2 is the XML C parser and toolkit developed for the Gnome project
 
 License:        MIT
@@ -20,12 +20,16 @@ Patch0:         libxml2-0001-python-parentheses.patch
 
 BuildRequires: libpython%{system_python}-devel
 BuildRequires: pkg-config
+BuildRequires: liblzma-devel
+
+Requires:      liblzma
 
 %description
 
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
+Requires:       liblzma-devel
 
 %description    devel
 The %{name}-devel package contains libraries and header files for
@@ -82,3 +86,6 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %doc %{_mandir}/man1/*
 
 %changelog
+
+* Wed Dec 16 2020 Morgan Thomas <m@m0rg.dev> 2.9.10 release 4
+  Add liblzma-devel/liblzma to requires
