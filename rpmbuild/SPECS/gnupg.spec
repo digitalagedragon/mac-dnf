@@ -1,6 +1,6 @@
 Name:           gnupg
 Version:        2.2.25
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        The GNU Privacy Guard
 
 License:        GPLv2+
@@ -19,6 +19,12 @@ BuildRequires:  libksba-devel
 BuildRequires:  libnpth-devel
 
 Recommends:     pinentry
+
+Requires:       libassuan
+Requires:       libgpg-error
+Requires:       libgcrypt
+Requires:       libksba
+Requires:       libnpth
 
 %undefine _annotated_build
 
@@ -65,3 +71,6 @@ rm -f %{buildroot}%{_infodir}/dir
 %doc %{_datadir}/doc/gnupg
 
 %changelog
+
+* Wed Dec 16 2020 Morgan Thomas <m@m0rg.dev> 2.2.25 release 2
+  Added run-time dependencies.
