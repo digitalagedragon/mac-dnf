@@ -28,103 +28,103 @@ The package repository is currently tiny. I'm currently working on porting Homeb
 
 brew pkg | status | dnf pkg
 --- | --- | ---
-python@3.9 | ✔ | `python3.9`
+node | ✘ |
+python@3.9 | ✔ | `python3.9` (`python`)
+postgresql | ✘ |
+python@3.8 | ✘ |
+imagemagick | ✘ |
+youtube-dl | ✘ |
+awscli | ✘ |
+git | ✘ |
 openssl@1.1 | ✔ | `libopenssl`
-sqlite | ✔ | `libsqlite`, `sqlite`
-readline | ✔ | `libreadline`
-node | ✘
-gmp | ✘
-gdbm | ✘
-icu4c | ✘ | `libicu4c`, in progress
-libtiff | ✘
-gettext | ✔ | `gettext`
-python@3.8 | ✘
-nghttp2 | ✘
-unbound | ✘
-krb5 | ✘
-xz | ✔ | `xz`
-glib | ✔ | `glib2`, `glib2-utils`
-c-ares | ✘
-freetype | ✘
-pkg-config | ✔ | `pkgconf` (provides `pkg-config`)
-imagemagick | ✘
-libtool | ❗ | `libtool`, does not provide `glibtool` yet
-postgresql | ✘
-pcre2 | ✘ | 
-libev | ✘
-jemalloc | ✘
-pcre | ✔ | `libpcre`, `pcre`
-libffi | ✔ | `libffi`
-libevent | ✘
-libidn2 | ✘
-p11-kit | ✘
-youtube-dl | ✘
-gobject-introspection | ✘
-cmake | ✔ | `cmake`
-x265 | ✘
-libunistring | ✘
-gnutls | ✘
-git | ✘
-awscli | ✘
-jpeg | ✘
-openjdk | ✘
-jansson | ✘
-protobuf | ✘
-guile | ✘
-bdw-gc | ✘
-x264 | ✘
-ffmpeg | ✘
-libpng | ✘
-libsndfile | ✘
-gnu-getopt | ✘
-harfbuzz | ✘
-aom | ✘
-webp | ✘
-pango | ✘
-nettle | ✘
-fribidi | ✘
-oniguruma | ✘
-automake | ✔ | `automake`
-yarn | ✘
-little-cms2 | ✘
-freetds | ✘
-libass | ✘
-pixman | ✔ | `libpixman`
-libbluray | ✘
-autoconf | ✔ | `autoconf`
-libtasn1 | ✘
-libpq | ✘
-curl | ✘
-cairo | ✘
-libmpc | ✘
-fontconfig | ✘
+yarn | ✘ |
+ffmpeg | ✘ |
+cmake | ✘ |
+wget | ✘ |
 gnupg | ✔ | `gnupg`
-ruby-build | ✘
-libyaml | ✔ | `libyaml`
-openldap | ✘
+htop | ✘ |
+mysql | ✘ |
+vim | ✘ |
+pyenv | ✘ |
+go | ✘ |
+automake | ✔ | `automake`
+zsh | ✘ |
+curl | ✘ |
+php | ✘ |
+ruby | ✘ |
+nvm | ✘ |
+tmux | ✘ |
+glib | ✔ | `glib2`, `glib2-utils`
+ansible | ✘ |
+gradle | ✘ |
+openjdk | ✘ |
+sqlite | ✔ | `libsqlite`, `sqlite`
+nginx | ✘ |
+coreutils | ✘ |
+watchman | ✘ |
+redis | ✘ |
+libpq | ✘ |
+kubernetes-cli | ✘ |
+nmap | ✘ |
+composer | ✘ |
+heroku/brew/heroku | ✘ |
+gh | ✘ |
+jq | ✘ |
+libxml2 | ✘ |
+pkg-config | ✔ | `pkgconf` (`pkg-config`)
+helm | ✘ |
+azure-cli | ✘ |
+gcc | ✘ |
+telnet | ✘ |
+readline | ✔ | `libreadline`
+cocoapods | ✘ |
+gnutls | ✘ |
+krb5 | ✘ |
+libtool | ✔ | `libtool` (need to add `glibtool` link)
+ruby-build | ✘ |
+unbound | ✘ |
+maven | ✘ |
+terraform | ✘ |
+docker | ✘ |
+zlib | ✘ |
+graphviz | ✘ |
+pango | ✘ |
+git-lfs | ✘ |
+pipenv | ✘ |
+minikube | ✘ |
+mongodb/brew/mongodb-community | ✘ |
+fzf | ✘ |
+bash | ✘ |
+protobuf | ✘ |
+gobject-introspection | ✘ |
 libksba | ✔ | `libksba`
-graphite2 | ✘
-zstd | ✔ | `libzstd`
-lz4 | ✘
-wget | ✘
-go | ✘
-gdk-pixbuf | ✘
-srt | ✘
-lzo | ✘
-qt | ✘
-ruby | ✘
-libde265 | ✘
-utf8proc | ✘
-rtmpdump | ✘
-mysql | ✘
-htop | ✘
-rubberband | ✘
-libomp | ✘
-mpfr | ✘
-jasper | ✘
-ghostscript | ✘
-vim | ✘
-rav1e | ✘
-gcc | ✘
-ncurses | ✘
-lua | ✔ | `lua`, `liblua`
+pandoc | ✘ |
+mysql@5.7 | ✘ |
+sphinx-doc | ✔ | `python-sphinx`
+gdk-pixbuf | ✘ |
+python@3.7 | ✘ |
+harfbuzz | ✘ |
+rbenv | ✘ |
+tree | ✘ |
+subversion | ✘ |
+libass | ✘ |
+aws/tap/aws-sam-cli | ✘ |
+php@7.3 | ✘ |
+poppler | ✘ |
+libyaml | ✔ | `libyaml`
+bat | ✘ |
+mysql-client | ✘ |
+qt | ✘ |
+opencv | ✘ |
+librsvg | ✘ |
+sbt | ✘ |
+hugo | ✘ |
+unrar | ✘ |
+freetds | ✘ |
+autoconf | ✔ | `autoconf`
+numpy | ✘ |
+mercurial | ✘ |
+openldap | ✘ |
+ccache | ✘ |
+fastlane | ✘ |
+direnv | ✘ |
