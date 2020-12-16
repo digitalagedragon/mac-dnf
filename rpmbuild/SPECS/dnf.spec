@@ -2,7 +2,7 @@
 
 Name:           dnf
 Version:        4.4.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        A powerful RPM-based package manager
 
 License:        GPLv2
