@@ -14,6 +14,7 @@ Source0:        https://github.com/rpm-software-management/dnf/archive/%{version
 
 Patch0:         dnf-0001-non-root.patch
 Patch1:         dnf-0002-usrlocal.patch
+Patch2:         dnf-0003-first-run-mark.patch
 
 # X10-Update-Spec: { "type": "git-tags",
 # X10-Update-Spec:   "repo": "https://github.com/rpm-software-management/dnf.git",

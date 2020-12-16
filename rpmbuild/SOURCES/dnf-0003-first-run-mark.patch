@@ -1,0 +1,10 @@
+--- dnf/cli/commands/mark.py	2020-12-15 16:29:14.000000000 -0800
++++ dnf/cli/commands/mark.py	2020-12-15 16:29:29.000000000 -0800
+@@ -89,7 +89,7 @@
+
+         old = self.base.history.last()
+         if old is None:
+-            rpmdb_version = self.sack._rpmdb_version()
++            rpmdb_version = self.base.sack._rpmdb_version()
+         else:
+             rpmdb_version = old.end_rpmdb_version
