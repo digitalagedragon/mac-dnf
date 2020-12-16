@@ -2,7 +2,7 @@
 
 Name:           libdnf
 Version:        0.55.2
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        This library provides a high level package-manager.
 
 License:        LGPLv2+
@@ -22,6 +22,7 @@ Patch4:         libdnf-0005-posixify-regex.patch
 # X10-Update-Spec:   "pattern": "^(\\d+\\.\\d+\\.\\d+)$" }
 
 BuildRequires:  cmake swig gettext
+BuildRequires:  pkg-config
 
 BuildRequires: glib2-devel libsmartcols-devel
 BuildRequires: libsolv-devel libcheck-devel librepo-devel
