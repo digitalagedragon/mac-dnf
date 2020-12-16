@@ -9,12 +9,13 @@ echo "If you have Homebrew installed, this is a good time to kill the script and
 sh setup_usrlocal.sh
 
 echo "### Downloading bootstrap packages..."
-cd /usr/local
+cd /tmp
 curl -LO http://digitalis-repository.s3-website-us-west-1.amazonaws.com/macdnf/preinstall-$(uname -m).tar.gz
 
 echo "### Unpacking bootstrap packages..."
-tar xzf preinstall-$(uname -m).tar.gz bin etc include lib share var
-rm preinstall-$(uname -m).tar.gz
+cd /usr/local
+tar xzf /tmp/preinstall-$(uname -m).tar.gz bin etc include lib share var
+rm /tmp/preinstall-$(uname -m).tar.gz
 
 echo "### Reinstalling from DNF repository..."
 dnf reinstall -y \*
