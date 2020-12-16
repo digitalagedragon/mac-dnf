@@ -7,6 +7,6 @@ XID=$(dnf history info | head -n1 | cut -d ':' -f 2)
 SPEC=$1
 
 BUILDREQUIRES=$(rpmspec -q --buildrequires $SPEC)
-[ -n "$BUILDREQUIRES" ] && dnf install -y 
+[ -n "$BUILDREQUIRES" ] && dnf install -y $BUILDREQUIRES
 rpmbuild -ba $@
 dnf history rollback -y $XID
