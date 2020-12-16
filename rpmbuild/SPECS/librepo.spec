@@ -4,7 +4,7 @@
 
 Name:           %{libname}
 Version:        1.12.1
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        A library providing C and Python (libcURL like) API for downloading linux repository metadata and packages
 
 License:        LGPLv2
@@ -18,6 +18,8 @@ Source0:        https://github.com/rpm-software-management/%{libname}/archive/%{
 # X10-Update-Spec:   "pattern": "^((?:\\d+\\.?)+)$" }
 
 BuildRequires: cmake
+BuildRequires: pkg-config
+BuildRequires: libzchunk-devel
 BuildRequires: glib2-devel libopenssl-devel
 BuildRequires: libcurl-devel libpython%{system_python}-devel
 BuildRequires: libcheck-devel libgpgme-devel
@@ -25,6 +27,9 @@ BuildRequires: libxml2-devel
 
 Requires: glib2 libopenssl libcurl libpython
 Requires: libgpgme
+Requires: libzchunk
+Requires: libxml2
+
 %description
 
 %package        devel
@@ -69,3 +74,6 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_prefix}/lib/pkgconfig/*.pc
 
 %changelog
+
+* Wed Dec 16 2020 Morgan Thomas <m@m0rg.dev> 1.12.1 release 5
+  Add libzchunk to build dependencies.
