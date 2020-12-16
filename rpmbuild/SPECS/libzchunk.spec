@@ -2,7 +2,7 @@
 
 Name:           lib%{libname}
 Version:        1.1.7
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        zchunk is a compressed file format that splits the file into independent chunks
 
 License:        BSD-2-Clause
@@ -17,7 +17,9 @@ Patch0:         libzchunk-0001-endian-h.patch
 # X10-Update-Spec:   "repo": "https://github.com/zchunk/zchunk.git",
 # X10-Update-Spec:   "pattern": "^((?:\\d+\\.?)+)$" }
 
-BuildRequires:  meson ninja-build
+BuildRequires:  pkg-config
+BuildRequires:  meson
+BuildRequires:  ninja-build
 
 BuildRequires:  libopenssl-devel
 BuildRequires:  libcurl-devel
