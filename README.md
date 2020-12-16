@@ -31,7 +31,7 @@ brew pkg | status | dnf pkg
 node | ✘ |
 python@3.9 | ✔ | `python3.9` (`python`)
 postgresql | ✘ |
-python@3.8 | ✘ |
+python@3.8 | ✔✘ | `python3.8`, but no library support yet
 imagemagick | ✘ |
 youtube-dl | ✘ |
 awscli | ✘ |
