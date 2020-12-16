@@ -218,18 +218,18 @@ for pkg in $REBUILD_PKGS; do
         || /usr/local/bin/rpmbuild -ba ../rpmbuild/SPECS/$pkg.spec
 done
 
+cd ..
+mkdir -p repo
+cd repo
 cat > /usr/local/etc/yum.repos.d/local.repo <<EOF
 [local]
 name=local
-baseurl=file:///Users/morgan/src/rpm/repo
+baseurl=file://$PWD
 enabled=1
 metadata_expire=1d
 gpgcheck=0
 EOF
 
-cd ..
-mkdir -p repo
-cd repo
 rm -rf *
 cp -r ../rpmbuild/RPMS/* .
 createrepo_c .
