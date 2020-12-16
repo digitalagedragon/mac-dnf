@@ -230,7 +230,7 @@ EOF
 cd ..
 mkdir -p repo
 cd repo
-rm -r *
+rm -rf *
 cp -r ../rpmbuild/RPMS/* .
 createrepo_c .
 dnf makecache
