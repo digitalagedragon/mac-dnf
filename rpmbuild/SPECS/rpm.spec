@@ -2,7 +2,7 @@
 
 Name:           rpm
 Version:        4.16.1
-Release:        12%{?dist}
+Release:        13%{?dist}
 Summary:        The RPM Package Manager (RPM) is a powerful package management system.
 
 License:        GPLv2
@@ -69,6 +69,7 @@ sed -e '1s/python/python3/' -Iold scripts/pythondistdeps.py
 
 %build
 export PYTHON=%{_prefix}/bin/python%{system_python}
+export __CURL=/usr/bin/curl
 %configure --libdir=%{_prefix}/lib --enable-bdb=no --enable-sqlite=yes --disable-openmp --enable-python \
     CFLAGS="-Wno-implicit-function-declaration -Wno-unused-function"
 %make_build
@@ -123,3 +124,6 @@ rm %{buildroot}%{_prefix}/lib/rpm/fileattrs/python*.attr
 %{_includedir}/rpm
 
 %changelog
+
+* Wed Dec 16 2020 Morgan Thomas <m@m0rg.dev> 4.16.1 release 13
+  Explicitly pass __CURL.
