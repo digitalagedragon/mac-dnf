@@ -1,25 +1,26 @@
-%define pybasever 3.9
-%define general_version %{pybasever}.1
+%define pybasever 3.8
+%define general_version %{pybasever}.5
 
-%define is_system_python 1
+%define is_system_python 0
 
+%if %{is_system_python}
+Name:           python
+%else
 Name:           python%{pybasever}
+%endif
 Version:        %{general_version}
-Release:        2%{?dist}
+Release:        1%{?dist}
 Summary:        The Python programming language
 
 License:        Python-2.0
 URL:            https://www.python.org/
 %undefine       _disable_source_fetch
 Source0:        https://www.python.org/ftp/python/%{version}/Python-%{version}.tgz
-%define         SHA256SUM0 29cb91ba038346da0bd9ab84a0a55a845d872c341a4da6879f462e94c741f117
+%define         SHA256SUM0 015115023c382eb6ab83d512762fe3c5502fa0c6c52ffebc4831c4e1a06ffc49
+
+Patch0:         python3.8-0001-macos-arm64.patch
 
 BuildRequires:  libsqlite-devel
-
-# the unversioned ones don't exist anymore
-Obsoletes:      python <= 3.9.1-1
-Obsoletes:      libpython <= 3.9.1-1
-Obsoletes:      libpython-devel <= 3.9.1-1
 
 Requires:       libpython%{pybasever} = %{version}-%{release}
 %if %{is_system_python}
@@ -107,6 +108,3 @@ rm %{buildroot}/%{_prefix}/lib/python%{pybasever}/cgi.py
 %{_prefix}/lib/pkgconfig/*.pc
 
 %changelog
-
-* Wed Dec 16 2020 Morgan Thomas <m@morg.dev> 3.9.1 release 2
-  Infrastructure for multiple python versions.

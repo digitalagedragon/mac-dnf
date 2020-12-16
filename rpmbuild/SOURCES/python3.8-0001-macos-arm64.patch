@@ -1,0 +1,12 @@
+--- configure.orig	2020-12-16 15:13:24.000000000 -0800
++++ configure	2020-12-16 15:14:16.000000000 -0800
+@@ -9264,6 +9264,9 @@
+     	ppc)
+     		MACOSX_DEFAULT_ARCH="ppc64"
+     		;;
++        arm64)
++		MACOSX_DEFAULT_ARCH="arm64"
++		;;
+     	*)
+     		as_fn_error $? "Unexpected output of 'arch' on OSX" "$LINENO" 5
+     		;;
