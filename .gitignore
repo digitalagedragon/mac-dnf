@@ -6,3 +6,4 @@ rpmbuild/SOURCES/*
 !rpmbuild/SOURCES/*.patch
 !rpmbuild/SOURCES/*.src
 repo/
+preinstall_root
