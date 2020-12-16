@@ -1,6 +1,7 @@
 {
     "files.exclude": {
         "rpmbuild/BUILD": true,
-        "rpmbuild/BUILDROOT": true
+        "rpmbuild/BUILDROOT": true,
+        "preinstall_root": true
     }
 }

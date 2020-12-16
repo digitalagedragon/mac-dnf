@@ -4,7 +4,7 @@
 
 Name:           %{libname}
 Version:        1.12.1
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        A library providing C and Python (libcURL like) API for downloading linux repository metadata and packages
 
 License:        LGPLv2
@@ -31,6 +31,7 @@ Requires: libgpgme
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       libcurl-devel libopenssl-devel
+Requires:       libxml2-devel
 
 %description    devel
 The %{name}-devel package contains libraries and header files for

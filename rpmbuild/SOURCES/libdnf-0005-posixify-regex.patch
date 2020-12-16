@@ -1,0 +1,11 @@
+--- libdnf/repo/DependencySplitter.cpp	2020-12-16 10:08:54.000000000 -0800
++++ libdnf/repo/DependencySplitter.cpp	2020-12-16 10:08:58.000000000 -0800
+@@ -29,7 +29,7 @@
+ namespace libdnf {
+ 
+ static const Regex RELDEP_REGEX = 
+-    Regex("^(\\S*)\\s*(<=|>=|<|>|=|==)?\\s*(\\S*)$", REG_EXTENDED);
++    Regex("^([^[:space:]]*)[[:space:]]*(<=|>=|<|>|=|==)?[[:space:]]*([^[:space:]]*)$", REG_EXTENDED);
+ 
+ static bool
+ getCmpFlags(int *cmp_type, std::string matchCmpType)

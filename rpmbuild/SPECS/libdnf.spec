@@ -2,7 +2,7 @@
 
 Name:           libdnf
 Version:        0.55.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        This library provides a high level package-manager.
 
 License:        LGPLv2+
@@ -15,6 +15,7 @@ Patch0:         libdnf-0001-limits-h.patch
 Patch1:         libdnf-0002-error-types.patch
 Patch2:         libdnf-0003-arch-detect.patch
 Patch3:         libdnf-0004-usrlocal.patch
+Patch4:         libdnf-0005-posixify-regex.patch
 
 # X10-Update-Spec: { "type": "git-tags",
 # X10-Update-Spec:   "repo": "https://github.com/rpm-software-management/libdnf.git",

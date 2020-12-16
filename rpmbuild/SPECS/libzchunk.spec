@@ -2,7 +2,7 @@
 
 Name:           lib%{libname}
 Version:        1.1.7
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        zchunk is a compressed file format that splits the file into independent chunks
 
 License:        BSD-2-Clause
@@ -38,6 +38,7 @@ Requires:       libargp
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       libffi-devel
+Requires:       libzstd-devel
 
 %description    devel
 The %{name}-devel package contains libraries and header files for
