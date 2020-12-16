@@ -2,7 +2,7 @@
 
 Name:           libmodulemd
 Version:        2.10.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        C Library for manipulating module metadata files
 
 License:        MIT
@@ -17,6 +17,7 @@ Source0:        https://github.com/fedora-modularity/libmodulemd/releases/downlo
 
 BuildRequires:  meson ninja-build
 
+BuildRequires: pkg-config
 BuildRequires: glib2-devel libyaml-devel
 BuildRequires: librpm-devel libmagic-devel
 BuildRequires: python%{system_python}

@@ -2,7 +2,7 @@
 
 Name:           rpm
 Version:        4.16.1
-Release:        13%{?dist}
+Release:        14%{?dist}
 Summary:        The RPM Package Manager (RPM) is a powerful package management system.
 
 License:        GPLv2
@@ -56,6 +56,7 @@ Requires:       librpm%{?_isa} = %{version}-%{release}
 Requires:       libgcrypt-devel libpopt-devel libsqlite-devel
 Requires:       libarchive-devel
 Requires:       libpcre-devel
+Requires:       libzstd-devel
 
 %description -n librpm-devel
 The librpm-devel package contains libraries and header files for
@@ -71,6 +72,7 @@ sed -e '1s/python/python3/' -Iold scripts/pythondistdeps.py
 export PYTHON=%{_prefix}/bin/python%{system_python}
 export __CURL=/usr/bin/curl
 %configure --libdir=%{_prefix}/lib --enable-bdb=no --enable-sqlite=yes --disable-openmp --enable-python \
+    --enable-zstd=no \
     CFLAGS="-Wno-implicit-function-declaration -Wno-unused-function"
 %make_build
 
@@ -124,6 +126,9 @@ rm %{buildroot}%{_prefix}/lib/rpm/fileattrs/python*.attr
 %{_includedir}/rpm
 
 %changelog
+
+* Wed Dec 16 2020 Morgan Thomas <m@m0rg.dev> 4.16.1 release 14
+  Explicitly disable zstd.
 
 * Wed Dec 16 2020 Morgan Thomas <m@m0rg.dev> 4.16.1 release 13
   Explicitly pass __CURL.
