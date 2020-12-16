@@ -21,6 +21,7 @@ BuildRequires: pkg-config
 BuildRequires: glib2-devel libyaml-devel
 BuildRequires: librpm-devel libmagic-devel
 BuildRequires: python%{system_python}
+BuildRequires: glib2-utils
 
 Requires:      glib2
 Requires:      libyaml
@@ -77,3 +78,6 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_bindir}/modulemd-validator
 
 %changelog
+
+* Wed Dec 16 2020 Morgan Thomas <m@m0rg.dev> 2.10.0 release 2
+  Add pkg-config and glib2-utils to buildrequires.
