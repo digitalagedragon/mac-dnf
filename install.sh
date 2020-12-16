@@ -18,4 +18,4 @@ tar xzf /tmp/preinstall-$(uname -m).tar.gz bin etc include lib share var
 rm /tmp/preinstall-$(uname -m).tar.gz
 
 echo "### Reinstalling from DNF repository..."
-dnf reinstall -y \*
+dnf install -y dnf system-release repository
