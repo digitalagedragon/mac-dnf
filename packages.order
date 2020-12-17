@@ -57,3 +57,4 @@ qemu
 libreadline
 python3.8
 node
+libicu4c

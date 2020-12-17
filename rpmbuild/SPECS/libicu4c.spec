@@ -16,15 +16,56 @@ Source0:        https://github.com/unicode-org/icu/releases/download/release-%{m
 
 %description
 
+%package        devel
+Summary:        Development files for %{name}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+
+%description    devel
+The %{name}-devel package contains libraries and header files for
+developing applications that use %{name}.
+
+%package -n icu4c
+Summary:        Command-line tools and utilities for libicu4c
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+
+%description -n icu4c
+
 %prep
 echo "%SHA256SUM0  %SOURCE0" | shasum -a256 -c -
 %autosetup -n icu/source -p0
 
 %build
-%configure --disable-samples --disable-tests --enable-static --with-library-bits=64
+%configure --disable-samples --disable-tests --disable-static --with-library-bits=64
 %make_build
 
 %install
 %make_install
 
+find %{buildroot} -name '*.la' -exec rm -f {} ';'
+
 %files
+%{_libdir}/libicudata.*.dylib
+%{_libdir}/libicui18n.*.dylib
+%{_libdir}/libicuio.*.dylib
+%{_libdir}/libicutest.*.dylib
+%{_libdir}/libicutu.*.dylib
+%{_libdir}/libicuuc.*.dylib
+
+%files devel
+%{_libdir}/libicudata.dylib
+%{_libdir}/libicui18n.dylib
+%{_libdir}/libicuio.dylib
+%{_libdir}/libicutest.dylib
+%{_libdir}/libicutu.dylib
+%{_libdir}/libicuuc.dylib
+%{_libdir}/pkgconfig/*.pc
+%{_libdir}/icu
+%{_includedir}/unicode
+%{_datadir}/icu
+
+%files -n icu4c
+%{_bindir}/*
+%{_sbindir}/*
+%doc %{_mandir}/man{1,8}/*
+
+%changelog
