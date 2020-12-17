@@ -28,7 +28,7 @@ The package repository is currently tiny. I'm currently working on porting Homeb
 
 brew pkg | status | dnf pkg
 --- | --- | ---
-node | ✘ |
+node | ✔ | `node`
 python@3.9 | ✔ | `python3.9` (`python`)
 postgresql | ✘ |
 python@3.8 | ✔✘ | `python3.8`, but no library support yet
