@@ -27,7 +27,8 @@ if [ $(uname -m) = "arm64" ]; then
                 rm -rf *
                 cp -r ../rpmbuild/RPMS/* .
                 createrepo_c .
-                dnf makecache
+                dnf makecache --repo local
+                cd ..
             }
     done
 fi

@@ -5,7 +5,7 @@
 
 Name:           python%{pybasever}
 Version:        %{general_version}
-Release:        2%{?dist}
+Release:        4%{?dist}
 Summary:        The Python programming language
 
 License:        Python-2.0
@@ -15,6 +15,7 @@ Source0:        https://www.python.org/ftp/python/%{version}/Python-%{version}.t
 %define         SHA256SUM0 29cb91ba038346da0bd9ab84a0a55a845d872c341a4da6879f462e94c741f117
 
 BuildRequires:  libsqlite-devel
+BuildRequires:  libopenssl-devel
 
 # the unversioned ones don't exist anymore
 Obsoletes:      python <= 3.9.1-1
@@ -28,6 +29,8 @@ Provides:       python = %{version}-%{release}
 Provides:       python(abi) = %{pybasever}
 
 Requires:       libintl
+Requires:       libsqlite
+Requires:       libopenssl
 
 # lib2to3 breaks all kinds of stuff on Fedora
 # Turn off the brp-python-bytecompile script
@@ -89,9 +92,6 @@ rm -fv %{buildroot}/%{_libdir}/pkgconfig/python3-embed.pc
 rm -fv %{buildroot}/%{_mandir}/man1/python3.1*
 %endif
 
-# cgi.py has a #! /usr/local/bin/python in it and it makes rpm (and therefore me) sad
-rm %{buildroot}/%{_prefix}/lib/python%{pybasever}/cgi.py
-
 %files
 %license LICENSE
 %{_bindir}/*
@@ -108,5 +108,11 @@ rm %{buildroot}/%{_prefix}/lib/python%{pybasever}/cgi.py
 
 %changelog
 
-* Wed Dec 16 2020 Morgan Thomas <m@morg.dev> 3.9.1 release 2
+* Wed Dec 17 2020 Morgan Thomas <m@m0rg.dev> 3.9.1 release 4
+  Build with SSL support.
+
+* Wed Dec 17 2020 Morgan Thomas <m@m0rg.dev> 3.9.1 release 3
+  Stop not packaging cgi.py.
+
+* Wed Dec 16 2020 Morgan Thomas <m@m0rg.dev> 3.9.1 release 2
   Infrastructure for multiple python versions.

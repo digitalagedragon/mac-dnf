@@ -1,0 +1,22 @@
+--- a/qtbase/src/corelib/global/qglobal.h	2020-12-20 10:27:50.000000000 -0800
++++ b/qtbase/src/corelib/global/qglobal.h	2020-12-20 10:28:44.000000000 -0800
+@@ -625,6 +625,8 @@
+ #if defined(Q_CC_GNU) && defined(Q_OS_WIN) && !defined(QT_NO_DATA_RELOCATION)
+ // ### Qt6: you can remove me
+ #  define QT_INIT_METAOBJECT __attribute__((init_priority(101)))
++#elif defined(Q_CC_CLANG)
++#  define QT_INIT_METAOBJECT __attribute__((visibility("default")))
+ #else
+ #  define QT_INIT_METAOBJECT
+ #endif
+--- a/qttools/src/designer/src/uitools/quiloader.h	2020-12-20 11:59:29.000000000 -0800
++++ b/qttools/src/designer/src/uitools/quiloader.h	2020-12-20 12:01:43.000000000 -0800
+@@ -65,7 +65,7 @@
+ class QDir;
+ 
+ class QUiLoaderPrivate;
+-class QUiLoader : public QObject
++class __attribute__((visibility("default"))) QUiLoader : public QObject
+ {
+     Q_OBJECT
+ public:

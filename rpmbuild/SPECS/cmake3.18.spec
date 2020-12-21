@@ -1,18 +1,18 @@
-%define major_version 3.19
-%define patch_version 1
+%define major_version 3.18
+%define patch_version 4
 
-%define is_system_cmake 1
+%define is_system_cmake 0
 
 Name:           cmake%{major_version}
 Version:        %{major_version}.%{patch_version}
-Release:        2%{?dist}
+Release:        1%{?dist}
 Summary:        The cmake build system
 
 License:        BSD-3-Clause
 URL:            https://cmake.org
 %undefine       _disable_source_fetch
 Source0:        https://github.com/Kitware/CMake/releases/download/v%{version}/cmake-%{version}.tar.gz
-%define         SHA256SUM0 1d266ea3a76ef650cdcf16c782a317cb4a7aa461617ee941e389cb48738a3aba
+%define         SHA256SUM0 597c61358e6a92ecbfad42a9b5321ddd801fc7e7eca08441307c9138382d4f77
 
 # X10-Update-Spec: { "type": "git-tags",
 # X10-Update-Spec:   "repo": "https://github.com/Kitware/CMake.git",

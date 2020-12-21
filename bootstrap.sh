@@ -166,7 +166,7 @@ rm -f $PREFIX/lib/rpm/perl.req
 
 PACKAGES="apple-perl apple-bsdutils gettext autoconf automake"
 PACKAGES="$PACKAGES libtool pkgconf file libgpg-error libgcrypt"
-PACKAGES="$PACKAGES libpopt libarchive libsqlite lua python xz libpcre rpm"
+PACKAGES="$PACKAGES libpopt libarchive libsqlite lua libopenssl python xz libpcre rpm"
 
 for pkg in $PACKAGES; do
     $PREFIX/bin/rpm -q $pkg || {
@@ -195,7 +195,7 @@ popd
 # now start building with installed rpm
 # important because bootstrap rpm doesn't have working xz
 PACKAGES="cmake libsolv setuptools meson asciidoc ninja-build"
-PACKAGES="$PACKAGES libffi gettext glib2 util-linux apple-awk libcheck libopenssl"
+PACKAGES="$PACKAGES libffi gettext glib2 util-linux apple-awk libcheck"
 PACKAGES="$PACKAGES curl libassuan libksba libnpth gnupg swig libgpgme"
 PACKAGES="$PACKAGES libxml2 libargp libzstd libzchunk librepo libcppunit libjson-c"
 PACKAGES="$PACKAGES python-sphinx libyaml libmodulemd libdnf libcomps dnf"

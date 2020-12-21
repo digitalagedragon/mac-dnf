@@ -1,0 +1,26 @@
+From c86f56e32e724c6018e579bb2bc11e667c96fc96 Mon Sep 17 00:00:00 2001
+From: Petr Hosek <phosek@google.com>
+Date: Fri, 24 Jul 2020 13:36:13 -0700
+Subject: [PATCH] [CMake] Find zlib when building lldb as standalone
+
+This addresses the issue introduced by 10b1b4a.
+---
+ lldb/cmake/modules/LLDBStandalone.cmake | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/lldb/cmake/modules/LLDBStandalone.cmake b/lldb/cmake/modules/LLDBStandalone.cmake
+index 752113bcc6c414b06c841b094afab95992a12631..edd2b34ec8655b9a52b17755db33e4423ad2c532 100644
+--- a/lldb/cmake/modules/LLDBStandalone.cmake
++++ b/lldb/cmake/modules/LLDBStandalone.cmake
+@@ -73,6 +73,11 @@ endif()
+ # We append the directory in which LLVMConfig.cmake lives. We expect LLVM's
+ # CMake modules to be in that directory as well.
+ list(APPEND CMAKE_MODULE_PATH "${LLVM_DIR}")
++
++if(LLVM_ENABLE_ZLIB)
++  find_package(ZLIB)
++endif()
++
+ include(AddLLVM)
+ include(TableGen)
+ include(HandleLLVMOptions)

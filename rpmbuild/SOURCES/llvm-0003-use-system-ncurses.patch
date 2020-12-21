@@ -1,0 +1,282 @@
+From 3c7bfbd6831b2144229734892182d403e46d7baf Mon Sep 17 00:00:00 2001
+From: Petr Hosek <phosek@google.com>
+Date: Mon, 31 Aug 2020 15:11:39 -0700
+Subject: [PATCH] [CMake] Use find_library for ncurses
+
+Currently it is hard to avoid having LLVM link to the system install of
+ncurses, since it uses check_library_exists to find e.g. libtinfo and
+not find_library or find_package.
+
+With this change the ncurses lib is found with find_library, which also
+considers CMAKE_PREFIX_PATH. This solves an issue for the spack package
+manager, where we want to use the zlib installed by spack, and spack
+provides the CMAKE_PREFIX_PATH for it.
+
+This is a similar change as https://reviews.llvm.org/D79219, which just
+landed in master.
+
+Patch By: haampie
+
+Differential Revision: https://reviews.llvm.org/D85820
+---
+ compiler-rt/cmake/config-ix.cmake             | 21 +++++-----
+ compiler-rt/lib/xray/tests/CMakeLists.txt     |  2 +-
+ lldb/source/Core/CMakeLists.txt               |  4 +-
+ llvm/CMakeLists.txt                           |  7 ++++
+ llvm/cmake/config-ix.cmake                    | 25 +++++++-----
+ llvm/include/llvm/Config/config.h.cmake       |  2 +-
+ llvm/lib/Support/CMakeLists.txt               | 40 ++++++++++++-------
+ llvm/lib/Support/Unix/Process.inc             |  6 +--
+ .../llvm/include/llvm/Config/BUILD.gn         |  4 +-
+ 9 files changed, 66 insertions(+), 45 deletions(-)
+
+diff --git a/compiler-rt/cmake/config-ix.cmake b/compiler-rt/cmake/config-ix.cmake
+index 5f9e868de5fd8150ff8042ea924a1e05a8059b55..1428a514b55a451d9dfd74d8bbc0e2e302425e75 100644
+--- a/compiler-rt/cmake/config-ix.cmake
++++ b/compiler-rt/cmake/config-ix.cmake
+@@ -133,17 +133,18 @@ check_library_exists(pthread pthread_create "" COMPILER_RT_HAS_LIBPTHREAD)
+ check_library_exists(execinfo backtrace "" COMPILER_RT_HAS_LIBEXECINFO)
+ 
+ # Look for terminfo library, used in unittests that depend on LLVMSupport.
++if(LLVM_ENABLE_TERMINFO STREQUAL FORCE_ON)
++  set(MAYBE_REQUIRED REQUIRED)
++else()
++  set(MAYBE_REQUIRED)
++endif()
+ if(LLVM_ENABLE_TERMINFO)
+-  foreach(library terminfo tinfo curses ncurses ncursesw)
+-    string(TOUPPER ${library} library_suffix)
+-    check_library_exists(
+-      ${library} setupterm "" COMPILER_RT_HAS_TERMINFO_${library_suffix})
+-    if(COMPILER_RT_HAS_TERMINFO_${library_suffix})
+-      set(COMPILER_RT_HAS_TERMINFO TRUE)
+-      set(COMPILER_RT_TERMINFO_LIB "${library}")
+-      break()
+-    endif()
+-  endforeach()
++  find_library(COMPILER_RT_TERMINFO_LIB NAMES terminfo tinfo curses ncurses ncursesw ${MAYBE_REQUIRED})
++endif()
++if(COMPILER_RT_TERMINFO_LIB)
++  set(LLVM_ENABLE_TERMINFO 1)
++else()
++  set(LLVM_ENABLE_TERMINFO 0)
+ endif()
+ 
+ if (ANDROID AND COMPILER_RT_HAS_LIBDL)
+diff --git a/compiler-rt/lib/xray/tests/CMakeLists.txt b/compiler-rt/lib/xray/tests/CMakeLists.txt
+index a1fbccaeb6d2684352495dabe9a65310a22d5cde..96a9db1ef87773e69db29a8a2ff00a2fcb7864b9 100644
+--- a/compiler-rt/lib/xray/tests/CMakeLists.txt
++++ b/compiler-rt/lib/xray/tests/CMakeLists.txt
+@@ -55,7 +55,7 @@ set(XRAY_UNITTEST_LINK_FLAGS
+ if (NOT APPLE)
+   # Needed by LLVMSupport.
+   append_list_if(
+-    COMPILER_RT_HAS_TERMINFO
++    LLVM_ENABLE_TERMINFO
+     -l${COMPILER_RT_TERMINFO_LIB} XRAY_UNITTEST_LINK_FLAGS)
+ 
+   if (COMPILER_RT_STANDALONE_BUILD)
+diff --git a/lldb/source/Core/CMakeLists.txt b/lldb/source/Core/CMakeLists.txt
+index a4057d11077f396f9a085b1f625d572f0b3f5a9d..01a25045081f9fe03bfe9f970ad09ceaa2305f28 100644
+--- a/lldb/source/Core/CMakeLists.txt
++++ b/lldb/source/Core/CMakeLists.txt
+@@ -11,8 +11,8 @@ set(LLDB_LIBEDIT_LIBS)
+ 
+ if (LLDB_ENABLE_CURSES)
+   list(APPEND LLDB_CURSES_LIBS ${CURSES_LIBRARIES} ${PANEL_LIBRARIES})
+-  if(LLVM_ENABLE_TERMINFO AND HAVE_TERMINFO)
+-    list(APPEND LLDB_CURSES_LIBS ${TERMINFO_LIBS})
++  if(LLVM_ENABLE_TERMINFO)
++    list(APPEND LLDB_CURSES_LIBS ${TERMINFO_LIB})
+   endif()
+   if (LLVM_BUILD_STATIC)
+     list(APPEND LLDB_CURSES_LIBS gpm)
+diff --git a/llvm/CMakeLists.txt b/llvm/CMakeLists.txt
+index f6355a115642c175180e7dd2ad3e3a08517cbdb9..10fc8499a92ea82a637c534727adec9680060a97 100644
+--- a/llvm/CMakeLists.txt
++++ b/llvm/CMakeLists.txt
+@@ -642,6 +642,13 @@ endif()
+ 
+ if (LLVM_BUILD_STATIC)
+   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static")
++  # Remove shared library suffixes from use in find_library
++  foreach (shared_lib_suffix ${CMAKE_SHARED_LIBRARY_SUFFIX} ${CMAKE_IMPORT_LIBRARY_SUFFIX})
++    list(FIND CMAKE_FIND_LIBRARY_SUFFIXES ${shared_lib_suffix} shared_lib_suffix_idx)
++    if(NOT ${shared_lib_suffix_idx} EQUAL -1)
++      list(REMOVE_AT CMAKE_FIND_LIBRARY_SUFFIXES ${shared_lib_suffix_idx})
++    endif()
++  endforeach()
+ endif()
+ 
+ # Use libtool instead of ar if you are both on an Apple host, and targeting Apple.
+diff --git a/llvm/cmake/config-ix.cmake b/llvm/cmake/config-ix.cmake
+index 72505190e347fdf9c717792dafdfb6f4ed90225b..6b92180b739e8756cda61665ed2722b54f9f6291 100644
+--- a/llvm/cmake/config-ix.cmake
++++ b/llvm/cmake/config-ix.cmake
+@@ -148,19 +148,18 @@ if(NOT LLVM_USE_SANITIZER MATCHES "Memory.*")
+     else()
+       set(HAVE_LIBEDIT 0)
+     endif()
++    if(LLVM_ENABLE_TERMINFO STREQUAL FORCE_ON)
++      set(MAYBE_REQUIRED REQUIRED)
++    else()
++      set(MAYBE_REQUIRED)
++    endif()
+     if(LLVM_ENABLE_TERMINFO)
+-      set(HAVE_TERMINFO 0)
+-      foreach(library terminfo tinfo curses ncurses ncursesw)
+-        string(TOUPPER ${library} library_suffix)
+-        check_library_exists(${library} setupterm "" HAVE_TERMINFO_${library_suffix})
+-        if(HAVE_TERMINFO_${library_suffix})
+-          set(HAVE_TERMINFO 1)
+-          set(TERMINFO_LIBS "${library}")
+-          break()
+-        endif()
+-      endforeach()
++      find_library(TERMINFO_LIB NAMES terminfo tinfo curses ncurses ncursesw ${MAYBE_REQUIRED})
++    endif()
++    if(TERMINFO_LIB)
++      set(LLVM_ENABLE_TERMINFO 1)
+     else()
+-      set(HAVE_TERMINFO 0)
++      set(LLVM_ENABLE_TERMINFO 0)
+     endif()
+ 
+     find_library(ICONV_LIBRARY_PATH NAMES iconv libiconv libiconv-2 c)
+@@ -177,7 +176,11 @@ if(NOT LLVM_USE_SANITIZER MATCHES "Memory.*")
+         endif()
+       endif()
+     endif()
++  else()
++    set(LLVM_ENABLE_TERMINFO 0)
+   endif()
++else()
++  set(LLVM_ENABLE_TERMINFO 0)
+ endif()
+ 
+ if (LLVM_ENABLE_LIBXML2 STREQUAL "FORCE_ON" AND NOT LLVM_LIBXML2_ENABLED)
+diff --git a/llvm/include/llvm/Config/config.h.cmake b/llvm/include/llvm/Config/config.h.cmake
+index 90789df356ae1bfa53bef808229964921ec670ba..aec8d08f30e74d288f99a3e554dff65f72f7ebaa 100644
+--- a/llvm/include/llvm/Config/config.h.cmake
++++ b/llvm/include/llvm/Config/config.h.cmake
+@@ -212,7 +212,7 @@
+ #cmakedefine HAVE_SYSEXITS_H ${HAVE_SYSEXITS_H}
+ 
+ /* Define if the setupterm() function is supported this platform. */
+-#cmakedefine HAVE_TERMINFO ${HAVE_TERMINFO}
++#cmakedefine LLVM_ENABLE_TERMINFO ${LLVM_ENABLE_TERMINFO}
+ 
+ /* Define if the xar_open() function is supported this platform. */
+ #cmakedefine HAVE_LIBXAR ${HAVE_LIBXAR}
+diff --git a/llvm/lib/Support/CMakeLists.txt b/llvm/lib/Support/CMakeLists.txt
+index cf7408143361c7f56d378c3cde2dc78530f7b32d..5e0d43b148d6cd80e4b7954df27811c363d3b75f 100644
+--- a/llvm/lib/Support/CMakeLists.txt
++++ b/llvm/lib/Support/CMakeLists.txt
+@@ -2,6 +2,23 @@ if(LLVM_ENABLE_ZLIB)
+   set(imported_libs ZLIB::ZLIB)
+ endif()
+ 
++function(get_system_libname libpath libname)
++  get_filename_component(libpath ${libpath} NAME)
++  set(prefixes ${CMAKE_FIND_LIBRARY_PREFIXES})
++  set(suffixes ${CMAKE_FIND_LIBRARY_SUFFIXES})
++  list(FILTER prefixes EXCLUDE REGEX "^\\s*$")
++  list(FILTER suffixes EXCLUDE REGEX "^\\s*$")
++  if( prefixes )
++    string(REPLACE ";" "|" prefixes "${prefixes}")
++    string(REGEX REPLACE "^(${prefixes})" "" libpath ${libpath})
++  endif()
++  if( suffixes )
++    string(REPLACE ";" "|" suffixes "${suffixes}")
++    string(REGEX REPLACE "(${suffixes})$" "" libpath ${libpath})
++  endif()
++  set(${libname} "${libpath}" PARENT_SCOPE)
++endfunction()
++
+ if( MSVC OR MINGW )
+   # libuuid required for FOLDERID_Profile usage in lib/Support/Windows/Path.inc.
+   # advapi32 required for CryptAcquireContextW in lib/Support/Windows/Path.inc.
+@@ -21,10 +38,8 @@ elseif( CMAKE_HOST_UNIX )
+     STRING(REGEX REPLACE "^lib" "" Backtrace_LIBFILE ${Backtrace_LIBFILE})
+     set(system_libs ${system_libs} ${Backtrace_LIBFILE})
+   endif()
+-  if(LLVM_ENABLE_TERMINFO)
+-    if(HAVE_TERMINFO)
+-      set(system_libs ${system_libs} ${TERMINFO_LIBS})
+-    endif()
++  if( LLVM_ENABLE_TERMINFO )
++    set(imported_libs ${imported_libs} "${TERMINFO_LIB}")
+   endif()
+   if( LLVM_ENABLE_THREADS AND (HAVE_LIBATOMIC OR HAVE_CXX_LIBATOMICS64) )
+     set(system_libs ${system_libs} atomic)
+@@ -237,20 +252,15 @@ if(LLVM_ENABLE_ZLIB)
+   if(NOT zlib_library)
+     get_property(zlib_library TARGET ZLIB::ZLIB PROPERTY LOCATION)
+   endif()
+-  get_filename_component(zlib_library ${zlib_library} NAME)
+-  if(CMAKE_STATIC_LIBRARY_PREFIX AND CMAKE_STATIC_LIBRARY_SUFFIX AND
+-      zlib_library MATCHES "^${CMAKE_STATIC_LIBRARY_PREFIX}.*${CMAKE_STATIC_LIBRARY_SUFFIX}$")
+-    STRING(REGEX REPLACE "^${CMAKE_STATIC_LIBRARY_PREFIX}" "" zlib_library ${zlib_library})
+-    STRING(REGEX REPLACE "${CMAKE_STATIC_LIBRARY_SUFFIX}$" "" zlib_library ${zlib_library})
+-  endif()
+-  if(CMAKE_SHARED_LIBRARY_PREFIX AND CMAKE_SHARED_LIBRARY_SUFFIX AND
+-      zlib_library MATCHES "^${CMAKE_SHARED_LIBRARY_PREFIX}.*${CMAKE_SHARED_LIBRARY_SUFFIX}$")
+-    STRING(REGEX REPLACE "^${CMAKE_SHARED_LIBRARY_PREFIX}" "" zlib_library ${zlib_library})
+-    STRING(REGEX REPLACE "${CMAKE_SHARED_LIBRARY_SUFFIX}$" "" zlib_library ${zlib_library})
+-  endif()
++  get_system_libname(${zlib_library} zlib_library)
+   set(llvm_system_libs ${llvm_system_libs} "${zlib_library}")
+ endif()
+ 
++if(LLVM_ENABLE_TERMINFO)
++  get_system_libname(${TERMINFO_LIB} terminfo_library)
++  set(llvm_system_libs ${llvm_system_libs} "${terminfo_library}")
++endif()
++
+ set_property(TARGET LLVMSupport PROPERTY LLVM_SYSTEM_LIBS "${llvm_system_libs}")
+ 
+ if(LLVM_WITH_Z3)
+diff --git a/llvm/lib/Support/Unix/Process.inc b/llvm/lib/Support/Unix/Process.inc
+index 24f16b51af7be98eb57b22ed53ff4ae4c44c0af9..7425d084da27afd9e464bca99228d5f4efa34a93 100644
+--- a/llvm/lib/Support/Unix/Process.inc
++++ b/llvm/lib/Support/Unix/Process.inc
+@@ -313,7 +313,7 @@ unsigned Process::StandardErrColumns() {
+   return getColumns();
+ }
+ 
+-#ifdef HAVE_TERMINFO
++#ifdef LLVM_ENABLE_TERMINFO
+ // We manually declare these extern functions because finding the correct
+ // headers from various terminfo, curses, or other sources is harder than
+ // writing their specs down.
+@@ -323,12 +323,12 @@ extern "C" int del_curterm(struct term *termp);
+ extern "C" int tigetnum(char *capname);
+ #endif
+ 
+-#ifdef HAVE_TERMINFO
++#ifdef LLVM_ENABLE_TERMINFO
+ static ManagedStatic<std::mutex> TermColorMutex;
+ #endif
+ 
+ static bool terminalHasColors(int fd) {
+-#ifdef HAVE_TERMINFO
++#ifdef LLVM_ENABLE_TERMINFO
+   // First, acquire a global lock because these C routines are thread hostile.
+   std::lock_guard<std::mutex> G(*TermColorMutex);
+ 
+diff --git a/llvm/utils/gn/secondary/llvm/include/llvm/Config/BUILD.gn b/llvm/utils/gn/secondary/llvm/include/llvm/Config/BUILD.gn
+index 03dc191f8ffdb9f20c175a5cf363cb0bc9f1bb66..d54242da38ccaa3eada9c4d3b01562b3217c69f5 100644
+--- a/llvm/utils/gn/secondary/llvm/include/llvm/Config/BUILD.gn
++++ b/llvm/utils/gn/secondary/llvm/include/llvm/Config/BUILD.gn
+@@ -286,9 +286,9 @@ write_cmake_config("config") {
+   }
+ 
+   if (llvm_enable_terminfo) {
+-    values += [ "HAVE_TERMINFO=1" ]
++    values += [ "LLVM_ENABLE_TERMINFO=1" ]
+   } else {
+-    values += [ "HAVE_TERMINFO=" ]
++    values += [ "LLVM_ENABLE_TERMINFO=" ]
+   }
+ 
+   if (llvm_enable_dia_sdk) {

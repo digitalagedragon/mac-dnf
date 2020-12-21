@@ -1,0 +1,529 @@
+From 31e5f7120bdd2f76337686d9d169b1c00e6ee69c Mon Sep 17 00:00:00 2001
+From: Petr Hosek <phosek@google.com>
+Date: Thu, 30 Apr 2020 13:07:13 -0700
+Subject: [PATCH] [CMake] Simplify CMake handling for zlib
+
+Rather than handling zlib handling manually, use find_package from CMake
+to find zlib properly. Use this to normalize the LLVM_ENABLE_ZLIB,
+HAVE_ZLIB, HAVE_ZLIB_H. Furthermore, require zlib if LLVM_ENABLE_ZLIB is
+set to YES, which requires the distributor to explicitly select whether
+zlib is enabled or not. This simplifies the CMake handling and usage in
+the rest of the tooling.
+
+This is a reland of abb0075 with all followup changes and fixes that
+should address issues that were reported in PR44780.
+
+Differential Revision: https://reviews.llvm.org/D79219
+---
+ clang/test/CMakeLists.txt                     | 11 +----
+ clang/test/lit.site.cfg.py.in                 |  2 +-
+ compiler-rt/test/lit.common.configured.in     |  2 +-
+ lld/test/CMakeLists.txt                       | 11 +----
+ lld/test/lit.site.cfg.py.in                   |  2 +-
+ lldb/cmake/modules/LLDBStandalone.cmake       |  4 --
+ .../gdb-remote/GDBRemoteCommunication.cpp     |  4 +-
+ .../GDBRemoteCommunicationClient.cpp          |  2 +-
+ llvm/cmake/config-ix.cmake                    | 47 +++++++++----------
+ llvm/cmake/modules/LLVMConfig.cmake.in        |  3 ++
+ llvm/include/llvm/Config/config.h.cmake       |  6 ---
+ llvm/lib/Support/CMakeLists.txt               | 35 ++++++++++++--
+ llvm/lib/Support/CRC.cpp                      |  2 +-
+ llvm/lib/Support/Compression.cpp              |  4 +-
+ llvm/test/CMakeLists.txt                      |  2 +-
+ llvm/test/lit.site.cfg.py.in                  |  2 +-
+ llvm/unittests/Support/CompressionTest.cpp    |  2 +-
+ llvm/utils/gn/secondary/clang/test/BUILD.gn   |  4 +-
+ .../gn/secondary/compiler-rt/test/BUILD.gn    |  4 +-
+ llvm/utils/gn/secondary/lld/test/BUILD.gn     |  4 +-
+ .../llvm/include/llvm/Config/BUILD.gn         | 14 +-----
+ llvm/utils/gn/secondary/llvm/test/BUILD.gn    |  4 +-
+ 22 files changed, 79 insertions(+), 92 deletions(-)
+
+diff --git a/clang/test/CMakeLists.txt b/clang/test/CMakeLists.txt
+index b2777fded0ae5e756efd632f4dc6945d8379f38b..3ace9f2521b08fdf421c9c29a3ca27313d8bde8e 100644
+--- a/clang/test/CMakeLists.txt
++++ b/clang/test/CMakeLists.txt
+@@ -9,15 +9,6 @@ endif ()
+ 
+ string(REPLACE ${CMAKE_CFG_INTDIR} ${LLVM_BUILD_MODE} CLANG_TOOLS_DIR ${LLVM_RUNTIME_OUTPUT_INTDIR})
+ 
+-if(CLANG_BUILT_STANDALONE)
+-  # Set HAVE_LIBZ according to recorded LLVM_ENABLE_ZLIB value. This
+-  # value is forced to 0 if zlib was not found, so it is fine to use it
+-  # instead of HAVE_LIBZ (not recorded).
+-  if(LLVM_ENABLE_ZLIB)
+-    set(HAVE_LIBZ 1)
+-  endif()
+-endif()
+-
+ llvm_canonicalize_cmake_booleans(
+   CLANG_BUILD_EXAMPLES
+   CLANG_ENABLE_ARCMT
+@@ -25,7 +16,7 @@ llvm_canonicalize_cmake_booleans(
+   CLANG_SPAWN_CC1
+   ENABLE_BACKTRACES
+   ENABLE_EXPERIMENTAL_NEW_PASS_MANAGER
+-  HAVE_LIBZ
++  LLVM_ENABLE_ZLIB
+   LLVM_ENABLE_PER_TARGET_RUNTIME_DIR
+   LLVM_ENABLE_PLUGINS
+   LLVM_ENABLE_THREADS)
+diff --git a/clang/test/lit.site.cfg.py.in b/clang/test/lit.site.cfg.py.in
+index d9b5b2f2592e59c1b3b202ad6210383281a8444a..286ea06d798c1b097c63b3e9b54ef1c146882cc2 100644
+--- a/clang/test/lit.site.cfg.py.in
++++ b/clang/test/lit.site.cfg.py.in
+@@ -16,7 +16,7 @@ config.host_triple = "@LLVM_HOST_TRIPLE@"
+ config.target_triple = "@TARGET_TRIPLE@"
+ config.host_cxx = "@CMAKE_CXX_COMPILER@"
+ config.llvm_use_sanitizer = "@LLVM_USE_SANITIZER@"
+-config.have_zlib = @HAVE_LIBZ@
++config.have_zlib = @LLVM_ENABLE_ZLIB@
+ config.clang_arcmt = @CLANG_ENABLE_ARCMT@
+ config.clang_default_cxx_stdlib = "@CLANG_DEFAULT_CXX_STDLIB@"
+ config.clang_staticanalyzer = @CLANG_ENABLE_STATIC_ANALYZER@
+diff --git a/compiler-rt/test/lit.common.configured.in b/compiler-rt/test/lit.common.configured.in
+index 1f746c067b84c4d6a91ceb37b75fc84796dce2d2..000bf9b9847092ed9ac51e39d6b75e30f5cd87dd 100644
+--- a/compiler-rt/test/lit.common.configured.in
++++ b/compiler-rt/test/lit.common.configured.in
+@@ -57,7 +57,7 @@ elif config.android:
+ else:
+   set_default("target_suffix", "-%s" % config.target_arch)
+ 
+-set_default("have_zlib", "@HAVE_LIBZ@")
++set_default("have_zlib", "@LLVM_ENABLE_ZLIB@")
+ set_default("libcxx_used", "@LLVM_LIBCXX_USED@")
+ 
+ # LLVM tools dir can be passed in lit parameters, so try to
+diff --git a/lld/test/CMakeLists.txt b/lld/test/CMakeLists.txt
+index 74b29f5d65b8926077b72a26c47d425994d774a5..52e6118ba876bedb7499f6bd2cd0e96c6bb1d069 100644
+--- a/lld/test/CMakeLists.txt
++++ b/lld/test/CMakeLists.txt
+@@ -4,17 +4,8 @@ set(LLVM_BUILD_MODE "%(build_mode)s")
+ set(LLVM_TOOLS_DIR "${LLVM_TOOLS_BINARY_DIR}/%(build_config)s")
+ set(LLVM_LIBS_DIR "${LLVM_BINARY_DIR}/lib${LLVM_LIBDIR_SUFFIX}/%(build_config)s")
+ 
+-if(LLD_BUILT_STANDALONE)
+-  # Set HAVE_LIBZ according to recorded LLVM_ENABLE_ZLIB value. This
+-  # value is forced to 0 if zlib was not found, so it is fine to use it
+-  # instead of HAVE_LIBZ (not recorded).
+-  if(LLVM_ENABLE_ZLIB)
+-    set(HAVE_LIBZ 1)
+-  endif()
+-endif()
+-
+ llvm_canonicalize_cmake_booleans(
+-  HAVE_LIBZ
++  LLVM_ENABLE_ZLIB
+   LLVM_LIBXML2_ENABLED
+   )
+ 
+diff --git a/lld/test/lit.site.cfg.py.in b/lld/test/lit.site.cfg.py.in
+index 4aa2fcda73bb4eb2be4c29c2b3eb0a06c8d83e1b..3d4c51f4ab64731d0f8829d77cc0d42c408fb713 100644
+--- a/lld/test/lit.site.cfg.py.in
++++ b/lld/test/lit.site.cfg.py.in
+@@ -14,7 +14,7 @@ config.lld_libs_dir = "@LLVM_LIBRARY_OUTPUT_INTDIR@"
+ config.lld_tools_dir = "@LLVM_RUNTIME_OUTPUT_INTDIR@"
+ config.target_triple = "@TARGET_TRIPLE@"
+ config.python_executable = "@Python3_EXECUTABLE@"
+-config.have_zlib = @HAVE_LIBZ@
++config.have_zlib = @LLVM_ENABLE_ZLIB@
+ config.sizeof_void_p = @CMAKE_SIZEOF_VOID_P@
+ 
+ # Support substitution of the tools and libs dirs with user parameters. This is
+diff --git a/lldb/cmake/modules/LLDBStandalone.cmake b/lldb/cmake/modules/LLDBStandalone.cmake
+index edd2b34ec8655b9a52b17755db33e4423ad2c532..94781c35837445c1be5ec5022ec2b40d3f4fe58f 100644
+--- a/lldb/cmake/modules/LLDBStandalone.cmake
++++ b/lldb/cmake/modules/LLDBStandalone.cmake
+@@ -74,10 +74,6 @@ endif()
+ # CMake modules to be in that directory as well.
+ list(APPEND CMAKE_MODULE_PATH "${LLVM_DIR}")
+ 
+-if(LLVM_ENABLE_ZLIB)
+-  find_package(ZLIB)
+-endif()
+-
+ include(AddLLVM)
+ include(TableGen)
+ include(HandleLLVMOptions)
+diff --git a/lldb/source/Plugins/Process/gdb-remote/GDBRemoteCommunication.cpp b/lldb/source/Plugins/Process/gdb-remote/GDBRemoteCommunication.cpp
+index 71522d65bc4bf1d9361fe1e7bf953baa65c6c940..832760f7f0dccad88ed97280b365b1701fb084b2 100644
+--- a/lldb/source/Plugins/Process/gdb-remote/GDBRemoteCommunication.cpp
++++ b/lldb/source/Plugins/Process/gdb-remote/GDBRemoteCommunication.cpp
+@@ -50,7 +50,7 @@
+ #include <compression.h>
+ #endif
+ 
+-#if defined(HAVE_LIBZ)
++#if LLVM_ENABLE_ZLIB
+ #include <zlib.h>
+ #endif
+ 
+@@ -582,7 +582,7 @@ bool GDBRemoteCommunication::DecompressPacket() {
+   }
+ #endif
+ 
+-#if defined(HAVE_LIBZ)
++#if LLVM_ENABLE_ZLIB
+   if (decompressed_bytes == 0 && decompressed_bufsize != ULONG_MAX &&
+       decompressed_buffer != nullptr &&
+       m_compression_type == CompressionType::ZlibDeflate) {
+diff --git a/lldb/source/Plugins/Process/gdb-remote/GDBRemoteCommunicationClient.cpp b/lldb/source/Plugins/Process/gdb-remote/GDBRemoteCommunicationClient.cpp
+index 5669b1f4c9a49c4e090ffb56de3a12a12ba7c89d..cf0daccc2d0c283749b40a1b8c66f11a5871aa1f 100644
+--- a/lldb/source/Plugins/Process/gdb-remote/GDBRemoteCommunicationClient.cpp
++++ b/lldb/source/Plugins/Process/gdb-remote/GDBRemoteCommunicationClient.cpp
+@@ -1053,7 +1053,7 @@ void GDBRemoteCommunicationClient::MaybeEnableCompression(
+   }
+ #endif
+ 
+-#if defined(HAVE_LIBZ)
++#if LLVM_ENABLE_ZLIB
+   if (avail_type == CompressionType::None) {
+     for (auto compression : supported_compressions) {
+       if (compression == "zlib-deflate") {
+diff --git a/llvm/cmake/config-ix.cmake b/llvm/cmake/config-ix.cmake
+index 90e5d327c7577261b5092c46b46ffaa44cde4e90..2c20a1afeec01daebe8151a2ad8b88dfce828637 100644
+--- a/llvm/cmake/config-ix.cmake
++++ b/llvm/cmake/config-ix.cmake
+@@ -9,6 +9,7 @@ include(CheckSymbolExists)
+ include(CheckFunctionExists)
+ include(CheckStructHasMember)
+ include(CheckCCompilerFlag)
++include(CMakePushCheckState)
+ 
+ include(CheckCompilerVersion)
+ include(HandleLLVMStdlib)
+@@ -56,7 +57,6 @@ check_include_file(sys/types.h HAVE_SYS_TYPES_H)
+ check_include_file(termios.h HAVE_TERMIOS_H)
+ check_include_file(unistd.h HAVE_UNISTD_H)
+ check_include_file(valgrind/valgrind.h HAVE_VALGRIND_VALGRIND_H)
+-check_include_file(zlib.h HAVE_ZLIB_H)
+ check_include_file(fenv.h HAVE_FENV_H)
+ check_symbol_exists(FE_ALL_EXCEPT "fenv.h" HAVE_DECL_FE_ALL_EXCEPT)
+ check_symbol_exists(FE_INEXACT "fenv.h" HAVE_DECL_FE_INEXACT)
+@@ -115,22 +115,30 @@ if(HAVE_LIBPTHREAD)
+   set(LLVM_PTHREAD_LIB ${CMAKE_THREAD_LIBS_INIT})
+ endif()
+ 
++if(LLVM_ENABLE_ZLIB)
++  if(LLVM_ENABLE_ZLIB STREQUAL FORCE_ON)
++    find_package(ZLIB REQUIRED)
++  elseif(NOT LLVM_USE_SANITIZER MATCHES "Memory.*")
++    find_package(ZLIB)
++  endif()
++  if(ZLIB_FOUND)
++    # Check if zlib we found is usable; for example, we may have found a 32-bit
++    # library on a 64-bit system which would result in a link-time failure.
++    cmake_push_check_state()
++    set(CMAKE_REQUIRED_INCLUDES ${ZLIB_INCLUDE_DIRS})
++    set(CMAKE_REQUIRED_LIBRARIES ${ZLIB_LIBRARY})
++    check_symbol_exists(compress2 zlib.h HAVE_ZLIB)
++    cmake_pop_check_state()
++    if(LLVM_ENABLE_ZLIB STREQUAL FORCE_ON AND NOT HAVE_ZLIB)
++      message(FATAL_ERROR "Failed to configure zlib")
++    endif()
++  endif()
++  set(LLVM_ENABLE_ZLIB "${HAVE_ZLIB}")
++endif()
++
+ # Don't look for these libraries if we're using MSan, since uninstrumented third
+ # party code may call MSan interceptors like strlen, leading to false positives.
+ if(NOT LLVM_USE_SANITIZER MATCHES "Memory.*")
+-  set(HAVE_LIBZ 0)
+-  if(LLVM_ENABLE_ZLIB)
+-    foreach(library z zlib_static zlib)
+-      string(TOUPPER ${library} library_suffix)
+-      check_library_exists(${library} compress2 "" HAVE_LIBZ_${library_suffix})
+-      if(HAVE_LIBZ_${library_suffix})
+-        set(HAVE_LIBZ 1)
+-        set(ZLIB_LIBRARIES "${library}")
+-        break()
+-      endif()
+-    endforeach()
+-  endif()
+-
+   # Don't look for these libraries on Windows.
+   if (NOT PURE_WINDOWS)
+     # Skip libedit if using ASan as it contains memory leaks.
+@@ -175,10 +183,6 @@ if (LLVM_ENABLE_LIBXML2 STREQUAL "FORCE_ON" AND NOT LLVM_LIBXML2_ENABLED)
+   message(FATAL_ERROR "Failed to congifure libxml2")
+ endif()
+ 
+-if (LLVM_ENABLE_ZLIB STREQUAL "FORCE_ON" AND NOT HAVE_LIBZ)
+-  message(FATAL_ERROR "Failed to configure zlib")
+-endif()
+-
+ check_library_exists(xar xar_open "" HAVE_LIBXAR)
+ if(HAVE_LIBXAR)
+   set(XAR_LIB xar)
+@@ -517,13 +521,6 @@ else( LLVM_ENABLE_THREADS )
+   message(STATUS "Threads disabled.")
+ endif()
+ 
+-if (LLVM_ENABLE_ZLIB )
+-  # Check if zlib is available in the system.
+-  if ( NOT HAVE_ZLIB_H OR NOT HAVE_LIBZ )
+-    set(LLVM_ENABLE_ZLIB 0)
+-  endif()
+-endif()
+-
+ if (LLVM_ENABLE_DOXYGEN)
+   message(STATUS "Doxygen enabled.")
+   find_package(Doxygen REQUIRED)
+diff --git a/llvm/cmake/modules/LLVMConfig.cmake.in b/llvm/cmake/modules/LLVMConfig.cmake.in
+index 4d8e33711d27bad19dd92e757774156e7bb653f3..a5c370bbc25e44342387de95ddb26a36da41a73e 100644
+--- a/llvm/cmake/modules/LLVMConfig.cmake.in
++++ b/llvm/cmake/modules/LLVMConfig.cmake.in
+@@ -51,6 +51,9 @@ set(LLVM_ENABLE_THREADS @LLVM_ENABLE_THREADS@)
+ set(LLVM_ENABLE_UNWIND_TABLES @LLVM_ENABLE_UNWIND_TABLES@)
+ 
+ set(LLVM_ENABLE_ZLIB @LLVM_ENABLE_ZLIB@)
++if(LLVM_ENABLE_ZLIB)
++  find_package(ZLIB)
++endif()
+ 
+ set(LLVM_LIBXML2_ENABLED @LLVM_LIBXML2_ENABLED@)
+ 
+diff --git a/llvm/include/llvm/Config/config.h.cmake b/llvm/include/llvm/Config/config.h.cmake
+index 70543bec245832354c18ae0c33953e4d06fa2fab..b8c7e070eb3416d2da90ee1f5542da51a5432519 100644
+--- a/llvm/include/llvm/Config/config.h.cmake
++++ b/llvm/include/llvm/Config/config.h.cmake
+@@ -115,9 +115,6 @@
+ /* Define to 1 if you have the `pthread_setname_np' function. */
+ #cmakedefine HAVE_PTHREAD_SETNAME_NP ${HAVE_PTHREAD_SETNAME_NP}
+ 
+-/* Define to 1 if you have the `z' library (-lz). */
+-#cmakedefine HAVE_LIBZ ${HAVE_LIBZ}
+-
+ /* Define to 1 if you have the <link.h> header file. */
+ #cmakedefine HAVE_LINK_H ${HAVE_LINK_H}
+ 
+@@ -226,9 +223,6 @@
+ /* Define to 1 if you have the <valgrind/valgrind.h> header file. */
+ #cmakedefine HAVE_VALGRIND_VALGRIND_H ${HAVE_VALGRIND_VALGRIND_H}
+ 
+-/* Define to 1 if you have the <zlib.h> header file. */
+-#cmakedefine HAVE_ZLIB_H ${HAVE_ZLIB_H}
+-
+ /* Have host's _alloca */
+ #cmakedefine HAVE__ALLOCA ${HAVE__ALLOCA}
+ 
+diff --git a/llvm/lib/Support/CMakeLists.txt b/llvm/lib/Support/CMakeLists.txt
+index 17bef023078976d5c56137b755b6b8f2387bfd6b..7b45dc628160e087b3535719087692a173ddd792 100644
+--- a/llvm/lib/Support/CMakeLists.txt
++++ b/llvm/lib/Support/CMakeLists.txt
+@@ -1,7 +1,7 @@
+-set(system_libs)
+-if ( LLVM_ENABLE_ZLIB AND HAVE_LIBZ )
+-  set(system_libs ${system_libs} ${ZLIB_LIBRARIES})
++if(LLVM_ENABLE_ZLIB)
++  set(imported_libs ZLIB::ZLIB)
+ endif()
++
+ if( MSVC OR MINGW )
+   # libuuid required for FOLDERID_Profile usage in lib/Support/Windows/Path.inc.
+   # advapi32 required for CryptAcquireContextW in lib/Support/Windows/Path.inc.
+@@ -194,10 +194,35 @@ add_llvm_component_library(LLVMSupport
+   ${LLVM_MAIN_INCLUDE_DIR}/llvm/ADT
+   ${LLVM_MAIN_INCLUDE_DIR}/llvm/Support
+   ${Backtrace_INCLUDE_DIRS}
+-  LINK_LIBS ${system_libs} ${delayload_flags} ${Z3_LINK_FILES}
++  LINK_LIBS ${system_libs} ${imported_libs} ${delayload_flags} ${Z3_LINK_FILES}
+   )
+ 
+-set_property(TARGET LLVMSupport PROPERTY LLVM_SYSTEM_LIBS "${system_libs}")
++set(llvm_system_libs ${system_libs})
++
++if(LLVM_ENABLE_ZLIB)
++  # CMAKE_BUILD_TYPE is only meaningful to single-configuration generators.
++  if(CMAKE_BUILD_TYPE)
++    string(TOUPPER ${CMAKE_BUILD_TYPE} build_type)
++    get_property(zlib_library TARGET ZLIB::ZLIB PROPERTY LOCATION_${build_type})
++  endif()
++  if(NOT zlib_library)
++    get_property(zlib_library TARGET ZLIB::ZLIB PROPERTY LOCATION)
++  endif()
++  get_filename_component(zlib_library ${zlib_library} NAME)
++  if(CMAKE_STATIC_LIBRARY_PREFIX AND CMAKE_STATIC_LIBRARY_SUFFIX AND
++      zlib_library MATCHES "^${CMAKE_STATIC_LIBRARY_PREFIX}.*${CMAKE_STATIC_LIBRARY_SUFFIX}$")
++    STRING(REGEX REPLACE "^${CMAKE_STATIC_LIBRARY_PREFIX}" "" zlib_library ${zlib_library})
++    STRING(REGEX REPLACE "${CMAKE_STATIC_LIBRARY_SUFFIX}$" "" zlib_library ${zlib_library})
++  endif()
++  if(CMAKE_SHARED_LIBRARY_PREFIX AND CMAKE_SHARED_LIBRARY_SUFFIX AND
++      zlib_library MATCHES "^${CMAKE_SHARED_LIBRARY_PREFIX}.*${CMAKE_SHARED_LIBRARY_SUFFIX}$")
++    STRING(REGEX REPLACE "^${CMAKE_SHARED_LIBRARY_PREFIX}" "" zlib_library ${zlib_library})
++    STRING(REGEX REPLACE "${CMAKE_SHARED_LIBRARY_SUFFIX}$" "" zlib_library ${zlib_library})
++  endif()
++  set(llvm_system_libs ${llvm_system_libs} "${zlib_library}")
++endif()
++
++set_property(TARGET LLVMSupport PROPERTY LLVM_SYSTEM_LIBS "${llvm_system_libs}")
+ 
+ if(LLVM_WITH_Z3)
+   target_include_directories(LLVMSupport SYSTEM
+diff --git a/llvm/lib/Support/CRC.cpp b/llvm/lib/Support/CRC.cpp
+index 7ff09debe3b7c8649614b7838ab31bc3c71eed0d..2bc668beed3223129beb56a8b8f9f3a741859922 100644
+--- a/llvm/lib/Support/CRC.cpp
++++ b/llvm/lib/Support/CRC.cpp
+@@ -25,7 +25,7 @@
+ 
+ using namespace llvm;
+ 
+-#if LLVM_ENABLE_ZLIB == 0 || !HAVE_ZLIB_H
++#if !LLVM_ENABLE_ZLIB
+ 
+ static const uint32_t CRCTable[256] = {
+     0x00000000, 0x77073096, 0xee0e612c, 0x990951ba, 0x076dc419, 0x706af48f,
+diff --git a/llvm/lib/Support/Compression.cpp b/llvm/lib/Support/Compression.cpp
+index 27d92f0e0aec24fd630beea879812972e3bdffcc..b8c77cf69b95fb6b42cdbcec0f21bb7f3f710e6a 100644
+--- a/llvm/lib/Support/Compression.cpp
++++ b/llvm/lib/Support/Compression.cpp
+@@ -17,13 +17,13 @@
+ #include "llvm/Support/Compiler.h"
+ #include "llvm/Support/Error.h"
+ #include "llvm/Support/ErrorHandling.h"
+-#if LLVM_ENABLE_ZLIB == 1 && HAVE_ZLIB_H
++#if LLVM_ENABLE_ZLIB
+ #include <zlib.h>
+ #endif
+ 
+ using namespace llvm;
+ 
+-#if LLVM_ENABLE_ZLIB == 1 && HAVE_LIBZ
++#if LLVM_ENABLE_ZLIB
+ static Error createError(StringRef Err) {
+   return make_error<StringError>(Err, inconvertibleErrorCode());
+ }
+diff --git a/llvm/test/CMakeLists.txt b/llvm/test/CMakeLists.txt
+index a01e278079f9e5edf293e909cc39b1141bbfdcc2..cde80035a09bffbc45765b74c10f926a06abfa74 100644
+--- a/llvm/test/CMakeLists.txt
++++ b/llvm/test/CMakeLists.txt
+@@ -1,12 +1,12 @@
+ llvm_canonicalize_cmake_booleans(
+   BUILD_SHARED_LIBS
+   HAVE_LIBXAR
+-  HAVE_LIBZ
+   HAVE_OCAMLOPT
+   HAVE_OCAML_OUNIT
+   LLVM_ENABLE_DIA_SDK
+   LLVM_ENABLE_FFI
+   LLVM_ENABLE_THREADS
++  LLVM_ENABLE_ZLIB
+   LLVM_INCLUDE_GO_TESTS
+   LLVM_LIBXML2_ENABLED
+   LLVM_LINK_LLVM_DYLIB
+diff --git a/llvm/test/lit.site.cfg.py.in b/llvm/test/lit.site.cfg.py.in
+index c04ef04fea60154bac1704e4094e2d3f8df5ac2a..52f709f817ddd5155a4d45213157750d3d46d0ce 100644
+--- a/llvm/test/lit.site.cfg.py.in
++++ b/llvm/test/lit.site.cfg.py.in
+@@ -33,7 +33,7 @@ config.host_cxx = "@HOST_CXX@"
+ config.host_ldflags = '@HOST_LDFLAGS@'
+ config.llvm_use_intel_jitevents = @LLVM_USE_INTEL_JITEVENTS@
+ config.llvm_use_sanitizer = "@LLVM_USE_SANITIZER@"
+-config.have_zlib = @HAVE_LIBZ@
++config.have_zlib = @LLVM_ENABLE_ZLIB@
+ config.have_libxar = @HAVE_LIBXAR@
+ config.have_dia_sdk = @LLVM_ENABLE_DIA_SDK@
+ config.enable_ffi = @LLVM_ENABLE_FFI@
+diff --git a/llvm/unittests/Support/CompressionTest.cpp b/llvm/unittests/Support/CompressionTest.cpp
+index cc7be431b62bc392508fd342c7db0dbbde995823..51723898e950d0bd2389467eda224b2c57fcd14e 100644
+--- a/llvm/unittests/Support/CompressionTest.cpp
++++ b/llvm/unittests/Support/CompressionTest.cpp
+@@ -21,7 +21,7 @@ using namespace llvm;
+ 
+ namespace {
+ 
+-#if LLVM_ENABLE_ZLIB == 1 && HAVE_LIBZ
++#if LLVM_ENABLE_ZLIB
+ 
+ void TestZlibCompression(StringRef Input, int Level) {
+   SmallString<32> Compressed;
+diff --git a/llvm/utils/gn/secondary/clang/test/BUILD.gn b/llvm/utils/gn/secondary/clang/test/BUILD.gn
+index 56feaae9a149d19bf4676dcb91d014c163d189d9..a0680d9848235f31141365c1c0cfe723e2ca3725 100644
+--- a/llvm/utils/gn/secondary/clang/test/BUILD.gn
++++ b/llvm/utils/gn/secondary/clang/test/BUILD.gn
+@@ -79,9 +79,9 @@ write_lit_config("lit_site_cfg") {
+   }
+ 
+   if (llvm_enable_zlib) {
+-    extra_values += [ "HAVE_LIBZ=1" ]
++    extra_values += [ "LLVM_ENABLE_ZLIB=1" ]
+   } else {
+-    extra_values += [ "HAVE_LIBZ=0" ]  # Must be 0.
++    extra_values += [ "LLVM_ENABLE_ZLIB=0" ]  # Must be 0.
+   }
+ 
+   if (host_cpu == "x64") {
+diff --git a/llvm/utils/gn/secondary/compiler-rt/test/BUILD.gn b/llvm/utils/gn/secondary/compiler-rt/test/BUILD.gn
+index 97007eecd1eb9251e5ad24e70c5c62c1715eb836..5f8058699d7293b8091122a8fe8deabe30413860 100644
+--- a/llvm/utils/gn/secondary/compiler-rt/test/BUILD.gn
++++ b/llvm/utils/gn/secondary/compiler-rt/test/BUILD.gn
+@@ -86,8 +86,8 @@ write_cmake_config("lit_common_configured") {
+   }
+ 
+   if (llvm_enable_zlib) {
+-    values += [ "HAVE_LIBZ=1" ]
++    values += [ "LLVM_ENABLE_ZLIB=1" ]
+   } else {
+-    values += [ "HAVE_LIBZ=0" ]
++    values += [ "LLVM_ENABLE_ZLIB=0" ]
+   }
+ }
+diff --git a/llvm/utils/gn/secondary/lld/test/BUILD.gn b/llvm/utils/gn/secondary/lld/test/BUILD.gn
+index 508225bd5e5f69edb502cc1dbebf7440e857d383..bfb63a39ba65a4cbe86ff5ee9531e1e2722e1cc4 100644
+--- a/llvm/utils/gn/secondary/lld/test/BUILD.gn
++++ b/llvm/utils/gn/secondary/lld/test/BUILD.gn
+@@ -49,9 +49,9 @@ write_lit_cfg("lit_site_cfg") {
+   }
+ 
+   if (llvm_enable_zlib) {
+-    extra_values += [ "HAVE_LIBZ=1" ]
++    extra_values += [ "LLVM_ENABLE_ZLIB=1" ]
+   } else {
+-    extra_values += [ "HAVE_LIBZ=0" ]  # Must be 0.
++    extra_values += [ "LLVM_ENABLE_ZLIB=0" ]  # Must be 0.
+   }
+ 
+   if (current_cpu == "x64" || current_cpu == "arm64" ||
+diff --git a/llvm/utils/gn/secondary/llvm/include/llvm/Config/BUILD.gn b/llvm/utils/gn/secondary/llvm/include/llvm/Config/BUILD.gn
+index 741729ea342ce090d3c652e3f7c4cff283ec9338..c9e7c45fc118ba0b61933aeaaaf6553568843219 100644
+--- a/llvm/utils/gn/secondary/llvm/include/llvm/Config/BUILD.gn
++++ b/llvm/utils/gn/secondary/llvm/include/llvm/Config/BUILD.gn
+@@ -295,20 +295,10 @@ write_cmake_config("config") {
+     values += [ "LLVM_ENABLE_DIA_SDK=" ]
+   }
+ 
+-  # FIXME: Once https://reviews.llvm.org/D79219 is in, remove the two
+-  # redundant HAVE_ variables.
+   if (llvm_enable_zlib) {
+-    values += [
+-      "HAVE_LIBZ=1",
+-      "HAVE_ZLIB_H=1",
+-      "LLVM_ENABLE_ZLIB=1",
+-    ]
++    values += [ "LLVM_ENABLE_ZLIB=1" ]
+   } else {
+-    values += [
+-      "HAVE_LIBZ=",
+-      "HAVE_ZLIB_H=",
+-      "LLVM_ENABLE_ZLIB=",
+-    ]
++    values += [ "LLVM_ENABLE_ZLIB=" ]
+   }
+ 
+   if (llvm_enable_libxml2) {
+diff --git a/llvm/utils/gn/secondary/llvm/test/BUILD.gn b/llvm/utils/gn/secondary/llvm/test/BUILD.gn
+index f272bc1baacf241b7f9110f181a1d4afeaedd694..c714d9b5ba7b1a9264922076da95724a2339b6fd 100644
+--- a/llvm/utils/gn/secondary/llvm/test/BUILD.gn
++++ b/llvm/utils/gn/secondary/llvm/test/BUILD.gn
+@@ -174,9 +174,9 @@ write_lit_config("lit_site_cfg") {
+   }
+ 
+   if (llvm_enable_zlib) {
+-    extra_values += [ "HAVE_LIBZ=1" ]
++    extra_values += [ "LLVM_ENABLE_ZLIB=1" ]
+   } else {
+-    extra_values += [ "HAVE_LIBZ=0" ]  # Must be 0.
++    extra_values += [ "LLVM_ENABLE_ZLIB=0" ]  # Must be 0.
+   }
+ }
+ 

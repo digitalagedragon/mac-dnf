@@ -39,7 +39,7 @@ git | ✘ |
 openssl@1.1 | ✔ | `libopenssl`
 yarn | ✘ |
 ffmpeg | ✘ |
-cmake | ✘ |
+cmake | ✔ | `cmake`
 wget | ✘ |
 gnupg | ✔ | `gnupg`
 htop | ✘ |
@@ -74,7 +74,7 @@ libxml2 | ✘ |
 pkg-config | ✔ | `pkgconf` (`pkg-config`)
 helm | ✘ |
 azure-cli | ✘ |
-gcc | ✘ |
+gcc | ✘ | Not yet buildable on arm64.
 telnet | ✘ |
 readline | ✔ | `libreadline`
 cocoapods | ✘ |
@@ -114,7 +114,7 @@ poppler | ✘ |
 libyaml | ✔ | `libyaml`
 bat | ✘ |
 mysql-client | ✘ |
-qt | ✘ |
+qt | ✔ | `libqt`
 opencv | ✘ |
 librsvg | ✘ |
 sbt | ✘ |
@@ -122,7 +122,7 @@ hugo | ✘ |
 unrar | ✘ |
 freetds | ✘ |
 autoconf | ✔ | `autoconf`
-numpy | ✘ |
+numpy | ✔ | `numpy`
 mercurial | ✘ |
 openldap | ✘ |
 ccache | ✘ |

@@ -18,13 +18,7 @@ BuildArch:      noarch
 
 Provides:       python-setuptools = %{version}-%{release}
 
-%if "%{_build}" != "%{_host}"
-%define host_tool_prefix %{_host}-
-%endif
-
 BuildRequires:  python%{system_python}
-
-%undefine _annotated_build
 
 %description
 

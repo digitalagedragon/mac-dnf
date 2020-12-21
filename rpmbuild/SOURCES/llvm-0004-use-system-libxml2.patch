@@ -1,0 +1,428 @@
+From c4d7536136b331bada079b2afbb2bd09ad8296bf Mon Sep 17 00:00:00 2001
+From: Petr Hosek <phosek@google.com>
+Date: Fri, 24 Jul 2020 15:47:38 -0700
+Subject: [PATCH] [CMake] Simplify CMake handling for libxml2
+
+This matches the changes made to handling of zlib done in 10b1b4a
+where we rely on find_package and the imported target rather than
+manually appending the library and include paths. The use of
+LLVM_LIBXML2_ENABLED has been replaced by LLVM_ENABLE_LIBXML2
+thus reducing the number of variables.
+
+Differential Revision: https://reviews.llvm.org/D84563
+---
+ lld/test/CMakeLists.txt                       |  2 +-
+ lld/test/lit.cfg.py                           |  4 +-
+ lld/test/lit.site.cfg.py.in                   |  2 +-
+ llvm/cmake/config-ix.cmake                    | 40 ++++++++++---------
+ llvm/cmake/modules/GetLibraryName.cmake       | 17 ++++++++
+ llvm/cmake/modules/LLVMConfig.cmake.in        |  5 ++-
+ llvm/include/llvm/Config/config.h.cmake       |  2 +-
+ llvm/lib/Support/CMakeLists.txt               | 25 +++---------
+ llvm/lib/WindowsManifest/CMakeLists.txt       | 35 +++++++++-------
+ .../WindowsManifest/WindowsManifestMerger.cpp |  6 +--
+ llvm/test/CMakeLists.txt                      |  2 +-
+ llvm/test/lit.cfg.py                          |  2 +-
+ llvm/test/lit.site.cfg.py.in                  |  2 +-
+ llvm/utils/gn/secondary/lld/test/BUILD.gn     |  4 +-
+ .../llvm/include/llvm/Config/BUILD.gn         |  4 +-
+ llvm/utils/gn/secondary/llvm/test/BUILD.gn    |  4 +-
+ 16 files changed, 85 insertions(+), 71 deletions(-)
+ create mode 100644 llvm/cmake/modules/GetLibraryName.cmake
+
+diff --git a/lld/test/CMakeLists.txt b/lld/test/CMakeLists.txt
+index 52e6118ba876bedb7499f6bd2cd0e96c6bb1d069..ff957e8912114bb59fcccd2960291d56d33abb0d 100644
+--- a/lld/test/CMakeLists.txt
++++ b/lld/test/CMakeLists.txt
+@@ -6,7 +6,7 @@ set(LLVM_LIBS_DIR "${LLVM_BINARY_DIR}/lib${LLVM_LIBDIR_SUFFIX}/%(build_config)s"
+ 
+ llvm_canonicalize_cmake_booleans(
+   LLVM_ENABLE_ZLIB
+-  LLVM_LIBXML2_ENABLED
++  LLVM_ENABLE_LIBXML2
+   )
+ 
+ configure_lit_site_cfg(
+diff --git a/lld/test/lit.cfg.py b/lld/test/lit.cfg.py
+index 267f8c5178584a17b50952b7ecc7458fedbc771e..037b9ed2d1676bd52f247c7b9fef25ce161dad4c 100644
+--- a/lld/test/lit.cfg.py
++++ b/lld/test/lit.cfg.py
+@@ -87,11 +87,11 @@
+ # Indirectly check if the mt.exe Microsoft utility exists by searching for
+ # cvtres, which always accompanies it.  Alternatively, check if we can use
+ # libxml2 to merge manifests.
+-if (lit.util.which('cvtres', config.environment['PATH']) or 
++if (lit.util.which('cvtres', config.environment['PATH']) or
+         config.llvm_libxml2_enabled):
+     config.available_features.add('manifest_tool')
+ 
+-if config.llvm_libxml2_enabled:
++if config.have_libxml2:
+     config.available_features.add('libxml2')
+ 
+ if config.have_dia_sdk:
+diff --git a/lld/test/lit.site.cfg.py.in b/lld/test/lit.site.cfg.py.in
+index 3d4c51f4ab64731d0f8829d77cc0d42c408fb713..bbc2c892eb71575cac782922c15504022275af56 100644
+--- a/lld/test/lit.site.cfg.py.in
++++ b/lld/test/lit.site.cfg.py.in
+@@ -7,7 +7,6 @@ config.llvm_src_root = "@LLVM_SOURCE_DIR@"
+ config.llvm_obj_root = "@LLVM_BINARY_DIR@"
+ config.llvm_tools_dir = "@LLVM_TOOLS_DIR@"
+ config.llvm_libs_dir = "@LLVM_LIBS_DIR@"
+-config.llvm_libxml2_enabled = @LLVM_LIBXML2_ENABLED@
+ config.lit_tools_dir = "@LLVM_LIT_TOOLS_DIR@"
+ config.lld_obj_root = "@LLD_BINARY_DIR@"
+ config.lld_libs_dir = "@LLVM_LIBRARY_OUTPUT_INTDIR@"
+@@ -15,6 +14,7 @@ config.lld_tools_dir = "@LLVM_RUNTIME_OUTPUT_INTDIR@"
+ config.target_triple = "@TARGET_TRIPLE@"
+ config.python_executable = "@Python3_EXECUTABLE@"
+ config.have_zlib = @LLVM_ENABLE_ZLIB@
++config.have_libxml2 = @LLVM_ENABLE_LIBXML2@
+ config.sizeof_void_p = @CMAKE_SIZEOF_VOID_P@
+ 
+ # Support substitution of the tools and libs dirs with user parameters. This is
+diff --git a/llvm/cmake/config-ix.cmake b/llvm/cmake/config-ix.cmake
+index 6b92180b739e8756cda61665ed2722b54f9f6291..eeaebf31c926ff8143ab8fd902aeb753807bd894 100644
+--- a/llvm/cmake/config-ix.cmake
++++ b/llvm/cmake/config-ix.cmake
+@@ -137,6 +137,27 @@ if(LLVM_ENABLE_ZLIB)
+   set(LLVM_ENABLE_ZLIB "${HAVE_ZLIB}")
+ endif()
+ 
++if(LLVM_ENABLE_LIBXML2)
++  if(LLVM_ENABLE_LIBXML2 STREQUAL FORCE_ON)
++    find_package(LibXml2 REQUIRED)
++  elseif(NOT LLVM_USE_SANITIZER MATCHES "Memory.*")
++    find_package(LibXml2)
++  endif()
++  if(LibXml2_FOUND)
++    # Check if libxml2 we found is usable; for example, we may have found a 32-bit
++    # library on a 64-bit system which would result in a link-time failure.
++    cmake_push_check_state()
++    set(CMAKE_REQUIRED_INCLUDES ${LIBXML2_INCLUDE_DIRS})
++    set(CMAKE_REQUIRED_LIBRARIES ${LIBXML2_LIBRARIES})
++    check_symbol_exists(xmlReadMemory libxml/xmlreader.h HAVE_LIBXML2)
++    cmake_pop_check_state()
++    if(LLVM_ENABLE_LIBXML2 STREQUAL FORCE_ON AND NOT HAVE_LIBXML2)
++      message(FATAL_ERROR "Failed to configure libxml2")
++    endif()
++  endif()
++  set(LLVM_ENABLE_LIBXML2 "${HAVE_LIBXML2}")
++endif()
++
+ # Don't look for these libraries if we're using MSan, since uninstrumented third
+ # party code may call MSan interceptors like strlen, leading to false positives.
+ if(NOT LLVM_USE_SANITIZER MATCHES "Memory.*")
+@@ -161,21 +182,6 @@ if(NOT LLVM_USE_SANITIZER MATCHES "Memory.*")
+     else()
+       set(LLVM_ENABLE_TERMINFO 0)
+     endif()
+-
+-    find_library(ICONV_LIBRARY_PATH NAMES iconv libiconv libiconv-2 c)
+-    set(LLVM_LIBXML2_ENABLED 0)
+-    set(LIBXML2_FOUND 0)
+-    if((LLVM_ENABLE_LIBXML2) AND ((CMAKE_SYSTEM_NAME MATCHES "Linux") AND (ICONV_LIBRARY_PATH) OR APPLE))
+-      find_package(LibXml2)
+-      if (LIBXML2_FOUND)
+-        set(LLVM_LIBXML2_ENABLED 1)
+-        if ((CMAKE_OSX_SYSROOT) AND (EXISTS ${CMAKE_OSX_SYSROOT}/${LIBXML2_INCLUDE_DIR}))
+-          include_directories(${CMAKE_OSX_SYSROOT}/${LIBXML2_INCLUDE_DIR})
+-        else()
+-          include_directories(${LIBXML2_INCLUDE_DIR})
+-        endif()
+-      endif()
+-    endif()
+   else()
+     set(LLVM_ENABLE_TERMINFO 0)
+   endif()
+@@ -183,10 +189,6 @@ else()
+   set(LLVM_ENABLE_TERMINFO 0)
+ endif()
+ 
+-if (LLVM_ENABLE_LIBXML2 STREQUAL "FORCE_ON" AND NOT LLVM_LIBXML2_ENABLED)
+-  message(FATAL_ERROR "Failed to congifure libxml2")
+-endif()
+-
+ check_library_exists(xar xar_open "" HAVE_LIBXAR)
+ if(HAVE_LIBXAR)
+   set(XAR_LIB xar)
+diff --git a/llvm/cmake/modules/GetLibraryName.cmake b/llvm/cmake/modules/GetLibraryName.cmake
+new file mode 100644
+index 0000000000000000000000000000000000000000..13c0080671a3c6ee8d4b4681708ece07171966c7
+--- /dev/null
++++ b/llvm/cmake/modules/GetLibraryName.cmake
+@@ -0,0 +1,17 @@
++# Returns library name for a given path.
++function(get_library_name path name)
++  get_filename_component(path ${path} NAME)
++  set(prefixes ${CMAKE_FIND_LIBRARY_PREFIXES})
++  set(suffixes ${CMAKE_FIND_LIBRARY_SUFFIXES})
++  list(FILTER prefixes EXCLUDE REGEX "^\\s*$")
++  list(FILTER suffixes EXCLUDE REGEX "^\\s*$")
++  if(prefixes)
++    string(REPLACE ";" "|" prefixes "${prefixes}")
++    string(REGEX REPLACE "^(${prefixes})" "" path ${path})
++  endif()
++  if(suffixes)
++    string(REPLACE ";" "|" suffixes "${suffixes}")
++    string(REGEX REPLACE "(${suffixes})$" "" path ${path})
++  endif()
++  set(${name} "${path}" PARENT_SCOPE)
++endfunction()
+diff --git a/llvm/cmake/modules/LLVMConfig.cmake.in b/llvm/cmake/modules/LLVMConfig.cmake.in
+index a5c370bbc25e44342387de95ddb26a36da41a73e..4453020cf4da4e798ea0c502848c8a647c2ad6cd 100644
+--- a/llvm/cmake/modules/LLVMConfig.cmake.in
++++ b/llvm/cmake/modules/LLVMConfig.cmake.in
+@@ -55,7 +55,10 @@ if(LLVM_ENABLE_ZLIB)
+   find_package(ZLIB)
+ endif()
+ 
+-set(LLVM_LIBXML2_ENABLED @LLVM_LIBXML2_ENABLED@)
++set(LLVM_ENABLE_LIBXML2 @LLVM_ENABLE_LIBXML2@)
++if(LLVM_ENABLE_LIBXML2)
++  find_package(LibXml2)
++endif()
+ 
+ set(LLVM_WITH_Z3 @LLVM_WITH_Z3@)
+ 
+diff --git a/llvm/include/llvm/Config/config.h.cmake b/llvm/include/llvm/Config/config.h.cmake
+index aec8d08f30e74d288f99a3e554dff65f72f7ebaa..9ad0d827dfd8ded2272a263889f662b57796109e 100644
+--- a/llvm/include/llvm/Config/config.h.cmake
++++ b/llvm/include/llvm/Config/config.h.cmake
+@@ -306,7 +306,7 @@
+ #cmakedefine01 LLVM_VERSION_PRINTER_SHOW_HOST_TARGET_INFO
+ 
+ /* Define if libxml2 is supported on this platform. */
+-#cmakedefine LLVM_LIBXML2_ENABLED ${LLVM_LIBXML2_ENABLED}
++#cmakedefine LLVM_ENABLE_LIBXML2 ${LLVM_ENABLE_LIBXML2}
+ 
+ /* Define to the extension used for shared libraries, say, ".so". */
+ #cmakedefine LTDL_SHLIB_EXT "${LTDL_SHLIB_EXT}"
+diff --git a/llvm/lib/Support/CMakeLists.txt b/llvm/lib/Support/CMakeLists.txt
+index 9eefea566feefdcb009ab590619cb9af46cbe593..01bf8febb5407a8d26ba2d44fb90e9aee0ff8fb1 100644
+--- a/llvm/lib/Support/CMakeLists.txt
++++ b/llvm/lib/Support/CMakeLists.txt
+@@ -1,24 +1,9 @@
++include(GetLibraryName)
++
+ if(LLVM_ENABLE_ZLIB)
+   set(imported_libs ZLIB::ZLIB)
+ endif()
+ 
+-function(get_system_libname libpath libname)
+-  get_filename_component(libpath ${libpath} NAME)
+-  set(prefixes ${CMAKE_FIND_LIBRARY_PREFIXES})
+-  set(suffixes ${CMAKE_FIND_LIBRARY_SUFFIXES})
+-  list(FILTER prefixes EXCLUDE REGEX "^\\s*$")
+-  list(FILTER suffixes EXCLUDE REGEX "^\\s*$")
+-  if( prefixes )
+-    string(REPLACE ";" "|" prefixes "${prefixes}")
+-    string(REGEX REPLACE "^(${prefixes})" "" libpath ${libpath})
+-  endif()
+-  if( suffixes )
+-    string(REPLACE ";" "|" suffixes "${suffixes}")
+-    string(REGEX REPLACE "(${suffixes})$" "" libpath ${libpath})
+-  endif()
+-  set(${libname} "${libpath}" PARENT_SCOPE)
+-endfunction()
+-
+ if( MSVC OR MINGW )
+   # libuuid required for FOLDERID_Profile usage in lib/Support/Windows/Path.inc.
+   # advapi32 required for CryptAcquireContextW in lib/Support/Windows/Path.inc.
+@@ -242,6 +227,8 @@ add_llvm_component_library(LLVMSupport
+ 
+ set(llvm_system_libs ${system_libs})
+ 
++# This block is only needed for llvm-config. When we deprecate llvm-config and
++# move to using CMake export, this block can be removed.
+ if(LLVM_ENABLE_ZLIB)
+   # CMAKE_BUILD_TYPE is only meaningful to single-configuration generators.
+   if(CMAKE_BUILD_TYPE)
+@@ -251,12 +238,12 @@ if(LLVM_ENABLE_ZLIB)
+   if(NOT zlib_library)
+     get_property(zlib_library TARGET ZLIB::ZLIB PROPERTY LOCATION)
+   endif()
+-  get_system_libname(${zlib_library} zlib_library)
++  get_library_name(${zlib_library} zlib_library)
+   set(llvm_system_libs ${llvm_system_libs} "${zlib_library}")
+ endif()
+ 
+ if(LLVM_ENABLE_TERMINFO)
+-  get_system_libname(${TERMINFO_LIB} terminfo_library)
++  get_library_name(${TERMINFO_LIB} terminfo_library)
+   set(llvm_system_libs ${llvm_system_libs} "${terminfo_library}")
+ endif()
+ 
+diff --git a/llvm/lib/WindowsManifest/CMakeLists.txt b/llvm/lib/WindowsManifest/CMakeLists.txt
+index 7ccc17ad577d3e879f8fe949ecdc93b3e44fb2e2..0f597af3c36f840607d007f72b1115a8e98b2430 100644
+--- a/llvm/lib/WindowsManifest/CMakeLists.txt
++++ b/llvm/lib/WindowsManifest/CMakeLists.txt
+@@ -1,23 +1,28 @@
++include(GetLibraryName)
++
++if(LLVM_ENABLE_LIBXML2)
++  set(imported_libs LibXml2::LibXml2)
++endif()
++
+ add_llvm_component_library(LLVMWindowsManifest
+   WindowsManifestMerger.cpp
+ 
+   ADDITIONAL_HEADER_DIRS
+   ${LLVM_MAIN_INCLUDE_DIR}/llvm/WindowsManifest
+-  ${Backtrace_INCLUDE_DIRS})
++  ${Backtrace_INCLUDE_DIRS}
++  LINK_LIBS ${imported_libs})
+ 
+-if(LIBXML2_LIBRARIES)
+-  target_link_libraries(LLVMWindowsManifest PUBLIC ${LIBXML2_LIBRARIES})
+-
+-  get_filename_component(xml2_library ${LIBXML2_LIBRARIES} NAME)
+-  if (CMAKE_STATIC_LIBRARY_PREFIX AND
+-      xml2_library MATCHES "^${CMAKE_STATIC_LIBRARY_PREFIX}.*${CMAKE_STATIC_LIBRARY_SUFFIX}$")
+-    string(REGEX REPLACE "^${CMAKE_STATIC_LIBRARY_PREFIX}" "" xml2_library ${xml2_library})
+-    string(REGEX REPLACE "${CMAKE_STATIC_LIBRARY_SUFFIX}$" "" xml2_library ${xml2_library})
+-  elseif (CMAKE_SHARED_LIBRARY_PREFIX AND
+-          xml2_library MATCHES "^${CMAKE_SHARED_LIBRARY_PREFIX}.*${CMAKE_SHARED_LIBRARY_SUFFIX}$")
+-    string(REGEX REPLACE "^${CMAKE_SHARED_LIBRARY_PREFIX}" "" xml2_library ${xml2_library})
+-    string(REGEX REPLACE "${CMAKE_SHARED_LIBRARY_SUFFIX}$" "" xml2_library ${xml2_library})
++# This block is only needed for llvm-config. When we deprecate llvm-config and
++# move to using CMake export, this block can be removed.
++if(LLVM_ENABLE_LIBXML2)
++  # CMAKE_BUILD_TYPE is only meaningful to single-configuration generators.
++  if(CMAKE_BUILD_TYPE)
++    string(TOUPPER ${CMAKE_BUILD_TYPE} build_type)
++    get_property(libxml2_library TARGET LibXml2::LibXml2 PROPERTY LOCATION_${build_type})
++  endif()
++  if(NOT zlib_library)
++    get_property(libxml2_library TARGET LibXml2::LibXml2 PROPERTY LOCATION)
+   endif()
+-  set_property(TARGET LLVMWindowsManifest PROPERTY
+-    LLVM_SYSTEM_LIBS ${xml2_library})
++  get_library_name(${libxml2_library} libxml2_library)
++  set_property(TARGET LLVMWindowsManifest PROPERTY LLVM_SYSTEM_LIBS ${libxml2_library})
+ endif()
+diff --git a/llvm/lib/WindowsManifest/WindowsManifestMerger.cpp b/llvm/lib/WindowsManifest/WindowsManifestMerger.cpp
+index 031a963cd3b0c65f341a1c0102d00bfb135d7e87..6af7bc699d056e33596321c1a46605a080784103 100644
+--- a/llvm/lib/WindowsManifest/WindowsManifestMerger.cpp
++++ b/llvm/lib/WindowsManifest/WindowsManifestMerger.cpp
+@@ -16,7 +16,7 @@
+ 
+ #include <map>
+ 
+-#if LLVM_LIBXML2_ENABLED
++#if LLVM_ENABLE_LIBXML2
+ #include <libxml/xmlreader.h>
+ #endif
+ 
+@@ -41,7 +41,7 @@ class WindowsManifestMerger::WindowsManifestMergerImpl {
+ private:
+   static void errorCallback(void *Ctx, const char *Format, ...);
+   Error getParseError();
+-#if LLVM_LIBXML2_ENABLED
++#if LLVM_ENABLE_LIBXML2
+   xmlDocPtr CombinedDoc = nullptr;
+   std::vector<xmlDocPtr> MergedDocs;
+ 
+@@ -56,7 +56,7 @@ class WindowsManifestMerger::WindowsManifestMergerImpl {
+   bool ParseErrorOccurred = false;
+ };
+ 
+-#if LLVM_LIBXML2_ENABLED
++#if LLVM_ENABLE_LIBXML2
+ 
+ static constexpr std::pair<StringLiteral, StringLiteral> MtNsHrefsPrefixes[] = {
+     {"urn:schemas-microsoft-com:asm.v1", "ms_asmv1"},
+diff --git a/llvm/test/CMakeLists.txt b/llvm/test/CMakeLists.txt
+index 58aa680a54c22a679e177e3f4c88833e5b4d4ddc..772ff0fd5f78041ee0ff6f607b828e2c8052e3f4 100644
+--- a/llvm/test/CMakeLists.txt
++++ b/llvm/test/CMakeLists.txt
+@@ -7,8 +7,8 @@ llvm_canonicalize_cmake_booleans(
+   LLVM_ENABLE_FFI
+   LLVM_ENABLE_THREADS
+   LLVM_ENABLE_ZLIB
++  LLVM_ENABLE_LIBXML2
+   LLVM_INCLUDE_GO_TESTS
+-  LLVM_LIBXML2_ENABLED
+   LLVM_LINK_LLVM_DYLIB
+   LLVM_TOOL_LTO_BUILD
+   LLVM_USE_INTEL_JITEVENTS
+diff --git a/llvm/test/lit.cfg.py b/llvm/test/lit.cfg.py
+index 4d7d3c861aba5c3e584e0dde9689459b68ea32fb..3c4cb9c32065b9e9af2d97c3180ee3344bc59085 100644
+--- a/llvm/test/lit.cfg.py
++++ b/llvm/test/lit.cfg.py
+@@ -356,7 +356,7 @@ def have_ld64_plugin_support():
+ if config.enable_threads:
+     config.available_features.add('thread_support')
+ 
+-if config.llvm_libxml2_enabled:
++if config.have_libxml2:
+     config.available_features.add('libxml2')
+ 
+ if config.have_opt_viewer_modules:
+diff --git a/llvm/test/lit.site.cfg.py.in b/llvm/test/lit.site.cfg.py.in
+index 52f709f817ddd5155a4d45213157750d3d46d0ce..0e77c1087ac13a3f32f2abaecf8a743c178dac19 100644
+--- a/llvm/test/lit.site.cfg.py.in
++++ b/llvm/test/lit.site.cfg.py.in
+@@ -35,13 +35,13 @@ config.llvm_use_intel_jitevents = @LLVM_USE_INTEL_JITEVENTS@
+ config.llvm_use_sanitizer = "@LLVM_USE_SANITIZER@"
+ config.have_zlib = @LLVM_ENABLE_ZLIB@
+ config.have_libxar = @HAVE_LIBXAR@
++config.have_libxml2 = @LLVM_ENABLE_LIBXML2@
+ config.have_dia_sdk = @LLVM_ENABLE_DIA_SDK@
+ config.enable_ffi = @LLVM_ENABLE_FFI@
+ config.build_examples = @LLVM_BUILD_EXAMPLES@
+ config.enable_threads = @LLVM_ENABLE_THREADS@
+ config.build_shared_libs = @BUILD_SHARED_LIBS@
+ config.link_llvm_dylib = @LLVM_LINK_LLVM_DYLIB@
+-config.llvm_libxml2_enabled = @LLVM_LIBXML2_ENABLED@
+ config.llvm_host_triple = '@LLVM_HOST_TRIPLE@'
+ config.host_arch = "@HOST_ARCH@"
+ config.have_opt_viewer_modules = @LLVM_HAVE_OPT_VIEWER_MODULES@
+diff --git a/llvm/utils/gn/secondary/lld/test/BUILD.gn b/llvm/utils/gn/secondary/lld/test/BUILD.gn
+index bfb63a39ba65a4cbe86ff5ee9531e1e2722e1cc4..00cb2f2c024c8872ccaa2de09769080569de83b2 100644
+--- a/llvm/utils/gn/secondary/lld/test/BUILD.gn
++++ b/llvm/utils/gn/secondary/lld/test/BUILD.gn
+@@ -43,9 +43,9 @@ write_lit_cfg("lit_site_cfg") {
+   }
+ 
+   if (llvm_enable_libxml2) {
+-    extra_values += [ "LLVM_LIBXML2_ENABLED=1" ]
++    extra_values += [ "LLVM_ENABLE_LIBXML2=1" ]
+   } else {
+-    extra_values += [ "LLVM_LIBXML2_ENABLED=0" ]  # Must be 0.
++    extra_values += [ "LLVM_ENABLE_LIBXML2=0" ]  # Must be 0.
+   }
+ 
+   if (llvm_enable_zlib) {
+diff --git a/llvm/utils/gn/secondary/llvm/include/llvm/Config/BUILD.gn b/llvm/utils/gn/secondary/llvm/include/llvm/Config/BUILD.gn
+index d54242da38ccaa3eada9c4d3b01562b3217c69f5..acbd66aca4ded652d552ecc07d8f2f7f14b52186 100644
+--- a/llvm/utils/gn/secondary/llvm/include/llvm/Config/BUILD.gn
++++ b/llvm/utils/gn/secondary/llvm/include/llvm/Config/BUILD.gn
+@@ -304,9 +304,9 @@ write_cmake_config("config") {
+   }
+ 
+   if (llvm_enable_libxml2) {
+-    values += [ "LLVM_LIBXML2_ENABLED=1" ]
++    values += [ "LLVM_ENABLE_LIBXML2=1" ]
+   } else {
+-    values += [ "LLVM_LIBXML2_ENABLED=" ]
++    values += [ "LLVM_ENABLE_LIBXML2=" ]
+   }
+ }
+ 
+diff --git a/llvm/utils/gn/secondary/llvm/test/BUILD.gn b/llvm/utils/gn/secondary/llvm/test/BUILD.gn
+index c714d9b5ba7b1a9264922076da95724a2339b6fd..df4c763f64cd678f1c3dde71813ec63e9637914b 100644
+--- a/llvm/utils/gn/secondary/llvm/test/BUILD.gn
++++ b/llvm/utils/gn/secondary/llvm/test/BUILD.gn
+@@ -162,9 +162,9 @@ write_lit_config("lit_site_cfg") {
+   }
+ 
+   if (llvm_enable_libxml2) {
+-    extra_values += [ "LLVM_LIBXML2_ENABLED=1" ]
++    extra_values += [ "LLVM_ENABLE_LIBXML2=1" ]
+   } else {
+-    extra_values += [ "LLVM_LIBXML2_ENABLED=0" ]  # Must be 0.
++    extra_values += [ "LLVM_ENABLE_LIBXML2=0" ]  # Must be 0.
+   }
+ 
+   if (llvm_enable_threads) {

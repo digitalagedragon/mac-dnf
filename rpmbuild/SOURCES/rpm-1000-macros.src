@@ -1,5 +1,9 @@
 %_db_backend sqlite
 %_usr /usr/local/
+%osxflags -mmacos-version-min=11.0 -Wpartial-availability
+%build_cflags %{optflags} %{osxflags}
+%build_cxxflags %{optflags} %{osxflags}
+%build_fflags %{optflags} %{osxflags}
 %build_ldflags -L%{_prefix}/lib
 %set_build_flags \
   CFLAGS="${CFLAGS:-%{?build_cflags}}" ; export CFLAGS ; \
@@ -7,7 +11,7 @@
   FFLAGS="${FFLAGS:-%{?build_fflags}}" ; export FFLAGS ; \
   FCFLAGS="${FCFLAGS:-%{?build_fflags}}" ; export FCFLAGS ; \
   LDFLAGS="${LDFLAGS:-%{?build_ldflags}}" ; export LDFLAGS ; \
-  CPPFLAGS=-I%{_includedir} ; export CPPFLAGS
+  CPPFLAGS="-I%{_includedir}" ; export CPPFLAGS
 %_invalid_encoding_terminates_build 0
 
 ##### Universal binary setup - assumes out-of-tree build is supported.
@@ -115,5 +119,17 @@ for f in $(find %{buildroot}.$__lastarch | sed -e "s:^%{buildroot}.$__lastarch::
 done ; \
 set -x \
 %endif
+# |
+# +--------
+
+# +--------
+# | CMake.
+
+%cmake_configure \
+  %set_build_flags; \
+  cmake -Wno-dev -DCMAKE_INSTALL_PREFIX=%{_prefix} -DCMAKE_BUILD_TYPE=Release
+
+%cmake_build cmake --build . %{?_smp_mflags}
+
 # |
 # +--------

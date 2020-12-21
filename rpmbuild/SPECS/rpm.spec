@@ -2,7 +2,7 @@
 
 Name:           rpm
 Version:        4.16.1
-Release:        14%{?dist}
+Release:        15%{?dist}
 Summary:        The RPM Package Manager (RPM) is a powerful package management system.
 
 License:        GPLv2
@@ -126,6 +126,9 @@ rm %{buildroot}%{_prefix}/lib/rpm/fileattrs/python*.attr
 %{_includedir}/rpm
 
 %changelog
+
+* Mon Dec 21 2020 Morgan Thomas <m@m0rg.dev> 4.16.1 release 15
+  Add -mmacos-version-min to build flags and add basic CMake macros.
 
 * Wed Dec 16 2020 Morgan Thomas <m@m0rg.dev> 4.16.1 release 14
   Explicitly disable zstd.

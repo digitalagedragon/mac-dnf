@@ -9,6 +9,7 @@ URL:            https://www.gnu.org/software/readline
 Source0:        https://ftp.gnu.org/gnu/readline/readline-%{version}.tar.gz
 %define         SHA256SUM0 f8ceb4ee131e3232226a17f51b164afc46cd0b9e6cef344be87c65962cb82b02
 
+# TODO that should be PREFIX=/usr/local/opt/readline, not /usr/local/opt...
 %description
 
 Note: macOS provides its own -lreadline, so this installs libraries into /usr/local/opt/lib.
