@@ -65,6 +65,8 @@ cython
 libgmp
 libmpfr
 libmpc
+x86_64:gcc
+x86_64:libflame
 numpy
 libfreetype
 matplotlib
