@@ -74,7 +74,7 @@ libxml2 | ✘ |
 pkg-config | ✔ | `pkgconf` (`pkg-config`)
 helm | ✘ |
 azure-cli | ✘ |
-gcc | ✘ | Not yet buildable on arm64.
+gcc | ✔✘ | Only on `x86_64` hosts.
 telnet | ✘ |
 readline | ✔ | `libreadline`
 cocoapods | ✘ |

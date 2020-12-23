@@ -13,6 +13,8 @@ Source0:        https://ftp.gnu.org/gnu/gcc/gcc-%{version}/gcc-%{version}.tar.xz
 
 # X10-Update-Spec: { "type": "webscrape", "url": "https://ftp.gnu.org/gnu/mpc/"}
 
+Patch0:         https://raw.githubusercontent.com/Homebrew/formula-patches/7baf6e2f/gcc/bigsur.diff#/gcc-0001-bigsur-version-numbering.patch
+
 BuildRequires:  xz
 BuildRequires:  libgmp-devel
 BuildRequires:  libmpfr-devel
@@ -22,11 +24,20 @@ Requires:       libgmp
 Requires:       libmpfr
 Requires:       libmpc
 
+Requires:       gcc-libs%{?_isa} = %{version}-%{release}
+
 %description
+
+%package        libs
+Summary:        GCC runtime support libraries
+License:        GPLv3
+URL:            https://gcc.gnu.org
+
+%description    libs
 
 %prep
 echo "%SHA256SUM0  %SOURCE0" | shasum -a256 -c -
-%autosetup
+%autosetup -p1
 
 %build
 
@@ -34,14 +45,16 @@ mkdir build
 cd build
 %define _configure ../configure
 %configure \
-%ifarch aarch64
-    --build=aarch64-apple-darwin%(uname -r) \
-    --host=aarch64-apple-darwin%(uname -r) \
-    --target=aarch64-apple-darwin%(uname -r) \
-%endif
+    --disable-nls \
     --enable-checking=release \
     --disable-multilib \
     --with-system-zlib \
+    --with-mpc=%{_prefix} \
+    --with-mpfr=%{_prefix} \
+    --with-gmp=%{_prefix} \
+    --enable-languages=c,c++,objc,obj-c++,fortran \
+    --with-native-system-header-dir=/usr/include \
+    --with-sysroot=/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk \
     SED=/usr/bin/sed
 
 %make_build BOOT_LDFLAGS=-Wl,-headerpad_max_install_names
@@ -55,5 +68,19 @@ rm -f %{buildroot}%{_infodir}/dir
 
 %files
 %license COPYING
+%{_bindir}/*
+%{_libexecdir}/gcc/*/%{version}
+%{_includedir}/c++/%{version}
+%{_libdir}/*.a
+%{_libdir}/*.spec
+%{_libdir}/gcc/*/%{version}
+%{_libdir}/*.py
+%{_mandir}/man{1,7}/*
+%{_infodir}/*
+%{_datadir}/gcc-%{version}
+
+%files libs
+%{_libdir}/*.dylib
+%{_libdir}/*.so
 
 %changelog
