@@ -1,17 +1,17 @@
 %define major_version 2.67
-%define patch_version 0
+%define patch_version 1
 %enable_universal
 
 Name:           %{universal glib2}
 Version:        %{major_version}.%{patch_version}
-Release:        3%{?dist}
+Release:        1%{?dist}
 Summary:        GLib library of C routines
 
 License:        GPLv2+
 URL:            http://www.gtk.org/
 %undefine       _disable_source_fetch
 Source0:        https://download.gnome.org/sources/glib/%{major_version}/glib-%{version}.tar.xz
-%define         SHA256SUM0 0b15e57ab6c2bb90ced4e24a1b0d8d6e9a13af8a70266751aa3a45baffeed7c1
+%define         SHA256SUM0 3b3409fe3a93f9e9f6f5dc9cd8405edfd7513b289589987e568369e627d3350c
 
 # X10-Update-Spec: { "type": "webscrape", "url": "https://download.gnome.org/sources/glib/cache.json"}
 
@@ -22,6 +22,7 @@ BuildRequires:  meson
 BuildRequires:  ninja-build
 BuildRequires:  %{universal libffi}-devel
 BuildRequires:  %{universal libpcre}-devel
+BuildRequires:  pkg-config
 
 Requires:       %{universal libpcre}
 Requires:       %{universal libffi}
@@ -103,3 +104,6 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_datadir}/bash-completion/completions/*
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 2.67.1-1
+  Updated to version 2.67.1.

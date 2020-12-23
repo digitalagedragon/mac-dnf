@@ -1,5 +1,5 @@
 Name:           curl
-Version:        7.73.0
+Version:        7.74.0
 Release:        1%{?dist}
 Summary:        Curl is a command line tool and library for transferring data with URLs.
 
@@ -7,7 +7,7 @@ License:        libcurl
 URL:            https://curl.haxx.se/
 %undefine       _disable_source_fetch
 Source0:        https://curl.haxx.se/download/%{name}-%{version}.tar.xz
-%define         SHA256SUM0 7c4c7ca4ea88abe00fea4740dcf81075c031b1d0bb23aff2d5efde20a3c2408a
+%define         SHA256SUM0 999d5f2c403cf6e25d58319fdd596611e455dd195208746bc6e6d197a77e878b
 
 # X10-Update-Spec: { "type": "webscrape", "url": "https://curl.haxx.se/download/"}
 
@@ -64,3 +64,6 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %doc %{_mandir}/man3/*
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 7.74.0-1
+  Updated to version 7.74.0.

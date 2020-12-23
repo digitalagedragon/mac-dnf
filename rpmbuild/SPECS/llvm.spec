@@ -13,6 +13,10 @@ URL:            https://llvm.org/
 Source0:        https://github.com/llvm/llvm-project/releases/download/llvmorg-%{version}/llvm-project-%{version}.tar.xz
 %define         SHA256SUM0 b7b639fc675fa1c86dd6d0bc32267be9eb34451748d2efd03f674b773000e92b
 
+# X10-Update-Spec: { "type": "git-tags",
+# X10-Update-Spec:   "repo": "https://github.com/llvm/llvm-project.git",
+# X10-Update-Spec:   "pattern": "^llvmorg-(\\d+\\.\\d+\\.\\d+)$" }
+
 Patch1:         https://github.com/llvm/llvm-project/commit/c86f56e32e724c6018e579bb2bc11e667c96fc96.patch?full_index=1#/llvm-0001-standalone-zlib.patch
 Patch2:         https://github.com/llvm/llvm-project/commit/31e5f7120bdd2f76337686d9d169b1c00e6ee69c.patch?full_index=1#/llvm-0002-zlib-from-cmake.patch
 #Patch3:         https://github.com/llvm/llvm-project/commit/3c7bfbd6831b2144229734892182d403e46d7baf.patch?full_index=1#/llvm-0003-use-system-ncurses.patch

@@ -30,6 +30,7 @@ BuildArch: noarch \
 %uarchdir() %{1}%uarch
 
 # I'd like this to use Conflicts: (%{1} without universal) but dnf doesn't like that
+# ^ TODO is this still true now that I've fixed dnf's dependency stuff with that regex patch
 %uprovides() \
 Provides: %{universal %{1}}%{?2:-%{2}} = %{version}-%{release} \
 %if %{with universal} \
@@ -101,7 +102,7 @@ if $__UFOR_MADE_DIRS; then cd ..; fi \
 __UFOR_MADE_DIRS=%{-n:false}%{!-n:true} \
 set +x \
 rsync -a --include='*/' --exclude='*' %{buildroot}.$__lastarch/* %{buildroot} ; \
-for f in $(find %{buildroot}.$__lastarch | sed -e "s:^%{buildroot}.$__lastarch::"); do \
+for f in $(find %{buildroot}.$__lastarch \\( -type l -o -type f \\) | sed -e "s:^%{buildroot}.$__lastarch::"); do \
   if readlink $f >/dev/null ; then \
     echo "--> Symlink: $f -> $(readlink $f)" ; \
     ln -s $(readlink $f) %{buildroot}/$f ; \

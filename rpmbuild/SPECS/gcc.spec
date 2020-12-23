@@ -11,7 +11,9 @@ URL:            https://gcc.gnu.org
 Source0:        https://ftp.gnu.org/gnu/gcc/gcc-%{version}/gcc-%{version}.tar.xz
 %define         SHA256SUM0 b8dd4368bb9c7f0b98188317ee0254dd8cc99d1e3a18d0ff146c855fe16c1d8c
 
-# X10-Update-Spec: { "type": "webscrape", "url": "https://ftp.gnu.org/gnu/mpc/"}
+# X10-Update-Spec: { "type": "git-tags",
+# X10-Update-Spec:   "repo": "https://gcc.gnu.org/git/gcc.git",
+# X10-Update-Spec:   "pattern": "^releases/gcc-(\\d+\\.\\d+\\.\\d+)$" }
 
 Patch0:         https://raw.githubusercontent.com/Homebrew/formula-patches/7baf6e2f/gcc/bigsur.diff#/gcc-0001-bigsur-version-numbering.patch
 

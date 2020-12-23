@@ -41,3 +41,9 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 %description -n 
 
 # --------
+
+# X10-Update-Spec: { "type": "webscrape", "url": ""}
+
+# X10-Update-Spec: { "type": "git-tags",
+# X10-Update-Spec:   "repo": "",
+# X10-Update-Spec:   "pattern": "^v(\\d+\\.\\d+\\.\\d+)$" }

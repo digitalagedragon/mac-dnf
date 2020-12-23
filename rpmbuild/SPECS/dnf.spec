@@ -1,15 +1,15 @@
 %define system_python 3.9
 
 Name:           dnf
-Version:        4.4.2
-Release:        3%{?dist}
+Version:        4.5.2
+Release:        1%{?dist}
 Summary:        A powerful RPM-based package manager
 
 License:        GPLv2
 URL:            https://github.com/rpm-software-management/dnf
 %undefine       _disable_source_fetch
 Source0:        https://github.com/rpm-software-management/dnf/archive/%{version}.tar.gz#/dnf-%{version}.tar.gz
-%define         SHA256SUM0 175c4f4488c9263df026e16e8df610485b6a6aac6183321f13caf7585959ee14
+%define         SHA256SUM0 39303b1c8f8850714ebf9f8e0ee488150c340e5b0bbe1e754fee1ce73d9582c8
 #Source1:        dnf-01-etc-dnf-dnf.conf
 
 Patch0:         dnf-0001-non-root.patch
@@ -75,3 +75,6 @@ mv %{buildroot}/etc/* %{buildroot}%{_sysconfdir}/
 %exclude /usr/lib/systemd
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 4.5.2-1
+  Updated to version 4.5.2.

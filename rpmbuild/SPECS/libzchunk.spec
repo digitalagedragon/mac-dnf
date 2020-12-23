@@ -1,15 +1,15 @@
 %define libname zchunk
 
 Name:           lib%{libname}
-Version:        1.1.7
-Release:        3%{?dist}
+Version:        1.1.8
+Release:        1%{?dist}
 Summary:        zchunk is a compressed file format that splits the file into independent chunks
 
 License:        BSD-2-Clause
 URL:            https://github.com/zchunk/zchunk
 %undefine       _disable_source_fetch
 Source0:        https://github.com/zchunk/%{libname}/archive/%{version}.tar.gz#/%{libname}-%{version}.tar.gz
-%define         SHA256SUM0 eb3d531916d6fea399520a2a4663099ddbf2278088599fa09980631067dc9d7b
+%define         SHA256SUM0 a47c99ecb6edac984056b921619b64ff25609cecdc9645ca6c7279adf20114de
 
 Patch0:         libzchunk-0001-endian-h.patch
 
@@ -81,3 +81,6 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %doc %{_mandir}/man1/*
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 1.1.8-1
+  Updated to version 1.1.8.

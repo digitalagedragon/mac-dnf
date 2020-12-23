@@ -1,18 +1,18 @@
 %define major_version 3.19
-%define patch_version 1
+%define patch_version 2
 
 %define is_system_cmake 1
 
 Name:           cmake%{major_version}
 Version:        %{major_version}.%{patch_version}
-Release:        2%{?dist}
+Release:        1%{?dist}
 Summary:        The cmake build system
 
 License:        BSD-3-Clause
 URL:            https://cmake.org
 %undefine       _disable_source_fetch
 Source0:        https://github.com/Kitware/CMake/releases/download/v%{version}/cmake-%{version}.tar.gz
-%define         SHA256SUM0 1d266ea3a76ef650cdcf16c782a317cb4a7aa461617ee941e389cb48738a3aba
+%define         SHA256SUM0 e3e0fd3b23b7fb13e1a856581078e0776ffa2df4e9d3164039c36d3315e0c7f0
 
 # X10-Update-Spec: { "type": "git-tags",
 # X10-Update-Spec:   "repo": "https://github.com/Kitware/CMake.git",
@@ -72,5 +72,8 @@ done
 
 %changelog
 
-* Thu Dec 17 2020 Morgan Thomas <m@morg.dev> 3.19 release 2
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 3.19.2-1
+  Updated to version 3.19.2.
+
+* Thu Dec 17 2020 Morgan Thomas <m@morg.dev> 3.19.1-2
   Infrastructure for multiple cmake versions.

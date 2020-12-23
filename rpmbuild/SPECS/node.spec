@@ -1,5 +1,5 @@
 Name:           node
-Version:        15.4.0
+Version:        15.5.0
 Release:        1%{?dist}
 Summary:        An asynchronous JavaScript runtime
 
@@ -7,9 +7,9 @@ License:        MIT
 URL:            https://nodejs.org
 %undefine       _disable_source_fetch
 Source0:        https://nodejs.org/dist/v%{version}/node-v%{version}.tar.gz
-%define         SHA256SUM0 b199796544d988b4bb61e38584cd097744e073fa0559cbec772858d91ce4649f
+%define         SHA256SUM0 a4f10a2e67dc99ed64c297be988fbe37f8a62f8fb8ff880f121f8be4e30df3d1
 
-# X10-Update-Spec: { "type": "webscrape", "url": "https://nodejs.org/en/", "pattern": "((?:\\d+\\.?)+) LTS"}
+# X10-Update-Spec: { "type": "webscrape", "url": "https://nodejs.org/en/", "pattern": "((?:\\d+\\.?)+) Current"}
 
 BuildRequires:  python
 # apparently this is not sufficient to have it not use its own openssl? TODO
@@ -44,3 +44,6 @@ echo "%SHA256SUM0  %SOURCE0" | shasum -a256 -c -
 %doc %{_mandir}/man1/*
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 15.5.0-1
+  Updated to version 15.5.0.

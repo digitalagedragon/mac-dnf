@@ -12,6 +12,10 @@ URL:        https://www.qt.io
 Source0:    https://download.qt.io/official_releases/qt/%{version_major}/%{version}/single/qt-everywhere-src-%{version}.tar.xz
 %define     SHA256SUM0 3a530d1b243b5dec00bc54937455471aaa3e56849d2593edb8ded07228202240
 
+# X10-Update-Spec: { "type": "git-tags",
+# X10-Update-Spec:   "repo": "https://code.qt.io/qt/qt5.git",
+# X10-Update-Spec:   "pattern": "^v(5\\.\\d+\\.\\d+)$" }
+
 # Patch here from Homebrew
 Patch0:     https://raw.githubusercontent.com/Homebrew/formula-patches/92d4cf/qt/5.15.2.diff#/libqt-0001-find-11.0-sdk.patch
 

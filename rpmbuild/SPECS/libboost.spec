@@ -1,7 +1,7 @@
-%define         system_python 3.9
+%define system_python 3.9
 
 Name:           libboost
-Version:        1.74.0
+Version:        1.75.0
 Release:        1%{?dist}
 Summary:        A collection of C++ libraries
 
@@ -9,7 +9,9 @@ License:        BSL-1.0
 URL:            https://www.boost.org
 %undefine       _disable_source_fetch
 Source0:        https://dl.bintray.com/boostorg/release/%{version}/source/boost_%(echo %{version} | tr . _).tar.bz2
-%define         SHA256SUM0 83bfc1507731a0906e387fc28b7ef5417d591429e51e788417fe9ff025e116b1
+%define         SHA256SUM0 953db31e016db7bb207f11432bef7df100516eeb746843fa0486a222e3fd49cb
+
+# X10-Update-Spec: { "type": "webscrape", "url": "https://www.boost.org/feed/downloads.rss", "pattern": ">Version v?(\\d+(?:\\.\\d+)+)<"}
 
 BuildRequires:  libicu4c-devel
 BuildRequires:  libzstd-devel
@@ -63,4 +65,7 @@ echo "%SHA256SUM0  %SOURCE0" | shasum -a256 -c -
 %{_libdir}/*.a
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 1.75.0-1
+  Updated to version 1.75.0.
 

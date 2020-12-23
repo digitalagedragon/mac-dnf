@@ -11,6 +11,10 @@ URL:            https://www.doxygen.org
 Source0:        https://doxygen.nl/files/doxygen-%{version}.src.tar.gz
 %define         SHA256SUM0 e0db6979286fd7ccd3a99af9f97397f2bae50532e4ecb312aa18862f8401ddec
 
+# X10-Update-Spec: { "type": "git-tags",
+# X10-Update-Spec:   "repo": "https://github.com/doxygen/doxygen",
+# X10-Update-Spec:   "pattern": "^Release_(\\d+_\\d+_\\d+)$" }
+
 BuildRequires:  cmake%{system_cmake}
 BuildRequires:  bison
 

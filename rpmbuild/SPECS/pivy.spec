@@ -12,8 +12,8 @@ Source0:        https://github.com/coin3d/pivy/archive/%{version}.tar.gz#/%{name
 %define         SHA256SUM0 16f2e339e5c59a6438266abe491013a20f53267e596850efad1559564a2c1719
 
 # X10-Update-Spec: { "type": "git-tags",
-# X10-Update-Spec:   "repo": "https://github.com/pypa/setuptools.git",
-# X10-Update-Spec:   "pattern": "^v((?:\\d+\\.?)+)$" }
+# X10-Update-Spec:   "repo": "https://github.com/coin3d/pivy.git",
+# X10-Update-Spec:   "pattern": "^(\\d+\\.\\d+\\.\\d+)$" }
 
 BuildRequires:  python%{system_python}
 BuildRequires:  cmake

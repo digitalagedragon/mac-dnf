@@ -1,15 +1,15 @@
 %enable_universal
 
 Name:           %{universal libgpg-error}
-Version:        1.39
-Release:        3%{?dist}
+Version:        1.41
+Release:        1%{?dist}
 Summary:        Libgpg-error is a small library that originally defined common error values for all GnuPG components.
 
 License:        LGPLv2+
 URL:            https://gnupg.org/software/libgpg-error/index.html
 %undefine       _disable_source_fetch
 Source0:        https://gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-%{version}.tar.bz2
-%define         SHA256SUM0 4a836edcae592094ef1c5a4834908f44986ab2b82e0824a0344b49df8cdb298f
+%define         SHA256SUM0 64b078b45ac3c3003d7e352a5e05318880a5778c42331ce1ef33d1a0d9922742
 
 # X10-Update-Spec: { "type": "webscrape",
 # X10-Update-Spec:   "url": "https://gnupg.org/ftp/gcrypt/libgpg-error",
@@ -81,3 +81,5 @@ rm -f %{buildroot}%{_infodir}/dir
 %{_prefix}/bin/yat2m
 
 %changelog
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 1.41-1
+  Updated to version 1.41.

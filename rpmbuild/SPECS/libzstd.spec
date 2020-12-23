@@ -1,7 +1,7 @@
 %define libname zstd
 
 Name:           lib%{libname}
-Version:        1.4.5
+Version:        1.4.8
 Release:        1%{?dist}
 Summary:        A fast lossless compression algorithm
 
@@ -9,7 +9,7 @@ License:        BSD-3-Clause, GPLv2
 URL:            https://facebook.github.io/zstd/
 %undefine       _disable_source_fetch
 Source0:        https://github.com/facebook/zstd/releases/download/v%{version}/zstd-%{version}.tar.gz
-%define         SHA256SUM0 98e91c7c6bf162bf90e4e70fdbc41a8188b9fa8de5ad840c401198014406ce9e
+%define         SHA256SUM0 32478297ca1500211008d596276f5367c54198495cf677e9439f4791a4c69f24
 
 # X10-Update-Spec: { "type": "git-tags",
 # X10-Update-Spec:   "repo": "https://github.com/facebook/zstd.git",
@@ -70,3 +70,6 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %doc %{_mandir}/man1/*
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 1.4.8-1
+  Updated to version 1.4.8.

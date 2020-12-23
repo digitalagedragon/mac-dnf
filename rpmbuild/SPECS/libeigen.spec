@@ -9,6 +9,10 @@ URL:            https://eigen.tuxfamily.org/
 Source0:        https://gitlab.com/libeigen/eigen/-/archive/%{version}/eigen-%{version}.tar.gz
 %define         SHA256SUM0 7985975b787340124786f092b3a07d594b2e9cd53bbfe5f3d9b1daee7d55f56f
 
+# X10-Update-Spec: { "type": "git-tags",
+# X10-Update-Spec:   "repo": "https://gitlab.com/libeigen/eigen.git",
+# X10-Update-Spec:   "pattern": "^(\\d+\\.\\d+\\.\\d+)$" }
+
 BuildRequires:  cmake
 
 %description

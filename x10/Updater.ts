@@ -115,6 +115,8 @@ export class Updater {
                     } else {
                         throw new Error(`unknown update type ${update_json.type}`);
                     }
+                    latest_version.replaceAll('_', '.');
+                    latest_version.replaceAll('-', '.');
                     if (latest_version) {
                         const spec_version = child_process.execSync(`rpmspec -q --qf '%{version}\\n' --define '_build %{_target}' --define '_host %{_build}' ../rpmbuild/SPECS/${spec} 2>/dev/null`).toString().split("\n")[0].trim();
                         if (latest_version == spec_version || update_json.type == 'none') {

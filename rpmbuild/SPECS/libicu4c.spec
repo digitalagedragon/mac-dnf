@@ -1,7 +1,7 @@
 # adapted from homebrew's
 
 %define major 68
-%define minor 1
+%define minor 2
 
 Name:           libicu4c
 Version:        %{major}.%{minor}
@@ -12,7 +12,11 @@ License:        ICU
 URL:            http://site.icu-project.org/home
 %undefine       _disable_source_fetch
 Source0:        https://github.com/unicode-org/icu/releases/download/release-%{major}-%{minor}/icu4c-%{major}_%{minor}-src.tgz
-%define         SHA256SUM0 a9f2e3d8b4434b8e53878b4308bd1e6ee51c9c7042e2b1a376abefb6fbb29f2d
+%define         SHA256SUM0 c79193dee3907a2199b8296a93b52c5cb74332c26f3d167269487680d479d625
+
+# X10-Update-Spec: { "type": "git-tags",
+# X10-Update-Spec:   "repo": "https://github.com/unicode-org/icu.git",
+# X10-Update-Spec:   "pattern": "^release-(\\d+-\\d+)$" }
 
 %description
 
@@ -69,3 +73,6 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %doc %{_mandir}/man{1,8}/*
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 68.2-1
+  Updated to version 68.2.

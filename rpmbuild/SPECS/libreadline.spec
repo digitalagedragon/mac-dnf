@@ -9,6 +9,8 @@ URL:            https://www.gnu.org/software/readline
 Source0:        https://ftp.gnu.org/gnu/readline/readline-%{version}.tar.gz
 %define         SHA256SUM0 f8ceb4ee131e3232226a17f51b164afc46cd0b9e6cef344be87c65962cb82b02
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://ftp.gnu.org/gnu/readline/"}
+
 # TODO that should be PREFIX=/usr/local/opt/readline, not /usr/local/opt...
 %description
 

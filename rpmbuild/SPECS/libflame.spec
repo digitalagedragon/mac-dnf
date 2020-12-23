@@ -9,6 +9,10 @@ URL:            https://www.cs.utexas.edu/~flame/web/libFLAME.html
 Source0:        https://github.com/flame/libflame/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 %define         SHA256SUM0 997c860f351a5c7aaed8deec00f502167599288fd0559c92d5bfd77d0b4d475c
 
+# X10-Update-Spec: { "type": "git-tags",
+# X10-Update-Spec:   "repo": "https://github.com/flame/libflame.git",
+# X10-Update-Spec:   "pattern": "^(\\d+\\.\\d+\\.\\d+)$" }
+
 BuildRequires:  gcc
 
 Requires:       gcc-libs

@@ -9,6 +9,8 @@ URL:            https://www.lysator.liu.se/~nisse/misc/
 Source0:        https://www.lysator.liu.se/~nisse/misc/argp-standalone-%{version}.tar.gz
 %define         SHA256SUM0 dec79694da1319acd2238ce95df57f3680fea2482096e483323fddf3d818d8be
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://www.lysator.liu.se/~nisse/misc/", "pattern": "argp-standalone-(\\d+(?:\\.\\d+)+)\\.tar\\.gz"}
+
 %description
 
 %package        devel

@@ -15,6 +15,8 @@ URL:            https://qemu.org
 Source0:        https://download.qemu.org/qemu-%{version}.tar.xz
 %define         SHA256SUM0 cb18d889b628fbe637672b0326789d9b0e3b8027e0445b936537c78549df17bc
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://download.qemu.org/"}
+
 BuildRequires:  xz
 BuildRequires:  ninja-build
 BuildRequires:  pkg-config

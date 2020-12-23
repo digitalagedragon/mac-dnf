@@ -1,15 +1,15 @@
 %define system_python 3.9
 
 Name:           rpm
-Version:        4.16.1
-Release:        15%{?dist}
+Version:        4.16.1.2
+Release:        2%{?dist}
 Summary:        The RPM Package Manager (RPM) is a powerful package management system.
 
 License:        GPLv2
 URL:            https://rpm.org/
 %undefine       _disable_source_fetch
 Source0:        http://ftp.rpm.org/releases/rpm-4.16.x/rpm-%{version}.tar.bz2
-%define         SHA256SUM0 4650cb9d414704059a6e0bee73a68a13bb367dfce188bd35f56b19e13a775cbf
+%define         SHA256SUM0 8357329ceefc92c41687988b22198b26f74a12a9a68ac00728f934a5c4b4cacc
 
 # X10-Update-Spec: { "type": "webscrape", "url": "http://rpm.org/timeline", "pattern": "RPM ((?:\\d+\\.?)+) released" }
 
@@ -126,6 +126,12 @@ rm %{buildroot}%{_prefix}/lib/rpm/fileattrs/python*.attr
 %{_includedir}/rpm
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@morg.dev> 4.16.1.2-2
+  Don't attempt to copy / merge directories in %umerge (how did that ever work?)
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 4.16.1.2-1
+  Updated to version 4.16.1.2.
 
 * Mon Dec 21 2020 Morgan Thomas <m@m0rg.dev> 4.16.1 release 15
   Add -mmacos-version-min to build flags and add basic CMake macros.

@@ -49,7 +49,7 @@ pyenv | ✘ |
 go | ✘ |
 automake | ✔ | `automake`
 zsh | ✘ |
-curl | ✘ |
+curl | ✔ | `curl`, `libcurl`
 php | ✘ |
 ruby | ✘ |
 nvm | ✘ |

@@ -1,5 +1,5 @@
 %define pybasever 3.8
-%define general_version %{pybasever}.5
+%define general_version %{pybasever}.7
 
 %define is_system_python 0
 
@@ -16,7 +16,9 @@ License:        Python-2.0
 URL:            https://www.python.org/
 %undefine       _disable_source_fetch
 Source0:        https://www.python.org/ftp/python/%{version}/Python-%{version}.tgz
-%define         SHA256SUM0 015115023c382eb6ab83d512762fe3c5502fa0c6c52ffebc4831c4e1a06ffc49
+%define         SHA256SUM0 20e5a04262f0af2eb9c19240d7ec368f385788bba2d8dfba7e74b20bab4d2bac
+
+# X10-Update-Spec: { "type": "webscrape", "url": "https://www.python.org/ftp/python/", "pattern": "\"(3\\.8\\.\\d+)/\""}
 
 Patch0:         python3.8-0001-macos-arm64.patch
 
@@ -108,3 +110,6 @@ rm %{buildroot}/%{_prefix}/lib/python%{pybasever}/cgi.py
 %{_prefix}/lib/pkgconfig/*.pc
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 3.8.7-1
+  Updated to version 3.8.7.

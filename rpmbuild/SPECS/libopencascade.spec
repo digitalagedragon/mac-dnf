@@ -11,6 +11,8 @@ URL:            https://www.opencascade.com/content/overview
 Source0:        https://git.dev.opencascade.org/gitweb/?p=occt.git;a=snapshot;h=refs/tags/V%(echo %{version} | tr . _);sf=tgz#/%{name}-%{version}.tar.gz
 %define         SHA256SUM0 c8df7d23051b86064f61299a5f7af30004c115bdb479df471711bab0c7166654
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://www.opencascade.com/content/latest-release", "pattern": "href=.*?opencascade[._-]v?(\\d+(?:\\.\\d+)+)\\.t"}
+
 BuildRequires:  cmake%{system_cmake}
 BuildRequires:  doxygen
 BuildRequires:  librapidjson-devel

@@ -11,6 +11,10 @@ URL:            https://miloyip.github.io/rapidjson/
 Source0:        https://github.com/miloyip/rapidjson/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 %define         SHA256SUM0 bf7ced29704a1e696fbccf2a2b4ea068e7774fa37f6d7dd4039d0787f8bed98e
 
+# X10-Update-Spec: { "type": "git-tags",
+# X10-Update-Spec:   "repo": "https://github.com/miloyip/rapidjson.git",
+# X10-Update-Spec:   "pattern": "^v(\\d+\\.\\d+\\.\\d+)$" }
+
 BuildRequires:  doxygen
 BuildRequires:  cmake%{system_cmake}
 

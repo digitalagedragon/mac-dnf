@@ -11,6 +11,10 @@ URL:            https://coin3d.github.io
 Source0:        https://github.com/coin3d/coin/releases/download/Coin-%{version}/coin-%{version}-src.tar.gz
 %define         SHA256SUM0 e4f4bd57804b8ed0e017424ad2e45c112912a928b83f86c89963df9015251476
 
+# X10-Update-Spec: { "type": "git-tags",
+# X10-Update-Spec:   "repo": "https://github.com/coin3d/coin",
+# X10-Update-Spec:   "pattern": "^Coin-(\\d+\\.\\d+\\.\\d+)$" }
+
 BuildRequires:  cmake
 BuildRequires:  cmake3.18
 BuildRequires:  libboost-devel
