@@ -1,6 +1,6 @@
 %_db_backend sqlite
 %_usr /usr/local/
-%osxflags -mmacos-version-min=11.0 -Wpartial-availability
+%osxflags -mmacosx-version-min=11.0 -Wpartial-availability
 %build_cflags %{optflags} %{osxflags}
 %build_cxxflags %{optflags} %{osxflags}
 %build_fflags %{optflags} %{osxflags}

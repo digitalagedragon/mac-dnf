@@ -2,7 +2,7 @@
 
 Name:           rpm
 Version:        4.16.1.2
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        The RPM Package Manager (RPM) is a powerful package management system.
 
 License:        GPLv2
@@ -130,6 +130,9 @@ rm %{buildroot}%{_prefix}/lib/rpm/fileattrs/python*.attr
 %{_includedir}/rpm
 
 %changelog
+
+* Thu Dec 24 2020 Morgan Thomas <m@m0rg.dev> 4.16.1.2-4
+  Use -mmacosx-version-min instead of -mmacos-version-min for compatibility.
 
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 4.16.1.2-3
   Add pkg-config and Mach-O dependency generators.
