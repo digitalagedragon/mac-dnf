@@ -2,7 +2,7 @@
 
 Name:           pyside2
 Version:        5.15.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Python bindings for libqt
 
 License:        LGPLv3, GPLv3, GPLv2, FDL, BSD
@@ -112,3 +112,6 @@ cd build
 %exclude %{_bindir}/Designer.app
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 5.15.2-2
+  Rebuilt with dependency generation.

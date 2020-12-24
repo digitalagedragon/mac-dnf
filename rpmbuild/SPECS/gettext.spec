@@ -4,7 +4,7 @@
 
 Name:           %{universal %{libname}}
 Version:        0.21
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        An internationalization library
 
 License:        GPLv3+
@@ -78,3 +78,6 @@ rm -f %{buildroot}%{_infodir}/dir
 %doc %{_docdir}/libtextstyle
 %doc %{_docdir}/libasprintf
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 0.21-4
+  Rebuilt with dependency generation.

@@ -1,6 +1,6 @@
 Name:           libargp
 Version:        1.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Argument parsing functions from gnulib
 
 License:        GPLv2+
@@ -47,3 +47,6 @@ rm -fv %{buildroot}%{_infodir}/dir
 %{_prefix}/lib/libargp.a
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 1.3-2
+  Rebuilt with dependency generation.

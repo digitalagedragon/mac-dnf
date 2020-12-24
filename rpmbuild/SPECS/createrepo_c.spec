@@ -2,7 +2,7 @@
 
 Name:           createrepo_c
 Version:        0.16.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Tool for building yum repos
 
 License:        GPLv2
@@ -84,3 +84,6 @@ cd build
 %{_includedir}/*
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 0.16.2-3
+  Rebuilt with dependency generation.

@@ -2,7 +2,7 @@
 
 Name:           libnetgen
 Version:        6.2.2010pre
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        C++ CAD/CAM library
 
 # earlier versions don't build on M1
@@ -83,4 +83,7 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_libdir}/cmake/netgen
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 6.2.2010pre-2
+  Rebuilt with dependency generation.
 

@@ -4,7 +4,7 @@
 
 Name:           lib%{libname}
 Version:        1.15.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        GPGME is the standard library to access GnuPG functions from programming languages.
 
 License:        LGPLv2+, GPLv2+
@@ -81,3 +81,6 @@ rm -f %{buildroot}%{_infodir}/dir
 %{_prefix}/bin/gpgme-json
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 1.15.0-3
+  Rebuilt with dependency generation.

@@ -2,7 +2,7 @@
 
 Name:           librapidjson
 Version:        1.1.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A fast JSON parser/generator for C++ with SAX/DOM style API
 
 License:        MIT
@@ -61,3 +61,6 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %doc %{_docdir}/RapidJSON
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 1.1.0-2
+  Rebuilt with dependency generation.

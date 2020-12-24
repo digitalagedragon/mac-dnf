@@ -2,7 +2,7 @@
 
 Name:           libopencascade
 Version:        7.5.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        C++ CAD/CAM library
 
 License:        LGPLv2 with exceptions
@@ -175,3 +175,6 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %doc %{_docdir}/opencascade
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 7.5.0-2
+  Rebuilt with dependency generation.

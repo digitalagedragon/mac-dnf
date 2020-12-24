@@ -2,7 +2,7 @@
 
 Name:           gcc
 Version:        10.2.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        The GNU Compiler Collection
 
 License:        GPLv3
@@ -86,3 +86,6 @@ rm -f %{buildroot}%{_infodir}/dir
 %{_libdir}/*.so
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 10.2.0-2
+  Rebuilt with dependency generation.

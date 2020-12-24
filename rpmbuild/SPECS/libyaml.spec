@@ -1,6 +1,6 @@
 Name:           libyaml
 Version:        0.2.5
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A C library for parsing and emitting YAML.
 
 License:        MIT
@@ -50,3 +50,6 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_prefix}/lib/pkgconfig/*.pc
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 0.2.5-2
+  Rebuilt with dependency generation.

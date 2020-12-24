@@ -4,7 +4,7 @@
 
 Name:           %{universal lib%{libname}}
 Version:        8.44
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Perl Compatible Regular Expressions
 
 License:        BSD
@@ -77,3 +77,6 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %doc %{_mandir}/man1/pcretest.1*
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 8.44-4
+  Rebuilt with dependency generation.

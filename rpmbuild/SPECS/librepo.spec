@@ -4,7 +4,7 @@
 
 Name:           %{libname}
 Version:        1.12.1
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        A library providing C and Python (libcURL like) API for downloading linux repository metadata and packages
 
 License:        LGPLv2
@@ -74,6 +74,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_prefix}/lib/pkgconfig/*.pc
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 1.12.1-6
+  Rebuilt with dependency generation.
 
 * Wed Dec 16 2020 Morgan Thomas <m@m0rg.dev> 1.12.1 release 5
   Add libzchunk to build dependencies.

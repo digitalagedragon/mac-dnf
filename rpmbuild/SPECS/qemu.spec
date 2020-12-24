@@ -6,7 +6,7 @@
 
 Name:           qemu
 Version:        5.2.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Open-source machine emulator and virtualizer
 
 License:        GPLv2, LGPLv2
@@ -65,3 +65,6 @@ export LDFLAGS="-arch x86_64"
 %exclude %{_datadir}/applications
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 5.2.0-3
+  Rebuilt with dependency generation.

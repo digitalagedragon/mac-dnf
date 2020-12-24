@@ -2,7 +2,7 @@
 
 Name:           %{universal libpixman}
 Version:        0.40.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        cairo's pixel manipulation library
 
 License:        LGPLv2
@@ -50,3 +50,6 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_libdir}/pkgconfig/*.pc
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 0.40.0-3
+  Rebuilt with dependency generation.

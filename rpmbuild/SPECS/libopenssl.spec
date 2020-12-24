@@ -2,7 +2,7 @@
 
 Name:           lib%{libname}
 Version:        1.1.1i
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        OpenSSL is a robust, commercial-grade, and full-featured toolkit for the Transport Layer Security (TLS) and Secure Sockets Layer (SSL) protocols.
 
 License:        OpenSSL
@@ -78,3 +78,6 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %doc %{_mandir}/man1/*
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 1.1.1i-2
+  Rebuilt with dependency generation.

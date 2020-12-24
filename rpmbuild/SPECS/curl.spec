@@ -1,6 +1,6 @@
 Name:           curl
 Version:        7.74.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Curl is a command line tool and library for transferring data with URLs.
 
 License:        libcurl
@@ -64,6 +64,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %doc %{_mandir}/man3/*
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 7.74.0-2
+  Rebuilt with dependency generation.
 
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 7.74.0-1
   Updated to version 7.74.0.

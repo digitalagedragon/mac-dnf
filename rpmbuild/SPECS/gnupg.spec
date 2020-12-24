@@ -1,6 +1,6 @@
 Name:           gnupg
 Version:        2.2.26
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        The GNU Privacy Guard
 
 License:        GPLv2+
@@ -71,6 +71,9 @@ rm -f %{buildroot}%{_infodir}/dir
 %doc %{_datadir}/doc/gnupg
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 2.2.26-2
+  Rebuilt with dependency generation.
 
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 2.2.26-1
   Updated to version 2.2.26.

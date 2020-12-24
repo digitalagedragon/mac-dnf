@@ -2,7 +2,7 @@
 
 Name:           libboost
 Version:        1.75.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A collection of C++ libraries
 
 License:        BSL-1.0
@@ -65,6 +65,9 @@ echo "%SHA256SUM0  %SOURCE0" | shasum -a256 -c -
 %{_libdir}/*.a
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 1.75.0-2
+  Rebuilt with dependency generation.
 
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 1.75.0-1
   Updated to version 1.75.0.

@@ -1,6 +1,6 @@
 Name:           libeigen
 Version:        3.3.9
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        C++ template library for linear algebra
 
 License:        MPL-2.0
@@ -52,3 +52,6 @@ mv -v %{buildroot}%{_datadir}/{eigen3/cmake,pkgconfig} %{buildroot}%{_libdir}/
 %{_libdir}/pkgconfig/*.pc
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 3.3.9-2
+  Rebuilt with dependency generation.

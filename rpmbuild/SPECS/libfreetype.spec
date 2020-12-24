@@ -1,6 +1,6 @@
 Name:           libfreetype
 Version:        2.10.4
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A freely available software library to render fonts
 
 License:        FTL
@@ -55,3 +55,6 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %doc %{_mandir}/man1/*
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 2.10.4-2
+  Rebuilt with dependency generation.

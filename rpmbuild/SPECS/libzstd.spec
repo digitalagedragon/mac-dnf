@@ -2,7 +2,7 @@
 
 Name:           lib%{libname}
 Version:        1.4.8
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A fast lossless compression algorithm
 
 License:        BSD-3-Clause, GPLv2
@@ -70,6 +70,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %doc %{_mandir}/man1/*
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 1.4.8-2
+  Rebuilt with dependency generation.
 
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 1.4.8-1
   Updated to version 1.4.8.

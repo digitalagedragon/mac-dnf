@@ -2,7 +2,7 @@
 
 Name:           numpy
 Version:        1.19.4
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        The fundamental package for scientific computing with Python
 
 License:        BSD-3-Clause
@@ -64,6 +64,9 @@ python%{system_python} setup.py build install --root %{buildroot} --single-versi
 %{_libdir}/python%{system_python}/site-packages/*
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 1.19.4-2
+  Rebuilt with dependency generation.
 
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 1.19.4-1
   Updated to version 1.19.4.

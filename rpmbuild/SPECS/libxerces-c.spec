@@ -1,6 +1,6 @@
 Name:           libxerces-c
 Version:        3.2.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Validating XML parser
 
 License:        Apache-2.0
@@ -64,3 +64,6 @@ rm -fv %{buildroot}%{_bindir}/MemParse
 %{_bindir}/*
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 3.2.3-2
+  Rebuilt with dependency generation.

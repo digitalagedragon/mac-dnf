@@ -1,6 +1,6 @@
 Name:           lua
 Version:        5.4.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Lua is a powerful, efficient, lightweight, embeddable scripting language.
 
 License:        MIT
@@ -89,3 +89,6 @@ EOF
 %{_prefix}/lib/liblua.dylib
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 5.4.2-2
+  Rebuilt with dependency generation.

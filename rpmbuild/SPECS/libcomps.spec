@@ -2,7 +2,7 @@
 
 Name:           libcomps
 Version:        0.1.15
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Libcomps is alternative for yum.comps library
 
 License:        GPLv2
@@ -65,3 +65,6 @@ mv %{buildroot}%{_prefix}/lib/python3.9/site-packages/libcomps/_libpycomps.{dyli
 %{_prefix}/lib/pkgconfig/*.pc
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 0.1.15-2
+  Rebuilt with dependency generation.

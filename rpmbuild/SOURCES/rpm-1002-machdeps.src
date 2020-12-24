@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+[ $# -ge 1 ] || {
+    cat > /dev/null
+    exit 0
+}
+
+case $1 in
+-P|--provides)
+    while read filename ; do
+        objdump -p $filename | perl -nE 'if(/LC_ID_DYLIB/../Load command/) { m|name (?:.*/)?([^/. ]+)| && print "$1.dylib"; m|current version (.*)$| && say " = $1";}'
+        # yes, there are (broken) libraries that do not list current version >= compatibility version! libdnf.2.dylib is one!
+        objdump -p $filename | perl -nE 'if(/LC_ID_DYLIB/../Load command/) { m|name (?:.*/)?([^/. ]+)| && print "$1.dylib"; m|compatibility version (.*)$| && say " = $1";}'
+    done | sort -u
+    ;;
+-R|--requires)
+    while read filename ; do
+        objdump -p $filename | perl -nE 'if(/LC_LOAD_DYLIB/../Load command/) { m(/usr/lib|/System|\@rpath) && print "# "; m|name (?:.*/)?([^/. ]+)| && print "$1.dylib"; m|compatibility version (.*)$| && say " >= $1";}'
+    done | grep -v '^# ' | sort -u
+    ;;
+esac
+exit 0

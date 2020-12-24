@@ -2,7 +2,7 @@
 
 Name:           lib%{libname}
 Version:        1.18
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        This is the popt(3) command line option parsing library.
 
 License:        MIT
@@ -58,3 +58,5 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 %changelog
 
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 1.18-2
+  Rebuilt with dependency generation.

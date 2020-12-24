@@ -2,7 +2,7 @@
 
 Name:           lib%{libname}
 Version:        1.6
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        The New Portable Threads Library
 
 License:        LGPLv2+
@@ -56,4 +56,7 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_datadir}/aclocal/*.m4
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 1.6-2
+  Rebuilt with dependency generation.
 

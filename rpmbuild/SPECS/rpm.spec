@@ -2,7 +2,7 @@
 
 Name:           rpm
 Version:        4.16.1.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        The RPM Package Manager (RPM) is a powerful package management system.
 
 License:        GPLv2
@@ -16,8 +16,11 @@ Source0:        http://ftp.rpm.org/releases/rpm-4.16.x/rpm-%{version}.tar.bz2
 Patch0:         rpm-0001-macos-arm64.patch
 Patch1:         rpm-0002-lua-rawlen.patch
 Patch2:         rpm-0003-bsd-sed.patch
+Patch3:         rpm-0004-pkgconfig-path.patch
 
 Source1:        rpm-1000-macros.src
+Source2:        rpm-1001-mach-fileattrs.src
+Source3:        rpm-1002-machdeps.src
 
 BuildRequires:  libgcrypt-devel
 BuildRequires:  libmagic-devel
@@ -38,8 +41,7 @@ Requires:       libarchive
 Requires:       libsqlite
 Requires:       liblua
 Requires:       libgcrypt
-
-%undefine _annotated_build
+Requires:       pkg-config
 
 %description
 
@@ -87,6 +89,8 @@ find %{buildroot} -name '*.sed_orig' -exec rm -f {} ';'
 # TODO should we have a /usr/local/bin/clang wrapper or something
 
 %{__install} -m644 -v %SOURCE1 %{buildroot}%{_prefix}/lib/rpm/macros.d/macros.macrpm
+%{__install} -m644 -v %SOURCE2 %{buildroot}%{_prefix}/lib/rpm/fileattrs/mach.attr
+%{__install} -m755 -v %SOURCE3 %{buildroot}%{_prefix}/lib/rpm/machdeps
 
 echo '%%_prefix /usr/local' >>%{buildroot}%{_prefix}/lib/rpm/platform/%(uname -m | sed -e 's/arm64/aarch64/')-%(uname -s | tr '[:upper:]' '[:lower:]')/macros
 
@@ -127,17 +131,20 @@ rm %{buildroot}%{_prefix}/lib/rpm/fileattrs/python*.attr
 
 %changelog
 
-* Wed Dec 23 2020 Morgan Thomas <m@morg.dev> 4.16.1.2-2
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 4.16.1.2-3
+  Add pkg-config and Mach-O dependency generators.
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 4.16.1.2-2
   Don't attempt to copy / merge directories in %umerge (how did that ever work?)
 
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 4.16.1.2-1
   Updated to version 4.16.1.2.
 
-* Mon Dec 21 2020 Morgan Thomas <m@m0rg.dev> 4.16.1 release 15
+* Mon Dec 21 2020 Morgan Thomas <m@m0rg.dev> 4.16.1-15
   Add -mmacos-version-min to build flags and add basic CMake macros.
 
-* Wed Dec 16 2020 Morgan Thomas <m@m0rg.dev> 4.16.1 release 14
+* Wed Dec 16 2020 Morgan Thomas <m@m0rg.dev> 4.16.1-14
   Explicitly disable zstd.
 
-* Wed Dec 16 2020 Morgan Thomas <m@m0rg.dev> 4.16.1 release 13
+* Wed Dec 16 2020 Morgan Thomas <m@m0rg.dev> 4.16.1-13
   Explicitly pass __CURL.

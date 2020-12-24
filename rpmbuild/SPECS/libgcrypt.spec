@@ -2,7 +2,7 @@
 
 Name:           %{universal libgcrypt}
 Version:        1.8.7
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Libgcrypt is a general purpose cryptographic library originally based on code from GnuPG.
 
 License:        LGPLv2+
@@ -85,3 +85,6 @@ rm -f %{buildroot}%{_infodir}/dir
 %doc %{_mandir}/man1/hmac256.1*
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 1.8.7-5
+  Rebuilt with dependency generation.

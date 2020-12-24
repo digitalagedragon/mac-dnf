@@ -1,6 +1,6 @@
 Name:           bison
 Version:        3.7.4
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A general-purpose parser generator
 
 License:        GPLv3+
@@ -52,3 +52,6 @@ rm -f %{buildroot}%{_infodir}/dir
 %doc %{_mandir}/man1/*
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 3.7.4-2
+  Rebuilt with dependency generation.

@@ -2,7 +2,7 @@
 
 Name:           libmodulemd
 Version:        2.11.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        C Library for manipulating module metadata files
 
 License:        MIT
@@ -78,6 +78,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_bindir}/modulemd-validator
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 2.11.1-2
+  Rebuilt with dependency generation.
 
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 2.11.1-1
   Updated to version 2.11.1.

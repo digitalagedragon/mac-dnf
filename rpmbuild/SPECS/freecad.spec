@@ -2,7 +2,7 @@
 
 Name:           freecad
 Version:        0.19pre
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Parametric 3D modeler
 
 License:        GPLv2
@@ -51,6 +51,9 @@ Requires:       shiboken2
 %prep
 %autosetup -n FreeCAD-%{source_commit} -p0
 
+# can't do this with patch due to CRLF nonsense
+sed -i.orig -e 's/!defined(__x86_64__)/0/' src/Mod/Mesh/App/WildMagic4/Wm4System.cpp
+
 %build
 mkdir build
 cd build
@@ -59,11 +62,14 @@ cd build
 # TODO: -DOCCT_CMAKE_FALLBACK=ON is due to libopencascade problems, I think
 # TODO: -DBUILD_WEB=1 requires qtwebengine
 # TODO: -DBUILD_FEM_NETGEN=1 requires VTK
+
 %cmake_configure \
       -DBUILD_QT5=ON \
       -DUSE_PYTHON3=1 \
       -DPYTHON_EXECUTABLE=/usr/local/bin/python%{system_python} \
       -std=c++14 \
+      -DCMAKE_CXX_STANDARD=14 \
+      -DBUILD_ENABLE_CXX_STD:STRING=C++14 \
       -DBUILD_FEM_NETGEN=0 \
       -DBUILD_FEM=0 \
       -DBUILD_WEB=0 \
@@ -72,7 +78,7 @@ cd build
       -DOCCT_CMAKE_FALLBACK=ON \
       -DFREECAD_CREATE_MAC_APP=1 \
       ..
-%cmake_build || cmake --build .
+%cmake_build || cmake --build . --verbose
 
 %install
 cd build
@@ -99,3 +105,6 @@ EOF
 /Applications/FreeCAD.app
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 0.19pre-2
+  Rebuilt with dependency generation.

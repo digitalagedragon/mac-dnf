@@ -2,7 +2,7 @@
 
 Name:           doxygen
 Version:        1.8.20
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Documentation generator
 
 License:        GPLv2
@@ -46,3 +46,6 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_bindir}/*
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 1.8.20-2
+  Rebuilt with dependency generation.

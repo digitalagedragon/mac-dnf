@@ -5,7 +5,7 @@
 
 Name:           libicu4c
 Version:        %{major}.%{minor}
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        C/C++ libraries for Unicode and Globalization
 
 License:        ICU
@@ -73,6 +73,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %doc %{_mandir}/man{1,8}/*
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 68.2-2
+  Rebuilt with dependency generation.
 
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 68.2-1
   Updated to version 68.2.

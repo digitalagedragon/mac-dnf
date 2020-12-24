@@ -2,7 +2,7 @@
 
 Name:           %{universal libffi}
 Version:        3.3
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        The libffi library provides a portable, high level programming interface to various calling conventions.
 
 License:        MIT
@@ -75,3 +75,6 @@ rm -fv %{buildroot}%{_infodir}/dir
 %doc %{_infodir}/*.info*
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 3.3-4
+  Rebuilt with dependency generation.

@@ -2,7 +2,7 @@
 
 Name:           %{libname}
 Version:        1.2.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        GNU MPC is a C library for the arithmetic of complex numbers with arbitrarily high precision and correct rounding of the result.
 
 License:        LGPLv3+
@@ -59,3 +59,6 @@ rm -f %{buildroot}%{_infodir}/dir
 %doc %{_infodir}/mpc.info*
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 1.2.1-2
+  Rebuilt with dependency generation.

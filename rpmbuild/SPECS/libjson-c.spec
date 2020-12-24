@@ -3,7 +3,7 @@
 
 Name:           lib%{libname}
 Version:        0.15
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        json-c is a library for creating and reading JSON objects in C.
 
 License:        MIT
@@ -62,3 +62,6 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_prefix}/lib/cmake/json-c
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 0.15-2
+  Rebuilt with dependency generation.

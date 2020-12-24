@@ -1,6 +1,6 @@
 Name:           libtool
 Version:        2.4.6
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Make building against shared libraries easier
 
 License:        GPLv3+
@@ -57,3 +57,6 @@ rm -f %{buildroot}%{_infodir}/dir
 %{_prefix}/lib/libltdl.dylib
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 2.4.6-2
+  Rebuilt with dependency generation.

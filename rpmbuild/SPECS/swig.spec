@@ -1,6 +1,6 @@
 Name:           swig
 Version:        4.0.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Multi-language bindings generator
 
 License:        GPLv3+, MIT
@@ -41,3 +41,6 @@ echo "%SHA256SUM0  %SOURCE0" | shasum -a256 -c -
 %{_datadir}/swig
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 4.0.2-2
+  Rebuilt with dependency generation.

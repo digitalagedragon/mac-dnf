@@ -1,6 +1,6 @@
 Name:           libflame
 Version:        5.2.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A portable library for dense matrix computations
 
 License:        BSD-3-Clause
@@ -51,3 +51,6 @@ EOF
 %{_libdir}/libflame-static.a
 %{_libdir}/libflame.a
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 5.2.0-2
+  Rebuilt with dependency generation.

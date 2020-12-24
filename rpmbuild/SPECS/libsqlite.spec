@@ -3,7 +3,7 @@
 
 Name:           lib%{libname}
 Version:        3.34.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        SQLite is a C-language library that implements a small, fast, self-contained, high-reliability, full-featured, SQL database engine.
 
 License:        Public domain
@@ -70,3 +70,6 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %doc %{_mandir}/man1/*
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 3.34.0-2
+  Rebuilt with dependency generation.

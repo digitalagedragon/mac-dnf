@@ -2,7 +2,7 @@
 
 Name:           libdnf
 Version:        0.55.2
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        This library provides a high level package-manager.
 
 License:        LGPLv2+
@@ -101,3 +101,5 @@ mv %{buildroot}%{_prefix}/lib/python3.9/site-packages/hawkey/_hawkey.{dylib,so}
 %{_prefix}/lib/pkgconfig/*.pc
 
 %changelog
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 0.55.2-5
+  Rebuilt with dependency generation.

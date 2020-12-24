@@ -1,6 +1,6 @@
 Name:           libksba
 Version:        1.5.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        GPG certificate management library
 
 License:        LGPLv3+, GPLv2+, GPLv3+
@@ -57,3 +57,6 @@ rm -f %{buildroot}%{_infodir}/dir
 %{_datadir}/aclocal/*.m4
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 1.5.0-2
+  Rebuilt with dependency generation.

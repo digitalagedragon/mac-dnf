@@ -6,7 +6,7 @@
 
 Name:           util-linux
 Version:        %{major_version}.%{patch_version}
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Various utility programs.
 
 License:        GPLv2+, LGPLv2+, BSD
@@ -105,3 +105,6 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %doc %{_mandir}/man3/uuid*
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 2.36.1-2
+  Rebuilt with dependency generation.

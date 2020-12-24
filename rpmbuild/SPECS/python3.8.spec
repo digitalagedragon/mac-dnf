@@ -9,7 +9,7 @@ Name:           python
 Name:           python%{pybasever}
 %endif
 Version:        %{general_version}
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        The Python programming language
 
 License:        Python-2.0
@@ -110,6 +110,9 @@ rm %{buildroot}/%{_prefix}/lib/python%{pybasever}/cgi.py
 %{_prefix}/lib/pkgconfig/*.pc
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 3.8.7-2
+  Rebuilt with dependency generation.
 
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 3.8.7-1
   Updated to version 3.8.7.

@@ -2,7 +2,7 @@
 
 Name:           cython
 Version:        0.29.21
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        The fundamental package for scientific computing with Python
 
 License:        Apache-2.0
@@ -40,3 +40,6 @@ python%{system_python} setup.py install --skip-build --root %{buildroot}
 %{_libdir}/python%{system_python}/site-packages/*
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 0.29.21-2
+  Rebuilt with dependency generation.

@@ -1,6 +1,6 @@
 Name:           pkgconf
 Version:        1.7.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        a pkg-config replacement
 
 License:        MIT
@@ -74,3 +74,6 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_prefix}/lib/pkgconfig/*.pc
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 1.7.3-2
+  Rebuilt with dependency generation.

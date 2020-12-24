@@ -2,7 +2,7 @@
 
 Name:           lib%{libname}
 Version:        1.15.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        CppUnit is the C++ port of the famous JUnit framework for unit testing.
 
 License:        LGPLv2
@@ -57,3 +57,6 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_prefix}/lib/pkgconfig/*.pc
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 1.15.1-2
+  Rebuilt with dependency generation.

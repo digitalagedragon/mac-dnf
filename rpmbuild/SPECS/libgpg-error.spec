@@ -2,7 +2,7 @@
 
 Name:           %{universal libgpg-error}
 Version:        1.41
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Libgpg-error is a small library that originally defined common error values for all GnuPG components.
 
 License:        LGPLv2+
@@ -81,5 +81,9 @@ rm -f %{buildroot}%{_infodir}/dir
 %{_prefix}/bin/yat2m
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 1.41-2
+  Rebuilt with dependency generation.
+
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 1.41-1
   Updated to version 1.41.

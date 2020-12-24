@@ -5,7 +5,7 @@
 
 Name:           cmake%{major_version}
 Version:        %{major_version}.%{patch_version}
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        The cmake build system
 
 License:        BSD-3-Clause
@@ -71,6 +71,9 @@ done
 %endif
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 3.19.2-2
+  Rebuilt with dependency generation.
 
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 3.19.2-1
   Updated to version 3.19.2.

@@ -2,7 +2,7 @@
 
 Name:           lib%{libname}
 Version:        0.15.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Check is a unit testing framework for C.
 
 License:        LGPLv2
@@ -72,3 +72,6 @@ rm -f %{buildroot}%{_infodir}/dir
 %doc %{_mandir}/man1/*
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 0.15.2-2
+  Rebuilt with dependency generation.

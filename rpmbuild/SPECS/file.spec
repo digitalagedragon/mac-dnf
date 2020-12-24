@@ -1,6 +1,6 @@
 Name:           file
 Version:        5.39
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A utility for determining the type of a file.
 
 License:        BSD-2-Clause
@@ -62,12 +62,15 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %files -n libmagic
 %{_datadir}/misc/magic.mgc
 %{_prefix}/lib/libmagic.*.dylib
-%{_prefix}/lib/pkgconfig/libmagic.pc
 %doc %{_mandir}/man4/*
 
 %files -n libmagic-devel
 %{_prefix}/lib/libmagic.dylib
+%{_prefix}/lib/pkgconfig/libmagic.pc
 %{_includedir}/magic.h
 %doc %{_mandir}/man3/*
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 5.39-2
+  Rebuilt with dependency generation.

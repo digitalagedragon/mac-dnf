@@ -1,6 +1,6 @@
 Name:           xz
 Version:        5.2.5
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        XZ Utils is free general-purpose data compression software with a high compression ratio.
 
 License:        GPLv2+
@@ -63,3 +63,6 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_includedir}/lzma/
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 5.2.5-2
+  Rebuilt with dependency generation.

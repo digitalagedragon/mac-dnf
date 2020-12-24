@@ -3,6 +3,10 @@
 A port of Fedora's [dnf](https://github.com/rpm-software-management/dnf) package manager to macOS, and a (currently small) package repository.
 Supports both x86_64 and arm64 machines.
 
+**If you are on arm64 please do not try to install qemu or any `-universal` packages because they're broken**
+
+(or if you do please do not come put in an issue about how it didn't work)
+
 ## Installation
 
 ```

@@ -5,7 +5,7 @@
 
 Name:           python%{pybasever}
 Version:        %{general_version}
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        The Python programming language
 
 License:        Python-2.0
@@ -110,11 +110,14 @@ rm -fv %{buildroot}/%{_mandir}/man1/python3.1*
 
 %changelog
 
-* Wed Dec 17 2020 Morgan Thomas <m@m0rg.dev> 3.9.1 release 4
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 3.9.1-5
+  Rebuilt with dependency generation.
+
+* Thu Dec 17 2020 Morgan Thomas <m@m0rg.dev> 3.9.1-4
   Build with SSL support.
 
-* Wed Dec 17 2020 Morgan Thomas <m@m0rg.dev> 3.9.1 release 3
+* Thu Dec 17 2020 Morgan Thomas <m@m0rg.dev> 3.9.1-3
   Stop not packaging cgi.py.
 
-* Wed Dec 16 2020 Morgan Thomas <m@m0rg.dev> 3.9.1 release 2
+* Wed Dec 16 2020 Morgan Thomas <m@m0rg.dev> 3.9.1-2
   Infrastructure for multiple python versions.

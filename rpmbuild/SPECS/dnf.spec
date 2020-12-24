@@ -2,7 +2,7 @@
 
 Name:           dnf
 Version:        4.5.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A powerful RPM-based package manager
 
 License:        GPLv2
@@ -75,6 +75,9 @@ mv %{buildroot}/etc/* %{buildroot}%{_sysconfdir}/
 %exclude /usr/lib/systemd
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 4.5.2-2
+  Rebuilt with dependency generation.
 
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 4.5.2-1
   Updated to version 4.5.2.

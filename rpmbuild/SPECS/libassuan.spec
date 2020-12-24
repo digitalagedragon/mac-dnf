@@ -1,6 +1,6 @@
 Name:           libassuan
 Version:        2.5.4
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Libassuan is a small library implementing the so-called Assuan protocol.
 
 License:        LGPLv2+
@@ -57,3 +57,6 @@ rm -f %{buildroot}%{_infodir}/dir
 %{_datadir}/aclocal/*.m4
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 2.5.4-2
+  Rebuilt with dependency generation.

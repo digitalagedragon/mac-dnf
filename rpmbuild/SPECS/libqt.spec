@@ -3,7 +3,7 @@
 
 Name:       libqt
 Version:    %{version_major}.%{version_patch}
-Release:    2%{?dist}
+Release:    3%{?dist}
 Summary:    Cross-platform application and UI framework
 
 License:    GFDLv1.3, GPLv2, GPLv3, LGPLv2, LGPLv3
@@ -147,3 +147,6 @@ find %{buildroot} -type f | xargs sed -i "" -e '1s:/usr/bin/python:/usr/local/bi
 %{_bindir}/*
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 5.15.2-3
+  Rebuilt with dependency generation.

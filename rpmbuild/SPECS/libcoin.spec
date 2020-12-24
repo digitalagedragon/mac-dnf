@@ -2,7 +2,7 @@
 
 Name:           lib%{libname}
 Version:        4.0.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        The free and open-source implementation of the Open Inventor API
 
 License:        BSD-3-Clause
@@ -68,4 +68,7 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %doc %{_infodir}/Coin4
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 4.0.0-2
+  Rebuilt with dependency generation.
 

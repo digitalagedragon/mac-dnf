@@ -1,6 +1,6 @@
 Name:           asciidoc
 Version:        9.0.4
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        An ASCII-based markup format
 
 License:        GPLv2+
@@ -38,3 +38,6 @@ sed -e '/^XMLLINT/s/xmllint//' -i.orig a2x.py
 %doc %{_mandir}/man1/*
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 9.0.4-2
+  Rebuilt with dependency generation.

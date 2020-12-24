@@ -2,7 +2,7 @@
 
 Name:           matplotlib
 Version:        3.3.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Python visualization library
 
 License:        MIT
@@ -41,3 +41,6 @@ python%{system_python} setup.py install --root %{buildroot}
 %{_libdir}/python%{system_python}/site-packages/*
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 3.3.3-2
+  Rebuilt with dependency generation.

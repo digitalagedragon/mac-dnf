@@ -1,6 +1,6 @@
 Name:           node
 Version:        15.5.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        An asynchronous JavaScript runtime
 
 License:        MIT
@@ -44,6 +44,9 @@ echo "%SHA256SUM0  %SOURCE0" | shasum -a256 -c -
 %doc %{_mandir}/man1/*
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 15.5.0-2
+  Rebuilt with dependency generation.
 
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 15.5.0-1
   Updated to version 15.5.0.

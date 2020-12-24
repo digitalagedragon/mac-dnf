@@ -4,7 +4,7 @@
 
 Name:           %{universal glib2}
 Version:        %{major_version}.%{patch_version}
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        GLib library of C routines
 
 License:        GPLv2+
@@ -104,6 +104,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_datadir}/bash-completion/completions/*
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 2.67.1-2
+  Rebuilt with dependency generation.
 
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 2.67.1-1
   Updated to version 2.67.1.

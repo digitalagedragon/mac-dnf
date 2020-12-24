@@ -1,6 +1,6 @@
 Name:           libreadline
 Version:        8.1
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Command line editing library
 
 License:        GPLv3+
@@ -59,3 +59,6 @@ sed -e 's/Requires.private: termcap//' -I "" %{buildroot}%{_libdir}/pkgconfig/re
 %doc %{_docdir}/readline
 
 %changelog
+
+* Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 8.1-4
+  Rebuilt with dependency generation.
