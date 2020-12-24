@@ -46,8 +46,10 @@ python-sphinx
 libyaml
 libmodulemd
 libdnf
+apple-expat
 libcomps
 dnf
+apple-zlib
 createrepo_c
 system-release
 repository

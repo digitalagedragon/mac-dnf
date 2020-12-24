@@ -16,6 +16,8 @@ Patch0:         freecad-0001-homebrew-paths.patch
 Patch1:         freecad-0002-skip-macos-package-manager-check.patch
 Patch2:         freecad-0003-qt-paths.patch
 
+# RPM-Audit-Skip Audit::SHA256Present
+
 BuildRequires:  cmake
 BuildRequires:  doxygen
 BuildRequires:  libboost-devel

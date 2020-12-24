@@ -27,7 +27,7 @@ for pkg in $(cat packages.order); do
     fi
 done
 
-if [ $(uname -m) = "arm64" ]; then
+if [ $(uname -m) = "arm64" ] && false; then
     for pkg in $(cat packages.universal); do
         [ -e rpmbuild/SRPMS/"$(/usr/local/bin/rpmspec -q --srpm rpmbuild/SPECS/$pkg.spec --with universal | sed -E 's|\.[^.]*$||')".src.rpm ] \
             || {
