@@ -4,7 +4,7 @@
 
 Name:           llvm
 Version:        11.0.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Next-gen compiler infrastructure
 
 License:        Apache-2.0 with exceptions
@@ -107,6 +107,9 @@ echo Note: macOS provides its own LLVM, so LLVM has been installed under /usr/lo
 %{_libdir}/*.dylib
 
 %changelog
+
+* Fri Dec 25 2020 Morgan Thomas <m@m0rg.dev> 11.0.0-3
+  Rebuilt with working brp-strip.
 
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 11.0.0-2
   Rebuilt with dependency generation.

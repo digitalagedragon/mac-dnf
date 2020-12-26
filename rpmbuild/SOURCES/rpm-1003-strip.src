@@ -1,0 +1,40 @@
+#!/bin/sh
+
+# If using normal root, avoid changing anything.
+if [ -z "$RPM_BUILD_ROOT" ] || [ "$RPM_BUILD_ROOT" = "/" ]; then
+	exit 0
+fi
+
+STRIP=${1:-strip}
+NCPUS=${RPM_BUILD_NCPUS:-1}
+
+case $(basename $0) in
+brp-strip)
+    MATCH="Mach-O ([0-9]{1,})-bit executable"
+    OPTS="-u -r"
+    ;;
+brp-strip-comment-note)
+    exit 0
+    ;;
+brp-strip-static-archive)
+    MATCH="current ar archive"
+    OPTS="-S"
+    ;;
+brp-strip-shared)
+    MATCH="Mach-O ([0-9]{1,})-bit dynamically linked shared library"
+    OPTS="-x"
+    ;;
+*)
+    exit 1
+    ;;
+esac
+
+echo "  - stripping $MATCH files with $STRIP $OPTS"
+
+set -x
+
+FILES=$(find "$RPM_BUILD_ROOT" -type f -print0 | xargs -0 -I \{\} sh -xc "file \"{}\" | head -n1" | grep -E "$MATCH" | cut -d: -f1)
+for f in $FILES; do
+    echo "  - $f"
+    $STRIP $OPTS $f
+done

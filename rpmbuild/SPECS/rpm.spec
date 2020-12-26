@@ -2,7 +2,7 @@
 
 Name:           rpm
 Version:        4.16.1.2
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        The RPM Package Manager (RPM) is a powerful package management system.
 
 License:        GPLv2
@@ -21,6 +21,7 @@ Patch3:         rpm-0004-pkgconfig-path.patch
 Source1:        rpm-1000-macros.src
 Source2:        rpm-1001-mach-fileattrs.src
 Source3:        rpm-1002-machdeps.src
+Source4:        rpm-1003-strip.src
 
 BuildRequires:  libgcrypt-devel
 BuildRequires:  libmagic-devel
@@ -91,6 +92,10 @@ find %{buildroot} -name '*.sed_orig' -exec rm -f {} ';'
 %{__install} -m644 -v %SOURCE1 %{buildroot}%{_prefix}/lib/rpm/macros.d/macros.macrpm
 %{__install} -m644 -v %SOURCE2 %{buildroot}%{_prefix}/lib/rpm/fileattrs/mach.attr
 %{__install} -m755 -v %SOURCE3 %{buildroot}%{_prefix}/lib/rpm/machdeps
+%{__install} -m755 -v %SOURCE4 %{buildroot}%{_prefix}/lib/rpm/brp-strip
+ln -svf brp-strip %{buildroot}%{_prefix}/lib/rpm/brp-strip-comment-note
+ln -svf brp-strip %{buildroot}%{_prefix}/lib/rpm/brp-strip-shared
+ln -svf brp-strip %{buildroot}%{_prefix}/lib/rpm/brp-strip-static-archive
 
 echo '%%_prefix /usr/local' >>%{buildroot}%{_prefix}/lib/rpm/platform/%(uname -m | sed -e 's/arm64/aarch64/')-%(uname -s | tr '[:upper:]' '[:lower:]')/macros
 
@@ -130,6 +135,9 @@ rm %{buildroot}%{_prefix}/lib/rpm/fileattrs/python*.attr
 %{_includedir}/rpm
 
 %changelog
+
+* Fri Dec 25 2020 Morgan Thomas <m@m0rg.dev> 4.16.1.2-5
+  Adapt the brp-strip* scripts for macOS.
 
 * Thu Dec 24 2020 Morgan Thomas <m@m0rg.dev> 4.16.1.2-4
   Use -mmacosx-version-min instead of -mmacos-version-min for compatibility.
