@@ -25,7 +25,7 @@ echo "%SHA256SUM0  %SOURCE0" | shasum -a256 -c -
 %autosetup -n node-v%{version}
 
 %build
-./configure --prefix=%{_prefix}
+LIBTOOL=/usr/local/bin/libtool ./configure --prefix=%{_prefix}
 %make_build
 
 %install

@@ -32,6 +32,7 @@ echo "%SHA256SUM0  %SOURCE0" | shasum -a256 -c -
 %autosetup
 
 %build
+%global osxflags %(echo "" %osxflags | sed -e 's/-Wpartial-availability//')
 %configure --enable-lapack2flame
 %make_build
 

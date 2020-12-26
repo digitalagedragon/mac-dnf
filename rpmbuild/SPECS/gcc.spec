@@ -45,7 +45,8 @@ echo "%SHA256SUM0  %SOURCE0" | shasum -a256 -c -
 
 mkdir build
 cd build
-%define _configure ../configure
+%define _configure ../configure 
+%global osxflags %(echo "" %osxflags | sed -e 's/-Wpartial-availability//')
 %configure \
     --disable-nls \
     --enable-checking=release \
