@@ -136,6 +136,9 @@ rm %{buildroot}%{_prefix}/lib/rpm/fileattrs/python*.attr
 
 %changelog
 
+* Sat Dec 26 2020 Morgan Thomas <m@m0rg.dev> 4.16.1.2-6
+  Drop the set -x from brp-strip (whoops)
+
 * Fri Dec 25 2020 Morgan Thomas <m@m0rg.dev> 4.16.1.2-5
   Adapt the brp-strip* scripts for macOS.
 
