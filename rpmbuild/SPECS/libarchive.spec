@@ -1,13 +1,13 @@
 Name:           libarchive
-Version:        3.4.3
-Release:        2%{?dist}
+Version:        3.5.1
+Release:        1%{?dist}
 Summary:        The libarchive project develops a portable, efficient C library that can read and write streaming archives in a variety of formats.
 
 License:        BSD-2-Clause
 URL:            https://www.libarchive.org/
 %undefine       _disable_source_fetch
 Source0:        http://www.libarchive.org/downloads/%{name}-%{version}.tar.gz
-%define         SHA256SUM0 ee1e749213c108cb60d53147f18c31a73d6717d7e3d2481c157e1b34c881ea39
+%define         SHA256SUM0 9015d109ec00bb9ae1a384b172bf2fc1dff41e2c66e5a9eeddf933af9db37f5a
 
 # X10-Update-Spec: { "type": "webscrape", "url": "http://www.libarchive.org/downloads/"}
 
@@ -56,6 +56,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %doc %{_mandir}/man1/*
 
 %changelog
+
+* Sat Dec 26 2020 Morgan Thomas <m@m0rg.dev> 3.5.1-1
+  Updated to version 3.5.1.
 
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 3.4.3-2
   Rebuilt with dependency generation.

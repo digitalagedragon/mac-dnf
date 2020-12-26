@@ -13,6 +13,9 @@ if [[ -z $2 ]]; then
     sh find_checksums.sh $spec
 fi
 
+# reset the release number
+perl -pe 's/Release:(\s*)(\d+)/"Release:${1}1"/e' -i ../rpmbuild/SPECS/$spec
+
 specbase=$(basename -s .spec $spec)
 version=$(rpmspec -q --qf '%{version}\n' --define '_build %{_target}' --define '_host %{_build}' ../rpmbuild/SPECS/${spec} 2>/dev/null | head -n1)
 release=$(rpmspec -q --qf '%{release}\n' --define '_build %{_target}' --define '_host %{_build}' --define 'dist %{nil}' ../rpmbuild/SPECS/${spec} 2>/dev/null | head -n1)
