@@ -3,5 +3,8 @@
         "rpmbuild/BUILD": true,
         "rpmbuild/BUILDROOT": true,
         "preinstall_root": true
+    },
+    "files.associations": {
+        "zz-snippets": "RPMSpec"
     }
 }
