@@ -20,6 +20,7 @@ BuildRequires:  libsqlite-devel
 BuildRequires:  libopenssl-devel
 
 # the unversioned ones don't exist anymore
+# TODO remove this in 3.10 because it was a bad idea
 Obsoletes:      python <= 3.9.1-1
 Obsoletes:      libpython <= 3.9.1-1
 Obsoletes:      libpython-devel <= 3.9.1-1
