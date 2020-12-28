@@ -18,6 +18,7 @@ python
 xz
 libpcre
 rpm
+cmake3.19
 cmake
 libsolv
 setuptools
