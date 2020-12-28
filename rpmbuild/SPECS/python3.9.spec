@@ -14,7 +14,7 @@ URL:            https://www.python.org/
 Source0:        https://www.python.org/ftp/python/%{version}/Python-%{version}.tgz
 %define         SHA256SUM0 29cb91ba038346da0bd9ab84a0a55a845d872c341a4da6879f462e94c741f117
 
-# X10-Update-Spec: { "type": "webscrape", "url": "https://www.python.org/ftp/python/", "pattern": "\"(\\d+\\.\\d+\\.\\d+)/\""}
+# X10-Update-Spec: { "type": "webscrape", "url": "https://www.python.org/ftp/python/", "pattern": "\"(3\\.9\\.\\d+)/\""}
 
 BuildRequires:  libsqlite-devel
 BuildRequires:  libopenssl-devel
