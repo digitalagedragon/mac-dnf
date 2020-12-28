@@ -13,6 +13,7 @@ libarchive
 libsqlite
 lua
 libopenssl
+python3.9
 python
 xz
 libpcre
