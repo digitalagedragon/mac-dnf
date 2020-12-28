@@ -7,6 +7,7 @@ package Audit;
 
 my %checks;
 my $current_file;
+my $errors_found;
 
 sub check {
     my $filename = shift;
@@ -20,10 +21,12 @@ sub check {
     my $parsed = `rpmspec -P $filename`;
 
     $current_file = $filename;
+    $errors_found = 0;
     while(my ($name, $class) = each %checks) {
         next if $contents =~ /RPM-Audit-Skip $class/;
         $class->can('check')->($filename, $contents, $parsed);
     }
+    return !$errors_found;
 }
 
 sub register {
@@ -41,6 +44,7 @@ sub emit_warning {
 sub emit_error {
     my $message = shift;
     print "\e[31m✘\e[0m $current_file: $message\n";
+    $errors_found = 1;
 }
 
 1;
@@ -133,6 +137,45 @@ sub check {
 
 Audit::register("pkgconfig() is used instead of -devel where possible", "Audit::PkgConfigNotDevel");
 
+package Audit::RedundantDependencies;
+
+use File::Basename qw(dirname);
+
+sub check {
+    my $filename = shift;
+    my $contents = shift;
+    my $parsed = shift;
+
+    my $rc = 1;
+    foreach my $rpm (`rpmspec -q --rpms $filename`) {
+        chomp $rpm;
+        $rpm =~ /.*\.(.*)$/;
+        my $dirname = dirname $filename;
+        my %seen;
+        foreach my $requirement (`rpm -q --requires $dirname/../RPMS/$1/$rpm.rpm`) {
+            chomp $requirement;
+            next if $requirement =~ /^rpmlib/;
+            my $dnf_output = `dnf repoquery --whatprovides "$requirement" 2>/dev/null | grep -v -- '-universal' | tail -n1`;
+            chomp $dnf_output;
+            # skip things like apple-bsdutils where multiple auto-generated requires may exist
+            next if $dnf_output =~ /^apple-/;
+            # skip the libfoo%{?_isa} = %{version}-%{release} types on -devel etc
+            next if $requirement =~ /^\S+\(aarch-64|x86_64\) = /;
+            if(exists $seen{$dnf_output}) {
+                # again, avoid some false-positive generated requires
+                last if $requirement =~ /\.dylib/ && $seen{$dnf_output} =~ /\.dylib/;
+                last if $requirement =~ /^pkgconfig/ && $seen{$dnf_output} =~ /^pkgconfig/;
+
+                Audit::emit_warning("$requirement and $seen{$dnf_output} both resolve to $dnf_output");
+            } else {
+                $seen{$dnf_output} = $requirement;
+            }
+        }
+    }
+}
+
+Audit::register("run-time dependencies are not redundant", "Audit::RedundantDependencies");
+
 package main;
 
-Audit::check shift;
+exit !(Audit::check shift);
