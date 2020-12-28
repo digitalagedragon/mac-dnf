@@ -10,7 +10,7 @@ mkdir preinstall_root
 cd preinstall_root
 
 for package in $(cat ../packages.preinstall); do
-    RPM=$(rpm -q $package)
+    RPM=$(rpm -q --whatprovides $package | head -n1)
     rpm2archive <../rpmbuild/RPMS/**/$RPM.rpm - | tar xz
 done
 
