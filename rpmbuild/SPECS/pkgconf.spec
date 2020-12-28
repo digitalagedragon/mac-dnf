@@ -1,6 +1,6 @@
 Name:           pkgconf
 Version:        1.7.3
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        a pkg-config replacement
 
 License:        MIT
@@ -40,6 +40,7 @@ developing applications that use libpkgconf.
 %prep
 echo "%SHA256SUM0  %SOURCE0" | shasum -a256 -c -
 %autosetup -n %{name}-%{name}-%{version}
+export PATH=%{_prefix}/opt/libtool/bin:$PATH
 
 ./autogen.sh
 
@@ -74,6 +75,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_prefix}/lib/pkgconfig/*.pc
 
 %changelog
+
+* Mon Dec 28 2020 Morgan Thomas <m@m0rg.dev> 1.7.3-3
+  Explicitly put libtool in $PATH.
 
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 1.7.3-2
   Rebuilt with dependency generation.
