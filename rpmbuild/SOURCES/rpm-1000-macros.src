@@ -134,3 +134,18 @@ set -x \
 
 # |
 # +--------
+
+# +--------
+# | /usr/local/opt.
+
+%optlink \
+  install -dm755 %{buildroot}%{_bindir} \
+  for f in $(ls %{buildroot}%{_prefix}/opt/%{name}/bin); do \
+      ln -sv ../opt/%{name}/bin/$f %{buildroot}%{_bindir}/g$f \
+  done
+
+%optpost \
+%posttrans \
+echo Note: macOS provides its own %{name}, so %{name}\\'s binaries have been installed under /usr/local/opt/%{name}/bin. \
+echo Additionally, they have been symlinked as /usr/local/bin/g\\<binary\\>.
+

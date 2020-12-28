@@ -2,7 +2,7 @@
 
 Name:           rpm
 Version:        4.16.1.2
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        The RPM Package Manager (RPM) is a powerful package management system.
 
 License:        GPLv2
@@ -136,8 +136,11 @@ rm %{buildroot}%{_prefix}/lib/rpm/fileattrs/python*.attr
 
 %changelog
 
+* Sun Dec 27 2020 Morgan Thomas <m@m0rg.dev> 4.16.1.2-7
+  Add /usr/local/opt management to macros.
+
 * Sat Dec 26 2020 Morgan Thomas <m@m0rg.dev> 4.16.1.2-6
-  Drop the set -x from brp-strip (whoops)
+  Drop the set -x from brp-strip (whoops).
 
 * Fri Dec 25 2020 Morgan Thomas <m@m0rg.dev> 4.16.1.2-5
   Adapt the brp-strip* scripts for macOS.

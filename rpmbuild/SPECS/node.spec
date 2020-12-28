@@ -1,6 +1,6 @@
 Name:           node
 Version:        15.5.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        An asynchronous JavaScript runtime
 
 License:        MIT
@@ -15,6 +15,7 @@ BuildRequires:  python
 # apparently this is not sufficient to have it not use its own openssl? TODO
 BuildRequires:  libopenssl-devel
 BuildRequires:  pkg-config
+BuildRequires:  glibtool
 
 Requires:       libopenssl
 
@@ -25,7 +26,7 @@ echo "%SHA256SUM0  %SOURCE0" | shasum -a256 -c -
 %autosetup -n node-v%{version}
 
 %build
-LIBTOOL=/usr/local/bin/libtool ./configure --prefix=%{_prefix}
+LIBTOOL=glibtool ./configure --prefix=%{_prefix}
 %make_build
 
 %install
@@ -44,6 +45,9 @@ LIBTOOL=/usr/local/bin/libtool ./configure --prefix=%{_prefix}
 %doc %{_mandir}/man1/*
 
 %changelog
+
+* Sun Dec 27 2020 Morgan Thomas <m@m0rg.dev> 15.5.0-3
+  Rebuilt for libtool -> glibtool.
 
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 15.5.0-2
   Rebuilt with dependency generation.

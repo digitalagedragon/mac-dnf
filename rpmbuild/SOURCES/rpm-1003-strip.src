@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set +x
+
 # If using normal root, avoid changing anything.
 if [ -z "$RPM_BUILD_ROOT" ] || [ "$RPM_BUILD_ROOT" = "/" ]; then
 	exit 0
@@ -31,7 +33,7 @@ esac
 
 echo "  - stripping $MATCH files with $STRIP $OPTS"
 
-FILES=$(find "$RPM_BUILD_ROOT" -type f -print0 | xargs -0 -I \{\} sh -xc "file \"{}\" | head -n1" | grep -E "$MATCH" | cut -d: -f1)
+FILES=$(find "$RPM_BUILD_ROOT" -type f -print0 | xargs -0 -I \{\} sh -c "file \"{}\" | head -n1" | grep -E "$MATCH" | cut -d: -f1)
 for f in $FILES; do
     echo "  - $f"
     $STRIP $OPTS $f

@@ -52,3 +52,9 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 0.21-4
   Rebuilt with dependency generation.
+
+# --------
+
+Provides:       glibtool = %{version}-%{release}
+
+--bindir=%{_prefix}/opt/%{name}/bin

@@ -1,6 +1,6 @@
 Name:           libtool
 Version:        2.4.6
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Make building against shared libraries easier
 
 License:        GPLv3+
@@ -10,6 +10,8 @@ Source0:        https://ftpmirror.gnu.org/libtool/libtool-%{version}.tar.gz
 %define         SHA256SUM0 e3bd4d5d3d025a36c21dd6af7ea818a2afcd4dfc1ea5a17b39d7854bcd0c06e3
 
 # X10-Update-Spec: { "type": "webscrape", "url": "https://ftp.gnu.org/gnu/libtool/"}
+
+Provides:       glibtool = %{version}-%{release}
 
 %description
 
@@ -32,7 +34,7 @@ echo "%SHA256SUM0  %SOURCE0" | shasum -a256 -c -
 %autosetup
 
 %build
-./configure --prefix=%{_prefix} --libdir=%{_prefix}/lib --disable-static
+./configure --bindir=%{_prefix}/opt/%{name}/bin --disable-static
 %make_build
 
 %install
@@ -41,9 +43,14 @@ echo "%SHA256SUM0  %SOURCE0" | shasum -a256 -c -
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 rm -f %{buildroot}%{_infodir}/dir
 
+%optlink
+
+%optpost
+
 %files
 %license COPYING
 %{_bindir}/*
+%{_prefix}/opt/%{name}/bin
 %{_datadir}/aclocal/*.m4
 %{_datadir}/libtool
 %doc %{_infodir}/*.info*
@@ -57,6 +64,9 @@ rm -f %{buildroot}%{_infodir}/dir
 %{_prefix}/lib/libltdl.dylib
 
 %changelog
+
+* Sun Dec 27 2020 Morgan Thomas <m@m0rg.dev> 2.4.6-3
+  Install binaries under /usr/local/opt/libtool/bin.
 
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 2.4.6-2
   Rebuilt with dependency generation.
