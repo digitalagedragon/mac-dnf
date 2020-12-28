@@ -120,6 +120,32 @@ sub check {
 
 Audit::register("package build dependencies exist", "Audit::Buildable");
 
+package Audit::PkgConfigNotDevel;
+
+sub check {
+    my $filename = shift;
+    my $contents = shift;
+    my $parsed = shift;
+
+    print "\e[1mchecking that pkgconfig() is used instead of -devel where possible...\e[0m\n";
+    my $rc = 1;
+    foreach my $requirement (`rpmspec -q --buildrequires $filename`) {
+        chomp $requirement;
+        next unless $requirement =~ /-devel/;
+        print "    \e[1m$requirement\e[0m ";
+        my $dnf_output = `dnf repoquery --provides "$requirement" 2>&1`;
+        if($dnf_output =~ /pkgconfig\((\w+)\)/) {
+            print " \e[31m$requirement provides pkgconfig($1)\e[0m\n";
+            $rc = 0;
+        } else {
+            print " <no pkgconfig>\n";
+        }
+    }
+    return $rc;
+}
+
+Audit::register("pkgconfig() is used instead of -devel where possible", "Audit::PkgConfigNotDevel");
+
 package main;
 
 exit !(Audit::check shift);

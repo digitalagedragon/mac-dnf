@@ -23,6 +23,16 @@ developing applications that use %{name}.
 echo "%SHA256SUM0  %SOURCE0" | shasum -a256 -c -
 %autosetup
 
+%build
+%configure
+%make_build
+
+%install
+%make_install
+
+find %{buildroot} -name '*.la' -exec rm -f {} ';'
+rm -fv %{buildroot}%{_infodir}/dir
+
 # --------
 
 %build

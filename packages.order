@@ -86,3 +86,10 @@ pyside2
 libxerces-c
 libeigen
 freecad
+sed
+libnettle
+libtasn1
+libunistring
+libp11-kit
+libgnutls
+emacs

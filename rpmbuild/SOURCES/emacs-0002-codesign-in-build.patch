@@ -1,0 +1,10 @@
+--- a/src/Makefile.in    2020-12-21 22:00:58.000000000 +0000
++++ b/src/Makefile.in 2020-12-21 22:01:56.000000000 +0000
+@@ -653,6 +653,7 @@
+          $(ALLOBJS) $(LIBEGNU_ARCHIVE) $(W32_RES_LINK) $(LIBES)
+ ifeq ($(HAVE_PDUMPER),yes)
+        $(AM_V_at)$(MAKE_PDUMPER_FINGERPRINT) $@.tmp
++   codesign -s - -f $@.tmp
+ endif
+        $(AM_V_at)mv $@.tmp $@
+        $(MKDIR_P) $(etc)
