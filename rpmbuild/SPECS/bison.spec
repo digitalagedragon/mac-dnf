@@ -1,6 +1,6 @@
 Name:           bison
 Version:        3.7.4
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        A general-purpose parser generator
 
 License:        GPLv3+
@@ -22,17 +22,11 @@ echo "%SHA256SUM0  %SOURCE0" | shasum -a256 -c -
 %autosetup
 
 %build
-%configure --bindir=%{_prefix}/opt/bin --disable-static
+%configure --bindir=%{_prefix}/opt/%{name}/bin --disable-static
 %make_build
 
 %install
 %make_install
-
-# macOS provides its own bison so link as gbison
-install -dm755 %{buildroot}%{_bindir}
-for f in $(ls %{buildroot}%{_prefix}/opt/bin); do
-    ln -sv ../opt/bin/$f %{buildroot}%{_bindir}/g$f
-done
 
 %find_lang %{name}
 %find_lang %{name}-gnulib
@@ -40,10 +34,14 @@ done
 
 rm -f %{buildroot}%{_infodir}/dir
 
+%optlink
+
+%optpost
+
 %files -f %{name}.lang -f %{name}-gnulib.lang -f %{name}-runtime.lang
 %license COPYING
 %{_bindir}/*
-%{_prefix}/opt/bin/*
+%{_prefix}/opt/bison/bin/*
 %exclude %{_prefix}/lib/liby.a
 %{_datadir}/bison
 %{_datadir}/aclocal/bison-i18n.m4
@@ -52,6 +50,9 @@ rm -f %{buildroot}%{_infodir}/dir
 %doc %{_mandir}/man1/*
 
 %changelog
+
+* Sun Dec 27 2020 Morgan Thomas <m@m0rg.dev> 3.7.4-3
+  Fix /usr/local/opt layout
 
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 3.7.4-2
   Rebuilt with dependency generation.
