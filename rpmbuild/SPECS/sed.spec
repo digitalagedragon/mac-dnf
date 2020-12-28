@@ -1,6 +1,6 @@
 Name:           sed
 Version:        4.8
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        GNU sed
 
 License:        GPLv3+
@@ -14,14 +14,6 @@ Source0:        https://ftp.gnu.org/gnu/sed/sed-%{version}.tar.xz
 Provides:       gsed = %{version}-%{release}
 
 %description
-
-%package        devel
-Summary:        Development files for %{name}
-Requires:       %{name}%{?_isa} = %{version}-%{release}
-
-%description    devel
-The %{name}-devel package contains libraries and header files for
-developing applications that use %{name}.
 
 %prep
 echo "%SHA256SUM0  %SOURCE0" | shasum -a256 -c -
@@ -47,3 +39,6 @@ rm -fv %{buildroot}%{_infodir}/dir
 %{_infodir}/*
 
 %changelog
+
+* Mon Dec 28 2020 Morgan Thomas <m@m0rg.dev> 4.8-2
+  Don't pretend to build a -devel package.

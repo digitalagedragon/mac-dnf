@@ -2,7 +2,7 @@
 
 Name:           lib%{libname}
 Version:        0.15.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Check is a unit testing framework for C.
 
 License:        LGPLv2
@@ -16,7 +16,7 @@ Source0:        https://github.com/libcheck/%{libname}/releases/download/%{versi
 # X10-Update-Spec:   "pattern": "^(\\d+\\.\\d+\\.\\d+)$" }
 
 BuildRequires:  autoconf automake libtool
-BuildRequires:  libpkgconf-devel
+BuildRequires:  pkgconfig(libpkgconf)
 
 %description
 
@@ -38,6 +38,7 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 %prep
 echo "%SHA256SUM0  %SOURCE0" | shasum -a256 -c -
 %autosetup -n %{libname}-%{version}
+export PATH=%{_prefix}/opt/libtool/bin:$PATH
 autoreconf --install
 
 %build
@@ -72,6 +73,9 @@ rm -f %{buildroot}%{_infodir}/dir
 %doc %{_mandir}/man1/*
 
 %changelog
+
+* Mon Dec 28 2020 Morgan Thomas <m@m0rg.dev> 0.15.2-3
+  Use pkgconfig dependencies.
 
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 0.15.2-2
   Rebuilt with dependency generation.

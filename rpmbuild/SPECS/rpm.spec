@@ -2,7 +2,7 @@
 
 Name:           rpm
 Version:        4.16.1.2
-Release:        7%{?dist}
+Release:        8%{?dist}
 Summary:        The RPM Package Manager (RPM) is a powerful package management system.
 
 License:        GPLv2
@@ -23,14 +23,14 @@ Source2:        rpm-1001-mach-fileattrs.src
 Source3:        rpm-1002-machdeps.src
 Source4:        rpm-1003-strip.src
 
-BuildRequires:  libgcrypt-devel
-BuildRequires:  libmagic-devel
-BuildRequires:  libpopt-devel
-BuildRequires:  libarchive-devel
-BuildRequires:  libsqlite-devel
 BuildRequires:  pkg-config
-BuildRequires:  liblua-devel
-BuildRequires:  libpython%{system_python}-devel
+BuildRequires:  pkgconfig(libarchive)
+BuildRequires:  pkgconfig(libgcrypt)
+BuildRequires:  pkgconfig(libmagic)
+BuildRequires:  pkgconfig(lua)
+BuildRequires:  pkgconfig(popt)
+BuildRequires:  pkgconfig(python-%{system_python})
+BuildRequires:  pkgconfig(sqlite3)
 BuildRequires:  xz
 
 Requires:       xz
@@ -135,6 +135,9 @@ rm %{buildroot}%{_prefix}/lib/rpm/fileattrs/python*.attr
 %{_includedir}/rpm
 
 %changelog
+
+* Mon Dec 28 2020 Morgan Thomas <m@m0rg.dev> 4.16.1.2-8
+  Use pkgconfig dependencies.
 
 * Sun Dec 27 2020 Morgan Thomas <m@m0rg.dev> 4.16.1.2-7
   Add /usr/local/opt management to macros.

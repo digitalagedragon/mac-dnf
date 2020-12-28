@@ -2,7 +2,7 @@
 
 Name:           libsolv
 Version:        0.7.16
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        libsolv is a free package dependency solver using a satisfiability algorithm.
 
 License:        BSD-3-Clause
@@ -18,7 +18,7 @@ Patch0:         libsolv-0001-rpmdb-usrlocal.patch
 # X10-Update-Spec:   "pattern": "^((?:\\d+\\.?)+)$" }
 
 BuildRequires:  cmake%{system_cmake}
-BuildRequires:  librpm-devel
+BuildRequires:  pkgconfig(rpm)
 
 %undefine _annotated_build
 %global debug_package %{nil}
@@ -77,6 +77,9 @@ mv -v %{buildroot}%{_datadir}/cmake %{buildroot}%{_datadir}/cmake-%{system_cmake
 %doc %{_mandir}/man3/*
 
 %changelog
+
+* Mon Dec 28 2020 Morgan Thomas <m@m0rg.dev> 0.7.16-5
+  Use pkgconfig dependencies.
 
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 0.7.16-4
   Rebuilt with dependency generation.

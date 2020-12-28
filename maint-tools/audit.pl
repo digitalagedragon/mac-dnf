@@ -6,10 +6,10 @@ $| = 0;
 package Audit;
 
 my %checks;
+my $current_file;
 
 sub check {
     my $filename = shift;
-    print "### Checking: \e[35;1m$filename\e[0m\n";
     my $fh;
     open $fh, $filename;
     my $contents;
@@ -19,20 +19,11 @@ sub check {
     }
     my $parsed = `rpmspec -P $filename`;
 
-    my $all_ok = 1;
+    $current_file = $filename;
     while(my ($name, $class) = each %checks) {
         next if $contents =~ /RPM-Audit-Skip $class/;
-        my $rc = $class->can('check')->($filename, $contents, $parsed);
-        if($rc < 0) {
-            print "\e[1m$name\e[0m: \e[1m-\e[0m\n";
-        } elsif($rc) {
-            print "\e[1m$name\e[0m: \e[32m✔\e[0m\n";
-        } else {
-            print "\e[1m$name\e[0m: \e[31m✘\e[0m\n";
-            $all_ok = 0;
-        }
+        $class->can('check')->($filename, $contents, $parsed);
     }
-    return $all_ok;
 }
 
 sub register {
@@ -40,6 +31,16 @@ sub register {
     my $class = shift;
     $checks{$name} = $class;
     return 1;
+}
+
+sub emit_warning {
+    my $message = shift;
+    print "\e[33m!\e[0m $current_file: $message\n";
+}
+
+sub emit_error {
+    my $message = shift;
+    print "\e[31m✘\e[0m $current_file: $message\n";
 }
 
 1;
@@ -52,7 +53,9 @@ sub check {
     my $parsed = shift;
 
     if($parsed =~ /Source0/) {
-        return $parsed =~ /shasum -a256/;
+        if(!($parsed =~ /shasum -a256/)) {
+            Audit::emit_warning("No Source0 SHA256 check");
+        }
     } else {
         return -1;
     }
@@ -69,23 +72,18 @@ sub check {
     my $contents = shift;
     my $parsed = shift;
 
-    print "\e[1mchecking package dependencies...\e[0m\n";
     my $rc = 1;
     foreach my $rpm (`rpmspec -q --rpms $filename`) {
         chomp $rpm;
-        print "  \e[34;1m$rpm.rpm\e[0m:\n";
         $rpm =~ /.*\.(.*)$/;
         my $dirname = dirname $filename;
         foreach my $requirement (`rpm -q --requires $dirname/../RPMS/$1/$rpm.rpm`) {
             chomp $requirement;
             next if $requirement =~ /^rpmlib/;
-            print "    $requirement ";
             my $dnf_output = `dnf provides "$requirement" 2>&1`;
             if($dnf_output =~ /No Matches found/m) {
-                print " \e[31m✘\e[0m\n";
+                Audit::emit_error("Run-time requirement '$requirement' is not resolvable");
                 $rc = 0;
-            } else {
-                print " \e[32m✔\e[0m\n";
             }
         }
     }
@@ -102,17 +100,13 @@ sub check {
     my $contents = shift;
     my $parsed = shift;
 
-    print "\e[1mchecking package build dependencies...\e[0m\n";
     my $rc = 1;
     foreach my $requirement (`rpmspec -q --buildrequires $filename`) {
         chomp $requirement;
-        print "    \e[1m$requirement\e[0m ";
         my $dnf_output = `dnf provides "$requirement" 2>&1`;
         if($dnf_output =~ /No Matches found/m) {
-            print " \e[31m✘\e[0m\n";
+            Audit::emit_error("Build-time requirement '$requirement' is not resolvable");
             $rc = 0;
-        } else {
-            print " \e[32m✔\e[0m\n";
         }
     }
     return $rc;
@@ -127,25 +121,18 @@ sub check {
     my $contents = shift;
     my $parsed = shift;
 
-    print "\e[1mchecking that pkgconfig() is used instead of -devel where possible...\e[0m\n";
-    my $rc = 1;
     foreach my $requirement (`rpmspec -q --buildrequires $filename`) {
         chomp $requirement;
         next unless $requirement =~ /-devel/;
-        print "    \e[1m$requirement\e[0m ";
         my $dnf_output = `dnf repoquery --provides "$requirement" 2>&1`;
         if($dnf_output =~ /pkgconfig\((\w+)\)/) {
-            print " \e[31m$requirement provides pkgconfig($1)\e[0m\n";
-            $rc = 0;
-        } else {
-            print " <no pkgconfig>\n";
+            Audit::emit_warning("$requirement provides pkgconfig($1), use that instead");
         }
     }
-    return $rc;
 }
 
 Audit::register("pkgconfig() is used instead of -devel where possible", "Audit::PkgConfigNotDevel");
 
 package main;
 
-exit !(Audit::check shift);
+Audit::check shift;

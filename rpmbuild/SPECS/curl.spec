@@ -1,6 +1,6 @@
 Name:           curl
 Version:        7.74.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Curl is a command line tool and library for transferring data with URLs.
 
 License:        libcurl
@@ -11,7 +11,7 @@ Source0:        https://curl.haxx.se/download/%{name}-%{version}.tar.xz
 
 # X10-Update-Spec: { "type": "webscrape", "url": "https://curl.haxx.se/download/"}
 
-BuildRequires:  libopenssl-devel
+BuildRequires:  pkgconfig(libssl)
 
 Requires:       libcurl = %{version}-%{release}
 
@@ -64,6 +64,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %doc %{_mandir}/man3/*
 
 %changelog
+
+* Mon Dec 28 2020 Morgan Thomas <m@m0rg.dev> 7.74.0-3
+  Use pkgconfig dependencies.
 
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 7.74.0-2
   Rebuilt with dependency generation.

@@ -63,6 +63,9 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 0.21-4
   Rebuilt with dependency generation.
 
+* Mon Dec 28 2020 Morgan Thomas <m@m0rg.dev> 3.9.1-7
+  Use pkgconfig dependencies.
+
 # --------
 
 Provides:       glibtool = %{version}-%{release}

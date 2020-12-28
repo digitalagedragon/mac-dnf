@@ -1,6 +1,6 @@
 Name:           gnupg
 Version:        2.2.26
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        The GNU Privacy Guard
 
 License:        GPLv2+
@@ -11,12 +11,11 @@ Source0:        https://www.gnupg.org/ftp/gcrypt/%{name}/%{name}-%{version}.tar.
 
 # X10-Update-Spec: { "type": "webscrape", "url": "https://www.gnupg.org/ftp/gcrypt/gnupg"}
 
-BuildRequires:  pkg-config
-BuildRequires:  libassuan-devel
 BuildRequires:  libgpg-error-devel
-BuildRequires:  libgcrypt-devel
-BuildRequires:  libksba-devel
 BuildRequires:  libnpth-devel
+BuildRequires:  pkgconfig(ksba)
+BuildRequires:  pkgconfig(libassuan)
+BuildRequires:  pkgconfig(libgcrypt)
 
 Recommends:     pinentry
 
@@ -71,6 +70,9 @@ rm -f %{buildroot}%{_infodir}/dir
 %doc %{_datadir}/doc/gnupg
 
 %changelog
+
+* Mon Dec 28 2020 Morgan Thomas <m@m0rg.dev> 2.2.26-3
+  Use pkgconfig dependencies.
 
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 2.2.26-2
   Rebuilt with dependency generation.

@@ -5,7 +5,7 @@
 
 Name:           python%{pybasever}
 Version:        %{general_version}
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        The Python programming language
 
 License:        Python-2.0
@@ -16,8 +16,8 @@ Source0:        https://www.python.org/ftp/python/%{version}/Python-%{version}.t
 
 # X10-Update-Spec: { "type": "webscrape", "url": "https://www.python.org/ftp/python/", "pattern": "\"(3\\.9\\.\\d+)/\""}
 
-BuildRequires:  libsqlite-devel
-BuildRequires:  libopenssl-devel
+BuildRequires:  pkgconfig(sqlite3)
+BuildRequires:  pkgconfig(libssl)
 
 # the unversioned ones don't exist anymore
 # TODO remove this in 3.10 because it was a bad idea
@@ -100,6 +100,9 @@ rm -fv %{buildroot}/%{_mandir}/man1/python3.1*
 %{_prefix}/lib/pkgconfig/*.pc
 
 %changelog
+
+* Mon Dec 28 2020 Morgan Thomas <m@m0rg.dev> 3.9.1-7
+  Use pkgconfig dependencies.
 
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 3.9.1-5
   Rebuilt with dependency generation.

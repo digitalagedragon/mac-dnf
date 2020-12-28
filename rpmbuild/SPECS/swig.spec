@@ -1,6 +1,6 @@
 Name:           swig
 Version:        4.0.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Multi-language bindings generator
 
 License:        GPLv3+, MIT
@@ -15,7 +15,7 @@ Source0:        https://github.com/swig/%{name}/archive/v%{version}.tar.gz#/%{na
 
 BuildRequires:  autoconf
 BuildRequires:  automake
-BuildRequires:  libpcre-devel
+BuildRequires:  pkgconfig(libpcre)
 
 %undefine _annotated_build
 
@@ -41,6 +41,9 @@ echo "%SHA256SUM0  %SOURCE0" | shasum -a256 -c -
 %{_datadir}/swig
 
 %changelog
+
+* Mon Dec 28 2020 Morgan Thomas <m@m0rg.dev> 4.0.2-3
+  Use pkgconfig dependencies.
 
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 4.0.2-2
   Rebuilt with dependency generation.
