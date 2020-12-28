@@ -1,6 +1,6 @@
 Name:           libreadline
 Version:        8.1
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Command line editing library
 
 License:        GPLv3+
@@ -11,11 +11,7 @@ Source0:        https://ftp.gnu.org/gnu/readline/readline-%{version}.tar.gz
 
 # X10-Update-Spec: { "type": "webscrape", "url": "https://ftp.gnu.org/gnu/readline/"}
 
-# TODO that should be PREFIX=/usr/local/opt/readline, not /usr/local/opt...
 %description
-
-Note: macOS provides its own -lreadline, so this installs libraries into /usr/local/opt/lib.
-Anything using pkg-config shouldn't have trouble with it.
 
 %package        devel
 Summary:        Development files for %{name}
@@ -32,7 +28,7 @@ echo "%SHA256SUM0  %SOURCE0" | shasum -a256 -c -
 
 %build
 
-%configure --libdir=%{_prefix}/opt/lib --disable-static
+%configure --libdir=%{_prefix}/opt/readline/lib --disable-static
 %make_build
 
 %install
@@ -42,23 +38,29 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 rm -f %{buildroot}%{_infodir}/dir
 
 %{__install} -dm755 %{buildroot}%{_libdir}
-mv %{buildroot}%{_prefix}/opt/lib/pkgconfig %{buildroot}%{_libdir}
+mv %{buildroot}%{_prefix}/opt/readline/lib/pkgconfig %{buildroot}%{_libdir}
 sed -e 's/Requires.private: termcap//' -I "" %{buildroot}%{_libdir}/pkgconfig/readline.pc
 
+%posttrans
+echo Note: macOS provides its own %{name}, so %{name}\'s libraries have been installed under /usr/local/opt/readline/lib.
+
 %files
-%{_prefix}/opt/lib/libhistory.*.dylib
-%{_prefix}/opt/lib/libreadline.*.dylib
+%{_prefix}/opt/readline/lib/libhistory.*.dylib
+%{_prefix}/opt/readline/lib/libreadline.*.dylib
 
 %files devel
 %{_includedir}/readline
-%{_prefix}/opt/lib/libhistory.dylib
-%{_prefix}/opt/lib/libreadline.dylib
+%{_prefix}/opt/readline/lib/libhistory.dylib
+%{_prefix}/opt/readline/lib/libreadline.dylib
 %{_libdir}/pkgconfig/*.pc
 %doc %{_mandir}/man3/*
 %doc %{_infodir}/*
 %doc %{_docdir}/readline
 
 %changelog
+
+* Sun Dec 27 2020 Morgan Thomas <m@m0rg.dev> 8.1-5
+  Moved libraries under /usr/local/opt/readline/lib.
 
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 8.1-4
   Rebuilt with dependency generation.
