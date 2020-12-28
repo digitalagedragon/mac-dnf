@@ -15,15 +15,7 @@ for pkg in $(cat packages.order); do
     fi
     if [[ -z $arch ]] || [[ $arch = $(uname -m) ]]; then
         [ -e rpmbuild/SRPMS/"$(/usr/local/bin/rpmspec -q --srpm rpmbuild/SPECS/$pkg.spec | sed -E 's|\.[^.]*$||')".src.rpm ] \
-            || {
-                ./rebuild.sh rpmbuild/SPECS/$pkg.spec
-                cd repo
-                rm -rf *
-                cp -r ../rpmbuild/RPMS/* .
-                createrepo_c .
-                dnf makecache --repo local
-                cd ..
-            }
+            || ./rebuild.sh rpmbuild/SPECS/$pkg.spec
     fi
 done
 
