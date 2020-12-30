@@ -34,6 +34,7 @@ developing applications that use %{name}.
 %prep
 echo "%SHA256SUM0  %SOURCE0" | shasum -a256 -c -
 %autosetup -n %{name}-%{version}
+export PATH=%{_prefix}/opt/libtool/bin:$PATH
 ./autogen.sh
 
 %build
@@ -75,6 +76,9 @@ rm -fv %{buildroot}%{_infodir}/dir
 %doc %{_infodir}/*.info*
 
 %changelog
+
+* Wed Dec 30 2020 Morgan Thomas <m@m0rg.dev>
+  Explicitly use opt/libtool path.
 
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 3.3-4
   Rebuilt with dependency generation.
