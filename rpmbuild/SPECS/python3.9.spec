@@ -5,7 +5,7 @@
 
 Name:           python%{pybasever}
 Version:        %{general_version}
-Release:        7%{?dist}
+Release:        8%{?dist}
 Summary:        The Python programming language
 
 License:        Python-2.0
@@ -72,14 +72,12 @@ echo "%SHA256SUM0  %SOURCE0" | shasum -a256 -c -
 %install
 %make_install
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
-%if %{is_system_python}
-ln -s python3 %{buildroot}/%{_bindir}/python
-%else
 rm -fv %{buildroot}/%{_bindir}/python3
 rm -fv %{buildroot}/%{_bindir}/python3-config
 rm -fv %{buildroot}/%{_bindir}/pydoc3
 rm -fv %{buildroot}/%{_bindir}/idle3
 rm -fv %{buildroot}/%{_bindir}/2to3
+%if ! %{is_system_python}
 rm -fv %{buildroot}/%{_libdir}/pkgconfig/python3.pc
 rm -fv %{buildroot}/%{_libdir}/pkgconfig/python3-embed.pc
 rm -fv %{buildroot}/%{_mandir}/man1/python3.1*
@@ -100,6 +98,9 @@ rm -fv %{buildroot}/%{_mandir}/man1/python3.1*
 %{_prefix}/lib/pkgconfig/*.pc
 
 %changelog
+
+* Thu Dec 31 2020 Morgan Thomas <m@m0rg.dev> 3.9.1-8
+  Move the python3 symlinks into the unversioned package.
 
 * Mon Dec 28 2020 Morgan Thomas <m@m0rg.dev> 3.9.1-7
   Use pkgconfig dependencies.
