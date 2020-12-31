@@ -1,15 +1,15 @@
 %define system_python 3.9
 
 Name:           setuptools
-Version:        51.1.0
-Release:        2%{?dist}
+Version:        51.1.1
+Release:        1%{?dist}
 Summary:        Easily download, build, install, upgrade, and uninstall Python packages
 
 License:        MIT
 URL:            https://pypi.org/project/setuptools/
 %undefine       _disable_source_fetch
 Source0:        https://github.com/pypa/%{name}/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
-%define         SHA256SUM0 2c175b6e818ef08cf195650dcd8650bbd416f122b2e8be11a5e018f196d37989
+%define         SHA256SUM0 97434f60d427e33cbcbd69003a20596f66a8643079858a8768574a8b73a97dbd
 BuildArch:      noarch
 
 # X10-Update-Spec: { "type": "git-tags",
@@ -41,6 +41,9 @@ python%{system_python} setup.py install --skip-build --root %{buildroot}
 %{_prefix}/lib/python%{system_python}/site-packages/*
 
 %changelog
+
+* Thu Dec 31 2020 Morgan Thomas <m@m0rg.dev> 51.1.1-1
+  Updated to version 51.1.1.
 
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 51.1.0-2
   Updated to version 51.1.0.
