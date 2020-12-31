@@ -3,7 +3,7 @@
 
 Name:           libgnutls
 Version:        %{major_version}.%{patch_version}
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        The GNU Transport Layer Security library
 
 License:        GPLv3, LGPLv2+
@@ -40,7 +40,7 @@ echo "%SHA256SUM0  %SOURCE0" | shasum -a256 -c -
 %autosetup -n gnutls-%{version}
 
 %build
-%configure --disable-static
+%configure --disable-static --bindir=%{_prefix}/opt/%{name}/bin
 %make_build
 
 %install
@@ -50,6 +50,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 rm -fv %{buildroot}%{_infodir}/dir
 
 %find_lang gnutls
+
+%posttrans -n gnutls
+echo Note: macOS provides its own %{name}, so %{name}\\'s binaries have been installed under /usr/local/opt/%{name}/bin.
 
 %files -f gnutls.lang
 %{_libdir}/libgnutls.*.dylib
@@ -65,7 +68,10 @@ rm -fv %{buildroot}%{_infodir}/dir
 %{_infodir}/*
 
 %files -n gnutls
-%{_bindir}/*
+%{_prefix}/opt/%{name}/bin/*
 %{_mandir}/man1/*
 
 %changelog
+
+* Thu Dec 31 2020 Morgan Thomas <m@m0rg.dev> 3.6.15-2
+  Move binaries to /usr/local/opt.

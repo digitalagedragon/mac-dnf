@@ -2,7 +2,7 @@
 
 Name:           lib%{libname}
 Version:        1.1.1i
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        OpenSSL is a robust, commercial-grade, and full-featured toolkit for the Transport Layer Security (TLS) and Secure Sockets Layer (SSL) protocols.
 
 License:        OpenSSL
@@ -51,6 +51,12 @@ echo "%SHA256SUM0  %SOURCE0" | shasum -a256 -c -
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
+%{__install} -dm755 %{buildroot}%{_prefix}/opt/%{name}
+mv -v %{buildroot}%{_bindir} %{buildroot}%{_prefix}/opt/%{name}/
+
+%posttrans -n openssl
+echo Note: macOS provides its own openssl, so %{name}\\'s binaries have been installed under /usr/local/opt/%{name}/bin.
+
 %files
 %license LICENSE
 %{_sysconfdir}/ssl
@@ -73,11 +79,14 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %doc %{_datadir}/doc/openssl
 
 %files -n openssl
-%{_bindir}/c_rehash
-%{_bindir}/openssl
+%{_prefix}/opt/%{name}/bin/c_rehash
+%{_prefix}/opt/%{name}/bin/openssl
 %doc %{_mandir}/man1/*
 
 %changelog
+
+* Thu Dec 31 2020 Morgan Thomas <m@m0rg.dev> 1.1.1i-3
+  Move binaries to /usr/local/opt.
 
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 1.1.1i-2
   Rebuilt with dependency generation.

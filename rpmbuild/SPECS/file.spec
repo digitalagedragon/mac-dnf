@@ -1,6 +1,6 @@
 Name:           file
 Version:        5.39
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        A utility for determining the type of a file.
 
 License:        BSD-2-Clause
@@ -10,8 +10,6 @@ Source0:        http://astron.com/pub/%{name}/%{name}-%{version}.tar.gz
 %define         SHA256SUM0 f05d286a76d9556243d0cb05814929c2ecf3a5ba07963f8f70bfaaa70517fad1
 
 # X10-Update-Spec: { "type": "webscrape", "url": "http://astron.com/pub/file/"}
-
-Requires:       libmagic
 
 %description
 
@@ -36,27 +34,19 @@ echo "%SHA256SUM0  %SOURCE0" | shasum -a256 -c -
 %autosetup -n %{name}-%{version}
 
 %build
-# local version of file needs to be >= the version we're building here for cross-compiling.
-# easiest way to do that is to build it ourselves.
-%if "%{_build}" != "%{_target}"
-mkdir build
-cd build
-../configure
-%{__make} %{?_smp_mflags}
-%{__make} install
-cd ..
-%endif
-
-%configure --libdir=%{_prefix}/lib
+%configure --bindir=%{_prefix}/opt/%{name}/bin
 %make_build
 
 %install
 %make_install
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
+%posttrans
+echo Note: macOS provides its own %{name}, so %{name}\\'s binaries have been installed under /usr/local/opt/%{name}/bin.
+
 %files
 %license COPYING
-%{_bindir}/*
+%{_prefix}/opt/%{name}/bin/file
 %doc %{_mandir}/man1/*
 
 %files -n libmagic
@@ -72,5 +62,8 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 %changelog
 
+* Thu Dec 31 2020 Morgan Thomas <m@m0rg.dev> 5.39-3
+  Move the file binary to /usr/local/opt to avoid conflicting with macOS-provided file.
+  
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 5.39-2
   Rebuilt with dependency generation.

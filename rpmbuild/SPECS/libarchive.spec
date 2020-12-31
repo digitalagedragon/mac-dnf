@@ -1,6 +1,6 @@
 Name:           libarchive
 Version:        3.5.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        The libarchive project develops a portable, efficient C library that can read and write streaming archives in a variety of formats.
 
 License:        BSD-2-Clause
@@ -31,13 +31,16 @@ echo "%SHA256SUM0  %SOURCE0" | shasum -a256 -c -
 %autosetup -n %{name}-%{version}
 
 %build
-%configure --libdir=%{_prefix}/lib --disable-static
+%configure --bindir=%{_prefix}/opt/%{name}/bin --disable-static
 %make_build
 
 %install
 %make_install
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
+
+%posttrans -n archive
+echo Note: macOS provides its own bsdtar, so %{name}\\'s binaries have been installed under /usr/local/opt/%{name}/bin.
 
 %files
 %license COPYING
@@ -50,12 +53,15 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %doc %{_mandir}/man{3,5}/*
 
 %files -n archive
-%{_bindir}/bsdcat
-%{_bindir}/bsdcpio
-%{_bindir}/bsdtar
+%{_prefix}/opt/%{name}/bin/bsdcat
+%{_prefix}/opt/%{name}/bin/bsdcpio
+%{_prefix}/opt/%{name}/bin/bsdtar
 %doc %{_mandir}/man1/*
 
 %changelog
+
+* Thu Dec 31 2020 Morgan Thomas <m@m0rg.dev> 3.5.1-2
+  Move bsdtar to /usr/local/opt.
 
 * Sat Dec 26 2020 Morgan Thomas <m@m0rg.dev> 3.5.1-1
   Updated to version 3.5.1.

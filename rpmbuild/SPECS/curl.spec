@@ -1,6 +1,6 @@
 Name:           curl
 Version:        7.74.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Curl is a command line tool and library for transferring data with URLs.
 
 License:        libcurl
@@ -41,16 +41,19 @@ echo "%SHA256SUM0  %SOURCE0" | shasum -a256 -c -
 %autosetup -n %{name}-%{version}
 
 %build
-%configure --libdir=%{_prefix}/lib --disable-static
+%configure --bindir=%{_prefix}/opt/%{name}/bin --disable-static
 %make_build
 
 %install
 %make_install
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
+%posttrans
+echo Note: macOS provides its own %{name}, so %{name}\\'s binaries have been installed under /usr/local/opt/%{name}/bin.
+
 %files
 %license COPYING
-%{_bindir}/*
+%{_prefix}/opt/%{name}/bin/*
 %doc %{_mandir}/man1/*
 
 %files -n libcurl
@@ -64,6 +67,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %doc %{_mandir}/man3/*
 
 %changelog
+
+* Thu Dec 31 2020 Morgan Thomas <m@m0rg.dev> 7.74.0-4
+  Move binaries to /usr/local/opt.
 
 * Mon Dec 28 2020 Morgan Thomas <m@m0rg.dev> 7.74.0-3
   Use pkgconfig dependencies.

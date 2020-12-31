@@ -12,6 +12,8 @@ BuildArch:      noarch
 Requires:       python%{pybasever}
 Provides:       python(abi) = %{pybasever}
 
+# RPM-Audit-Skip Audit::MacOSBinaryShadowing (expected package behavior)
+
 %description
 Meta-package for system Python.
 

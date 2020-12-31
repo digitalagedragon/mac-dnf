@@ -3,7 +3,7 @@
 
 Name:           lib%{libname}
 Version:        3.34.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        SQLite is a C-language library that implements a small, fast, self-contained, high-reliability, full-featured, SQL database engine.
 
 License:        Public domain
@@ -47,9 +47,12 @@ export CFLAGS="-g -O2 -DSQLITE_ENABLE_FTS3=1 \
     -DSQLITE_ENABLE_UNLOCK_NOTIFY=1 -DSQLITE_ENABLE_DBSTAT_VTAB=1 \
     -DSQLITE_SECURE_DELETE=1 -DSQLITE_ENABLE_FTS3_TOKENIZER=1"
 export LDFLAGS=""
-../configure --prefix=%{_prefix} --libdir=%{_prefix}/lib \
+../configure --prefix=%{_prefix} --bindir=%{_prefix}/opt/%{name}/bin \
     --enable-fts5  --disable-static
 %make_build
+
+%posttrans -n sqlite
+echo Note: macOS provides its own sqlite3, so %{name}\\'s binaries have been installed under /usr/local/opt/%{name}/bin.
 
 %install
 cd build
@@ -66,10 +69,13 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_prefix}/lib/pkgconfig/*.pc
 
 %files -n sqlite
-%{_bindir}/sqlite3
+%{_prefix}/opt/%{name}/bin/sqlite3
 %doc %{_mandir}/man1/*
 
 %changelog
+
+* Thu Dec 31 2020 Morgan Thomas <m@m0rg.dev> 3.34.0-3
+  Move sqlite3 to /usr/local/opt.
 
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 3.34.0-2
   Rebuilt with dependency generation.

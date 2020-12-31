@@ -16,6 +16,8 @@ BuildArch:      noarch
 # X10-Update-Spec:   "repo": "https://github.com/pypa/setuptools.git",
 # X10-Update-Spec:   "pattern": "^v((?:\\d+\\.?)+)$" }
 
+# RPM-Audit-Skip Audit::MacOSBinaryShadowing (expected package behavior)
+
 Provides:       python-setuptools = %{version}-%{release}
 
 BuildRequires:  python%{system_python}

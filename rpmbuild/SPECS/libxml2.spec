@@ -2,7 +2,7 @@
 
 Name:           libxml2
 Version:        2.9.10
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Libxml2 is the XML C parser and toolkit developed for the Gnome project
 
 License:        MIT
@@ -51,7 +51,7 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 mkdir build
 cd build
 %define _configure ../configure
-%configure --libdir=%{_prefix}/lib
+%configure --bindir=%{_prefix}/opt/%{name}/bin
 %make_build
 
 %install
@@ -59,6 +59,9 @@ cd build
 %make_install
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
+
+%posttrans utils
+echo Note: macOS provides its own %{name}, so %{name}\\'s binaries have been installed under /usr/local/opt/%{name}/bin.
 
 %files
 %license COPYING
@@ -80,15 +83,18 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %doc %{_mandir}/man3/*
 
 %files utils
-%{_bindir}/xml2-config
-%{_bindir}/xmlcatalog
-%{_bindir}/xmllint
+%{_prefix}/opt/%{name}/bin/xml2-config
+%{_prefix}/opt/%{name}/bin/xmlcatalog
+%{_prefix}/opt/%{name}/bin/xmllint
 %doc %{_mandir}/man1/*
 
 %changelog
 
+* Thu Dec 31 2020 Morgan Thomas <m@m0rg.dev> 2.9.10-6
+  Move binaries to /usr/local/opt.
+
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 2.9.10-5
   Rebuilt with dependency generation.
 
-* Wed Dec 16 2020 Morgan Thomas <m@m0rg.dev> 2.9.10 release 4
+* Wed Dec 16 2020 Morgan Thomas <m@m0rg.dev> 2.9.10-4
   Add liblzma-devel/liblzma to requires

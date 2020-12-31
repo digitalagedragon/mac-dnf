@@ -15,6 +15,8 @@ Source0:        https://ftp.gnu.org/gnu/gcc/gcc-%{version}/gcc-%{version}.tar.xz
 # X10-Update-Spec:   "repo": "https://gcc.gnu.org/git/gcc.git",
 # X10-Update-Spec:   "pattern": "^releases/gcc-(\\d+\\.\\d+\\.\\d+)$" }
 
+# RPM-Audit-Skip Audit::MacOSBinaryShadowing (expected package behavior)
+
 Patch0:         https://raw.githubusercontent.com/Homebrew/formula-patches/7baf6e2f/gcc/bigsur.diff#/gcc-0001-bigsur-version-numbering.patch
 
 BuildRequires:  xz

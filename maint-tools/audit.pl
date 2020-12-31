@@ -176,6 +176,32 @@ sub check {
 
 Audit::register("run-time dependencies are not redundant", "Audit::RedundantDependencies");
 
+package Audit::MacOSBinaryShadowing;
+
+use File::Basename qw(dirname);
+
+sub check {
+    my $filename = shift;
+    my $contents = shift;
+    my $parsed = shift;
+
+    my $rc = 1;
+    foreach my $rpm (`rpmspec -q --rpms $filename`) {
+        chomp $rpm;
+        $rpm =~ /.*\.(.*)$/;
+        my $dirname = dirname $filename;
+        foreach my $file (`rpm -ql $dirname/../RPMS/$1/$rpm.rpm`) {
+            chomp $file;
+            next unless $file =~ m|^/usr/local/bin/(.*)$|;
+            if(-e "/usr/bin/$1" || -e "/bin/$1") {
+                Audit::emit_error("$1 is already provided by macOS");
+            }
+        }
+    }
+}
+
+Audit::register("macOS-provided binaries are not shadowed", "Audit::MacOSBinaryShadowing");
+
 package main;
 
 exit !(Audit::check shift);
