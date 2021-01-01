@@ -5,6 +5,7 @@
         "preinstall_root": true
     },
     "files.associations": {
-        "zz-snippets": "RPMSpec"
+        "zz-snippets": "RPMSpec",
+        "rpm-1000-macros.src": "RPMSpec"
     }
 }
