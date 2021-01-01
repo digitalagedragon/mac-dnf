@@ -160,7 +160,7 @@ sub check {
             # skip things like apple-bsdutils where multiple auto-generated requires may exist
             next if $dnf_output =~ /^apple-/;
             # skip the libfoo%{?_isa} = %{version}-%{release} types on -devel etc
-            next if $requirement =~ /^\S+\(aarch-64|x86_64\) = /;
+            next if $requirement =~ /^\S+\(aarch-64|x86[-_]64\) = /;
             if(exists $seen{$dnf_output}) {
                 # again, avoid some false-positive generated requires
                 last if $requirement =~ /\.dylib/ && $seen{$dnf_output} =~ /\.dylib/;
