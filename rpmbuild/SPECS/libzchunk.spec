@@ -2,7 +2,7 @@
 
 Name:           lib%{libname}
 Version:        1.1.9
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        zchunk is a compressed file format that splits the file into independent chunks
 
 License:        BSD-2-Clause
@@ -21,12 +21,11 @@ BuildRequires:  pkg-config
 BuildRequires:  meson
 BuildRequires:  ninja-build
 
-BuildRequires:  libopenssl-devel
-BuildRequires:  libcurl-devel
-BuildRequires:  libzstd-devel
+BuildRequires:  pkgconfig(libssl)
+BuildRequires:  pkgconfig(libcurl)
+BuildRequires:  pkgconfig(libzstd)
 BuildRequires:  libargp-devel
 
-Requires:       libopenssl
 Requires:       libcurl
 Requires:       libzstd
 Requires:       libargp
@@ -40,7 +39,6 @@ Requires:       libargp
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       libffi-devel
-Requires:       libzstd-devel
 
 %description    devel
 The %{name}-devel package contains libraries and header files for
@@ -81,6 +79,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %doc %{_mandir}/man1/*
 
 %changelog
+
+* Thu Dec 31 2020 Morgan Thomas <m@m0rg.dev> 1.1.9-2
+  Dependency cleanup.
 
 * Thu Dec 31 2020 Morgan Thomas <m@m0rg.dev> 1.1.9-1
   Updated to version 1.1.9.

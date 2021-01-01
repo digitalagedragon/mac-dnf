@@ -166,7 +166,7 @@ sub check {
                 last if $requirement =~ /\.dylib/ && $seen{$dnf_output} =~ /\.dylib/;
                 last if $requirement =~ /^pkgconfig/ && $seen{$dnf_output} =~ /^pkgconfig/;
 
-                Audit::emit_warning("$requirement and $seen{$dnf_output} both resolve to $dnf_output");
+                Audit::emit_warning("($rpm) $requirement and $seen{$dnf_output} both resolve to $dnf_output");
             } else {
                 $seen{$dnf_output} = $requirement;
             }
