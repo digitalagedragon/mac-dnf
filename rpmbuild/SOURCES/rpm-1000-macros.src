@@ -149,3 +149,5 @@ set -x \
 echo Note: macOS provides its own %{name}, so %{name}\\'s binaries have been installed under /usr/local/opt/%{name}/bin. \
 echo Additionally, they have been symlinked as /usr/local/bin/g\\<binary\\>.
 
+# |
+# +--------
