@@ -1,6 +1,6 @@
 Name:           lua
 Version:        5.4.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Lua is a powerful, efficient, lightweight, embeddable scripting language.
 
 License:        MIT
@@ -12,8 +12,6 @@ Source0:        https://www.lua.org/ftp/%{name}-%{version}.tar.gz
 # X10-Update-Spec: { "type": "webscrape", "url": "https://www.lua.org/ftp/", "pattern": "(?:HREF=\"|/)\\w+-((?:\\d+\\.)*\\d+)\\.tar\\..z2?\""}
 
 Patch0:         liblua-0001-dynamic-library.patch
-
-Requires:       liblua
 
 %undefine _annotated_build
 %define   debug_package %{nil}
@@ -89,6 +87,9 @@ EOF
 %{_prefix}/lib/liblua.dylib
 
 %changelog
+
+* Fri Jan 01 2021 Morgan Thomas <m@m0rg.dev> 5.4.2-3
+  Clean up redundant dependencies.
 
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 5.4.2-2
   Rebuilt with dependency generation.
