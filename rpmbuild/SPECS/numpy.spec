@@ -1,15 +1,15 @@
 %define system_python 3.9
 
 Name:           numpy
-Version:        1.19.4
-Release:        2%{?dist}
+Version:        1.19.5
+Release:        1%{?dist}
 Summary:        The fundamental package for scientific computing with Python
 
 License:        BSD-3-Clause
 URL:            https://numpy.org/
 %undefine       _disable_source_fetch
 Source0:        https://github.com/numpy/numpy/releases/download/v%{version}/numpy-%{version}.tar.gz
-%define         SHA256SUM0 fe836a685d6838dbb3f603caef01183ea98e88febf4ce956a2ea484a75378413
+%define         SHA256SUM0 d1654047d75fb9d55cc3d46f312d5247eec5f4999039874d2f571bb8021d8f0b
 
 # X10-Update-Spec: { "type": "git-tags",
 # X10-Update-Spec:   "repo": "https://github.com/numpy/numpy.git",
@@ -64,6 +64,9 @@ python%{system_python} setup.py build install --root %{buildroot} --single-versi
 %{_libdir}/python%{system_python}/site-packages/*
 
 %changelog
+
+* Wed Jan 06 2021 Morgan Thomas <m@m0rg.dev> 1.19.5-1
+  Updated to version 1.19.5.
 
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 1.19.4-2
   Rebuilt with dependency generation.

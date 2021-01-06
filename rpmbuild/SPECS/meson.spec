@@ -1,15 +1,15 @@
 %define system_python 3.9
 
 Name:           meson
-Version:        0.56.0
-Release:        2%{?dist}
+Version:        0.56.1
+Release:        1%{?dist}
 Summary:        An efficient build system
 
 License:        Apache-2.0
 URL:            https://mesonbuild.com/
 %undefine       _disable_source_fetch
 Source0:        https://github.com/mesonbuild/meson/releases/download/%{version}/%{name}-%{version}.tar.gz
-%define         SHA256SUM0 291dd38ff1cd55fcfca8fc985181dd39be0d3e5826e5f0013bf867be40117213
+%define         SHA256SUM0 5780725304eaa28aac5e7de99d2d8d045112fbc10cf9f4181498b877de0ecf28
 BuildArch:      noarch
 
 # X10-Update-Spec: { "type": "git-tags",
@@ -47,3 +47,6 @@ python%{system_python} setup.py install --skip-build --root %{buildroot}
 %doc %{_mandir}/man1/meson*
 
 %changelog
+
+* Wed Jan 06 2021 Morgan Thomas <m@m0rg.dev> 0.56.1-1
+  Updated to version 0.56.1.
