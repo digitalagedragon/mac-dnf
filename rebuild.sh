@@ -4,7 +4,7 @@ set -e
 set -x
 
 XID=$(dnf history info | head -n1 | cut -d ':' -f 2)
-trap "dnf history rollback -y $XID" EXIT
+trap "dnf history rollback -qy $XID" EXIT
 
 rpm -qa | xargs dnf mark -q remove
 dnf mark -q install dnf repository system-release createrepo_c

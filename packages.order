@@ -93,3 +93,4 @@ libunistring
 libp11-kit
 libgnutls
 emacs
+wget
