@@ -43,7 +43,7 @@ openssl@1.1 | ✔ | `libopenssl`
 yarn | ✘ |
 ffmpeg | ✘ |
 cmake | ✔ | `cmake`
-wget | ✘ |
+wget | ✔ | `wget`
 gnupg | ✔ | `gnupg`
 htop | ✘ |
 mysql | ✘ |

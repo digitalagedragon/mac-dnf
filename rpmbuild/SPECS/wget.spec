@@ -9,6 +9,10 @@ URL:            https://www.gnu.org/software/wget/
 Source0:        https://ftp.gnu.org/gnu/wget/wget-%{version}.tar.gz
 %define         SHA256SUM0 b3bc1a9bd0c19836c9709c318d41c19c11215a07514f49f89b40b9d50ab49325
 
+# X10-Update-Spec: { "type": "webscrape",
+# X10-Update-Spec:   "url": "https://ftp.gnu.org/gnu/wget/",
+# X10-Update-Spec:   "exclude": "1\\.99\\.(?:\\d+)" }
+
 BuildRequires:  pkgconfig(openssl)
 BuildRequires:  pkgconfig(libpcre)
 BuildRequires:  pkgconfig(gnutls)

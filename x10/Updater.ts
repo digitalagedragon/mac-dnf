@@ -95,7 +95,7 @@ export class Updater {
                             .map(s => s.trim());
                         for (const possible_tag of tags) {
                             if (possible_tag.match(update_json.pattern)) {
-                                latest_version = possible_tag.match(update_json.pattern)[1];
+                                latest_version = possible_tag.match(update_json.pattern)[1].replaceAll(/[-_]/g, '.');
                                 break;
                             }
                         }
@@ -106,7 +106,10 @@ export class Updater {
                         // default is just a "match things that look like links to tarballs"
                         if (!update_json.pattern) update_json.pattern = "(?:href=\"|/)\\w+-((?:\\d+\\.)*\\d+)\\.tar\\..z2?\"";
                         const content = child_process.execSync(`curl -s -L "${update_json.url}"`).toString();
-                        const matches = [...content.matchAll(update_json.pattern)].map(m => m[1]);
+                        const matches = [...content.matchAll(update_json.pattern)]
+                            .map(m => m[1])
+                            .map(x => x.replaceAll(/[-_]/g, '.'))
+                            .filter(x => !x.match(RegExp(update_json.exclude || "^$")));
                         if (matches.length) {
                             latest_version = matches.sort((a, b) => versionCompare(b, a, update_json.compare_opts || {}))[0];
                         }
@@ -115,8 +118,6 @@ export class Updater {
                     } else {
                         throw new Error(`unknown update type ${update_json.type}`);
                     }
-                    latest_version.replaceAll('_', '.');
-                    latest_version.replaceAll('-', '.');
                     if (latest_version) {
                         const spec_version = child_process.execSync(`rpmspec -q --qf '%{version}\\n' --define '_build %{_target}' --define '_host %{_build}' ../rpmbuild/SPECS/${spec} 2>/dev/null`).toString().split("\n")[0].trim();
                         if (latest_version == spec_version || update_json.type == 'none') {
