@@ -17,6 +17,6 @@ BUILDREQUIRES=$(rpmspec -q --buildrequires $SPEC $@)
 rpmbuild -ba $@
 sh createrepo.sh
 perl maint-tools/audit.pl $SPEC || {
-    rm rpmbuild/SRPMS/"$(/usr/local/bin/rpmspec -q --srpm rpmbuild/SPECS/$pkg.spec | sed -E 's|\.[^.]*$||')".src.rpm
+    rm rpmbuild/SRPMS/"$(/usr/local/bin/rpmspec -q --srpm rpmbuild/SPECS/$SPEC.spec | sed -E 's|\.[^.]*$||')".src.rpm
     false
 }

@@ -94,3 +94,4 @@ libp11-kit
 libgnutls
 emacs
 wget
+libkrb5

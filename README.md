@@ -82,7 +82,7 @@ telnet | ✘ |
 readline | ✔ | `libreadline`
 cocoapods | ✘ |
 gnutls | ✘ |
-krb5 | ✘ |
+krb5 | ✔ | `libkrb5`, `krb5`
 libtool | ✔ | `libtool` (need to add `glibtool` link)
 ruby-build | ✘ |
 unbound | ✘ |
