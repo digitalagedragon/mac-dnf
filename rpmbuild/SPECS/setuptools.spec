@@ -2,7 +2,7 @@
 
 Name:           setuptools
 Version:        51.1.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Easily download, build, install, upgrade, and uninstall Python packages
 
 License:        MIT
@@ -18,7 +18,14 @@ BuildArch:      noarch
 
 # RPM-Audit-Skip Audit::MacOSBinaryShadowing (expected package behavior)
 
+Requires:       python%{system_python}-%{name} = %{version}-%{release}
+
+%package     -n python%{system_python}-%{name}
+Summary:        Python %{system_python} bindings for %{name}
+Provides:       python3-%{name} = %{version}-%{release}
 Provides:       python-setuptools = %{version}-%{release}
+
+%description -n python%{system_python}-%{name}
 
 BuildRequires:  python%{system_python}
 
@@ -38,9 +45,14 @@ python%{system_python} setup.py install --skip-build --root %{buildroot}
 %files
 %license LICENSE
 %{_bindir}/*
+
+%files -n python%{system_python}-%{name}
 %{_prefix}/lib/python%{system_python}/site-packages/*
 
 %changelog
+
+* Sun Jan 10 2021 Morgan Thomas <m@m0rg.dev> 51.1.1-2
+  Rebuilt with pythondistdeps generation.
 
 * Thu Dec 31 2020 Morgan Thomas <m@m0rg.dev> 51.1.1-1
   Updated to version 51.1.1.

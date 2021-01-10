@@ -55,7 +55,7 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 %package     -n python%{system_python}-%{name}
 Summary:        Python %{system_python} bindings for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-Provides:       python3-%{name}
+Provides:       python3-%{name} = %{version}-%{release}
 
 %description -n python%{system_python}-%{name}
 

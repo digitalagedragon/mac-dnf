@@ -2,7 +2,7 @@
 
 Name:           pivy
 Version:        0.6.5
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Python bindings for coin3d
 
 License:        ISC
@@ -23,6 +23,9 @@ BuildRequires:  libpython%{system_python}-devel
 
 Requires:       libcoin
 
+Provides:       python%{system_python}-%{name} = %{version}-%{release}
+Provides:       python3-%{name} = %{version}-%{release}
+
 %description
 
 %prep
@@ -40,6 +43,9 @@ python%{system_python} setup.py install --skip-build --root %{buildroot}
 %{_libdir}/python%{system_python}/site-packages/*
 
 %changelog
+
+* Sun Jan 10 2021 Morgan Thomas <m@m0rg.dev> 0.6.5-3
+  Rebuilt with pythondistdeps generation.
 
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 0.6.5-2
   Rebuilt with dependency generation.

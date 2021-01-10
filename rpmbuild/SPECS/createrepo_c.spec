@@ -2,7 +2,7 @@
 
 Name:           createrepo_c
 Version:        0.16.2
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Tool for building yum repos
 
 License:        GPLv2
@@ -48,6 +48,13 @@ Requires:       libcreaterepo_c%{?_isa} = %{version}-%{release}
 The libcreaterepo_c-devel package contains libraries and header files for
 developing applications that use libcreaterepo_c.
 
+%package     -n python%{system_python}-%{name}
+Summary:        Python %{system_python} bindings for %{name}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+Provides:       python3-%{name}
+
+%description -n python%{system_python}-%{name}
+
 %prep
 echo "%SHA256SUM0  %SOURCE0" | shasum -a256 -c -
 %autosetup
@@ -72,7 +79,6 @@ cd build
 %files
 %license COPYING
 %{_bindir}/*
-%{_prefix}/lib*/python%{system_python}/site-packages/*
 %doc %{_mandir}/man8/*
 
 %files -n libcreaterepo_c
@@ -83,7 +89,13 @@ cd build
 %{_prefix}/lib/pkgconfig/*.pc
 %{_includedir}/*
 
+%files -n python%{system_python}-%{name}
+%{_prefix}/lib*/python%{system_python}/site-packages/*
+
 %changelog
+
+* Sun Jan 10 2021 Morgan Thomas <m@m0rg.dev> 0.16.2-4
+  Rebuilt with pythondistdeps generation.
 
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 0.16.2-3
   Rebuilt with dependency generation.

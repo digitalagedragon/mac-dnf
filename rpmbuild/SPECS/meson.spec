@@ -2,7 +2,7 @@
 
 Name:           meson
 Version:        0.56.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        An efficient build system
 
 License:        Apache-2.0
@@ -24,10 +24,17 @@ BuildRequires:  python%{system_python}
 BuildRequires:  python-setuptools
 
 Requires:       python-setuptools
+Requires:       python%{system_python}-%{name} = %{version}-%{release}
 
 %undefine _annotated_build
 
 %description
+
+%package     -n python%{system_python}-%{name}
+Summary:        Python %{system_python} bindings for %{name}
+Provides:       python3-%{name} = %{version}-%{release}
+
+%description -n python%{system_python}-%{name}
 
 %prep
 echo "%SHA256SUM0  %SOURCE0" | shasum -a256 -c -
@@ -43,10 +50,15 @@ python%{system_python} setup.py install --skip-build --root %{buildroot}
 %license COPYING
 %{_bindir}/meson
 %{_datadir}/polkit-1/actions/*
-%{_prefix}/lib/python%{system_python}/site-packages/*
 %doc %{_mandir}/man1/meson*
 
+%files -n python%{system_python}-%{name}
+%{_prefix}/lib/python%{system_python}/site-packages/*
+
 %changelog
+
+* Sun Jan 10 2021 Morgan Thomas <m@m0rg.dev> 0.56.1-2
+  Rebuilt with pythondistdeps generation.
 
 * Wed Jan 06 2021 Morgan Thomas <m@m0rg.dev> 0.56.1-1
   Updated to version 0.56.1.

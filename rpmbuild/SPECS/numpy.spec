@@ -2,7 +2,7 @@
 
 Name:           numpy
 Version:        1.19.5
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        The fundamental package for scientific computing with Python
 
 License:        BSD-3-Clause
@@ -16,10 +16,14 @@ Source0:        https://github.com/numpy/numpy/releases/download/v%{version}/num
 # X10-Update-Spec:   "pattern": "^v(\\d+\\.\\d+\\.\\d+)$" }
 
 BuildRequires:  python%{system_python}
-BuildRequires:  cython
+BuildRequires:  python%{system_python}dist(cython)
 BuildRequires:  python-setuptools
 
 Requires:       python-setuptools
+Requires:       python%{system_python}dist(cython)
+
+Provides:       python3-%{name} = %{version}-%{release}
+Provides:       python%{system_python}-%{name} = %{version}-%{release}
 
 %ifarch x86_64
 # Accelerate.framework is really buggy on x86_64, so we need to use some
@@ -64,6 +68,9 @@ python%{system_python} setup.py build install --root %{buildroot} --single-versi
 %{_libdir}/python%{system_python}/site-packages/*
 
 %changelog
+
+* Sun Jan 10 2021 Morgan Thomas <m@m0rg.dev> 1.19.5-2
+  Rebuilt with pythondistdeps generation.
 
 * Wed Jan 06 2021 Morgan Thomas <m@m0rg.dev> 1.19.5-1
   Updated to version 1.19.5.

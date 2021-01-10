@@ -2,7 +2,7 @@
 
 Name:           libcomps
 Version:        0.1.15
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Libcomps is alternative for yum.comps library
 
 License:        GPLv2
@@ -31,6 +31,12 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
+%package     -n python%{system_python}-%{name}
+Summary:        Python %{system_python} bindings for %{name}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+Provides:       python3-%{name} = %{version}-%{release}
+
+%description -n python%{system_python}-%{name}
 
 %prep
 echo "%SHA256SUM0  %SOURCE0" | shasum -a256 -c -
@@ -57,14 +63,19 @@ mv %{buildroot}%{_prefix}/lib/python3.9/site-packages/libcomps/_libpycomps.{dyli
 %files
 %license COPYING
 %{_prefix}/lib/libcomps.*.dylib
-%{_prefix}/lib*/python%{system_python}/site-packages/libcomps*
 
 %files devel
 %{_includedir}/libcomps
 %{_prefix}/lib/libcomps.dylib
 %{_prefix}/lib/pkgconfig/*.pc
 
+%files -n python%{system_python}-%{name}
+%{_prefix}/lib*/python%{system_python}/site-packages/libcomps*
+
 %changelog
+
+* Sun Jan 10 2021 Morgan Thomas <m@m0rg.dev> 0.1.15-3
+  Rebuilt with pythondistdeps generation.
 
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 0.1.15-2
   Rebuilt with dependency generation.

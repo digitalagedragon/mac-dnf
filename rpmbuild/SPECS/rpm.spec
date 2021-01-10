@@ -2,7 +2,7 @@
 
 Name:           rpm
 Version:        4.16.1.2
-Release:        11%{?dist}
+Release:        12%{?dist}
 Summary:        The RPM Package Manager (RPM) is a powerful package management system.
 
 License:        GPLv2
@@ -45,6 +45,7 @@ Requires:       libsqlite
 Requires:       liblua
 Requires:       libgcrypt
 Requires:       pkg-config
+Requires:       setuptools
 
 %description
 
@@ -144,6 +145,9 @@ rm %{buildroot}%{_prefix}/lib/rpm/fileattrs/perl*.attr
 %{_prefix}/lib*/python%{system_python}/site-packages/rpm
 
 %changelog
+
+* Sun Jan 10 2021 Morgan Thomas <m@m0rg.dev> 4.16.1.2-12
+  Require setuptools as pythondistdeps depends on it.
 
 * Sun Jan 10 2021 Morgan Thomas <m@m0rg.dev> 4.16.1.2-11
   Rebuilt with pythondistdeps generation.

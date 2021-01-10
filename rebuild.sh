@@ -8,11 +8,6 @@ trap "dnf history rollback -qy $XID" EXIT
 
 rpm -qa | xargs dnf mark -q remove
 dnf mark -q install dnf repository system-release createrepo_c
-
-
-dnf install python3-librpm
-dnf mark -q install python3-librpm
-
 dnf autoremove -qy
 
 SPEC=$1
@@ -23,6 +18,6 @@ BUILDREQUIRES=$(rpmspec -q --buildrequires $SPEC $@)
 rpmbuild -ba $SPEC $@
 sh createrepo.sh
 perl maint-tools/audit.pl $SPEC || {
-    rm rpmbuild/SRPMS/"$(/usr/local/bin/rpmspec -q --srpm rpmbuild/SPECS/$SPEC | sed -E 's|\.[^.]*$||')".src.rpm
+    rm rpmbuild/SRPMS/"$(/usr/local/bin/rpmspec -q --srpm $SPEC | sed -E 's|\.[^.]*$||')".src.rpm
     false
 }

@@ -2,7 +2,7 @@
 
 Name:           cython
 Version:        0.29.21
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        The fundamental package for scientific computing with Python
 
 License:        Apache-2.0
@@ -18,6 +18,13 @@ BuildRequires:  python-setuptools
 Requires:       libpython%{system_python}-devel
 Requires:       libpython%{system_python}
 Requires:       python-setuptools
+
+%package     -n python%{system_python}-%{name}
+Summary:        Python %{system_python} bindings for %{name}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+Provides:       python3-%{name}
+
+%description -n python%{system_python}-%{name}
 
 %undefine _annotated_build
 
@@ -37,9 +44,14 @@ python%{system_python} setup.py install --skip-build --root %{buildroot}
 %files
 %license LICENSE.txt
 %{_bindir}/*
+
+%files -n python%{system_python}-%{name}
 %{_libdir}/python%{system_python}/site-packages/*
 
 %changelog
+
+* Sun Jan 10 2021 Morgan Thomas <m@m0rg.dev> 0.29.21-3
+  Rebuilt with pythondistdeps generation.
 
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 0.29.21-2
   Rebuilt with dependency generation.

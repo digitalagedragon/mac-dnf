@@ -17,11 +17,11 @@ python3.9
 python
 xz
 libpcre
+setuptools
 rpm
 cmake3.19
 cmake
 libsolv
-setuptools
 meson
 asciidoc
 ninja-build

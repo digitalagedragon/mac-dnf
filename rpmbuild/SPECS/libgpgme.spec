@@ -4,7 +4,7 @@
 
 Name:           lib%{libname}
 Version:        1.15.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        GPGME is the standard library to access GnuPG functions from programming languages.
 
 License:        LGPLv2+, GPLv2+
@@ -41,6 +41,13 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 %description -n gpgme
 
+%package     -n python%{system_python}-%{name}
+Summary:        Python %{system_python} bindings for %{name}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+Provides:       python3-%{name} = %{version}-%{release}
+
+%description -n python%{system_python}-%{name}
+
 %prep
 echo "%SHA256SUM0  %SOURCE0" | shasum -a256 -c -
 %autosetup -n %{libname}-%{version}
@@ -65,7 +72,6 @@ rm -f %{buildroot}%{_infodir}/dir
 %files
 %license COPYING COPYING.LESSER
 %{_prefix}/lib/libgpgme.*.dylib
-%{_prefix}/lib*/python%{system_python}/site-packages/gpg*
 %exclude %{_prefix}/lib/python2.7
 %doc %{_infodir}/*.info*
 
@@ -80,7 +86,13 @@ rm -f %{buildroot}%{_infodir}/dir
 %{_prefix}/bin/gpgme-tool
 %{_prefix}/bin/gpgme-json
 
+%files -n python%{system_python}-%{name}
+%{_prefix}/lib*/python%{system_python}/site-packages/gpg*
+
 %changelog
+
+* Sun Jan 10 2021 Morgan Thomas <m@m0rg.dev> 1.15.0-4
+  Rebuilt with pythondistdeps generation.
 
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 1.15.0-3
   Rebuilt with dependency generation.
