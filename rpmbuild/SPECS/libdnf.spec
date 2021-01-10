@@ -2,7 +2,7 @@
 
 Name:           libdnf
 Version:        0.55.2
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        This library provides a high level package-manager.
 
 License:        LGPLv2+
@@ -32,6 +32,7 @@ BuildRequires: libgpgme-devel
 BuildRequires: libzchunk-devel
 BuildRequires: python-sphinx
 BuildRequires: libmodulemd-devel
+BuildRequires: python%{system_python}-librpm
 
 Requires:      glib2
 Requires:      libsmartcols
@@ -42,6 +43,8 @@ Requires:      libjson-c
 Requires:      libgpgme
 Requires:      libzchunk
 Requires:      libmodulemd
+Requires:      python%{system_python}-librpm
+
 
 %undefine _annotated_build
 %global debug_package %{nil}
@@ -56,6 +59,12 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
+%package     -n python%{system_python}-%{name}
+Summary:        Python %{system_python} bindings for %{name}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+Provides:       python3-%{name}
+
+%description -n python%{system_python}-%{name}
 
 %prep
 echo "%SHA256SUM0  %SOURCE0" | shasum -a256 -c -
@@ -91,8 +100,6 @@ mv %{buildroot}%{_prefix}/lib/python3.9/site-packages/hawkey/_hawkey.{dylib,so}
 %license COPYING
 %{_prefix}/lib/libdnf.*.dylib
 %{_prefix}/lib/libdnf
-%{_prefix}/lib*/python%{system_python}/site-packages/hawkey
-%{_prefix}/lib*/python%{system_python}/site-packages/libdnf
 %{_datadir}/locale/*/LC_MESSAGES/libdnf.mo
 
 %files devel
@@ -100,6 +107,14 @@ mv %{buildroot}%{_prefix}/lib/python3.9/site-packages/hawkey/_hawkey.{dylib,so}
 %{_prefix}/lib/libdnf.dylib
 %{_prefix}/lib/pkgconfig/*.pc
 
+%files -n python%{system_python}-%{name}
+%{_prefix}/lib*/python%{system_python}/site-packages/hawkey
+%{_prefix}/lib*/python%{system_python}/site-packages/libdnf
+
 %changelog
+
+* Sun Jan 10 2021 Morgan Thomas <m@m0rg.dev> 0.55.2-6
+  Rebuilt with pythondistdeps generation.
+
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 0.55.2-5
   Rebuilt with dependency generation.

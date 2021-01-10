@@ -52,6 +52,17 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 # --------
 
+%package     -n python%{system_python}-%{name}
+Summary:        Python %{system_python} bindings for %{name}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+Provides:       python3-%{name}
+
+%description -n python%{system_python}-%{name}
+
+%files -n python%{system_python}-%{name}
+
+# --------
+
 # X10-Update-Spec: { "type": "webscrape", "url": ""}
 
 # X10-Update-Spec: { "type": "git-tags",
@@ -69,6 +80,9 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 * Mon Dec 28 2020 Morgan Thomas <m@m0rg.dev> 3.9.1-7
   Use pkgconfig dependencies.
+
+* Sun Jan 10 2021 Morgan Thomas <m@m0rg.dev>
+  Rebuilt with pythondistdeps generation.
 
 # --------
 

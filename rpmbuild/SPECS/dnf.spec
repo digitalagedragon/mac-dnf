@@ -2,7 +2,7 @@
 
 Name:           dnf
 Version:        4.5.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        A powerful RPM-based package manager
 
 License:        GPLv2
@@ -26,11 +26,13 @@ BuildRequires:  libdnf-devel
 BuildRequires:  libcomps-devel
 BuildRequires:  cmake
 BuildRequires:  python%{system_python}
+BuildRequires:  python%{system_python}-libdnf
 
 Requires:       rpm
 Requires:       libsolv
 Requires:       libcomps
 Requires:       libdnf
+Requires:       python%{system_python}-libdnf
 
 %description
 
@@ -75,6 +77,9 @@ mv %{buildroot}/etc/* %{buildroot}%{_sysconfdir}/
 %exclude /usr/lib/systemd
 
 %changelog
+
+* Sun Jan 10 2021 Morgan Thomas <m@m0rg.dev> 4.5.2-3
+  Rebuilt with pythondistdeps generation.
 
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 4.5.2-2
   Rebuilt with dependency generation.

@@ -2,7 +2,7 @@
 
 Name:           rpm
 Version:        4.16.1.2
-Release:        9%{?dist}
+Release:        11%{?dist}
 Summary:        The RPM Package Manager (RPM) is a powerful package management system.
 
 License:        GPLv2
@@ -17,6 +17,8 @@ Patch0:         rpm-0001-macos-arm64.patch
 Patch1:         rpm-0002-lua-rawlen.patch
 Patch2:         rpm-0003-bsd-sed.patch
 Patch3:         rpm-0004-pkgconfig-path.patch
+Patch4:         rpm-0005-python-paths.patch
+Patch5:         rpm-0006-pythondist-paths.patch
 
 Source1:        rpm-1000-macros.src
 Source2:        rpm-1001-mach-fileattrs.src
@@ -65,6 +67,12 @@ Requires:       libzstd-devel
 The librpm-devel package contains libraries and header files for
 developing applications that use librpm.
 
+%package     -n python%{system_python}-librpm
+Summary:        Python %{system_python} bindings for %{name}
+Requires:       librpm%{?_isa} = %{version}-%{release}
+Provides:       python3-librpm
+
+%description -n python%{system_python}-librpm
 
 %prep
 echo "%SHA256SUM0  %SOURCE0" | shasum -a256 -c -
@@ -123,7 +131,6 @@ rm %{buildroot}%{_prefix}/lib/rpm/fileattrs/perl*.attr
 %{_prefix}/lib/librpmsign.*.dylib
 %{_prefix}/lib/rpm-plugins
 %{_prefix}/lib/rpm
-%{_prefix}/lib*/python%{system_python}/site-packages/rpm
 
 %files -n librpm-devel
 %{_prefix}/lib/librpm.dylib
@@ -133,7 +140,16 @@ rm %{buildroot}%{_prefix}/lib/rpm/fileattrs/perl*.attr
 %{_prefix}/lib/pkgconfig/*.pc
 %{_includedir}/rpm
 
+%files -n python%{system_python}-librpm
+%{_prefix}/lib*/python%{system_python}/site-packages/rpm
+
 %changelog
+
+* Sun Jan 10 2021 Morgan Thomas <m@m0rg.dev> 4.16.1.2-11
+  Rebuilt with pythondistdeps generation.
+
+* Sun Jan 10 2021 Morgan Thomas <m@m0rg.dev> 4.16.1.2-10
+  Fix paths in fileattrs/python.attr.
 
 * Sun Jan 10 2021 Morgan Thomas <m@m0rg.dev> 4.16.1.2-9
   Turn pythondistdeps.py back on.

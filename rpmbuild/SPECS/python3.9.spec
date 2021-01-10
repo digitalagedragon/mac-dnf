@@ -5,7 +5,7 @@
 
 Name:           python%{pybasever}
 Version:        %{general_version}
-Release:        8%{?dist}
+Release:        10%{?dist}
 Summary:        The Python programming language
 
 License:        Python-2.0
@@ -98,6 +98,12 @@ rm -fv %{buildroot}/%{_mandir}/man1/python3.1*
 %{_prefix}/lib/pkgconfig/*.pc
 
 %changelog
+
+* Sun Jan 10 2021 Morgan Thomas <m@m0rg.dev> 3.9.1-10
+  Rebuilt with pythondistdeps generation (take 2).
+
+* Sun Jan 10 2021 Morgan Thomas <m@m0rg.dev> 3.9.1-9
+  Rebuilt with pythondistdeps generation.
 
 * Thu Dec 31 2020 Morgan Thomas <m@m0rg.dev> 3.9.1-8
   Move the python3 symlinks into the unversioned package.
