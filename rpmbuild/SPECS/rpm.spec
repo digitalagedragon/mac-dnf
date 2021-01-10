@@ -2,7 +2,7 @@
 
 Name:           rpm
 Version:        4.16.1.2
-Release:        8%{?dist}
+Release:        9%{?dist}
 Summary:        The RPM Package Manager (RPM) is a powerful package management system.
 
 License:        GPLv2
@@ -106,7 +106,6 @@ sed -e "s|^/usr|%_prefix|" -Iold %{buildroot}%{_prefix}/lib/rpm/find-requires
 
 # TODO... just TODO
 rm %{buildroot}%{_prefix}/lib/rpm/fileattrs/perl*.attr
-rm %{buildroot}%{_prefix}/lib/rpm/fileattrs/python*.attr
 
 %find_lang rpm
 
@@ -135,6 +134,9 @@ rm %{buildroot}%{_prefix}/lib/rpm/fileattrs/python*.attr
 %{_includedir}/rpm
 
 %changelog
+
+* Sun Jan 10 2021 Morgan Thomas <m@m0rg.dev> 4.16.1.2-9
+  Turn pythondistdeps.py back on.
 
 * Mon Dec 28 2020 Morgan Thomas <m@m0rg.dev> 4.16.1.2-8
   Use pkgconfig dependencies.
