@@ -12,7 +12,7 @@ BuildArch:      noarch
 
 # X10-Update-Spec: { "type": "git-tags",
 # X10-Update-Spec:   "repo": "https://github.com/dylanaraps/neofetch.git",
-# X10-Update-Spec:   "pattern": "^(\\d+\\.\\d+\\.\\d+)$" }
+# X10-Update-Spec:   "pattern": "^(\\d+\\.\\d+(?:\\.\\d+)?)$" }
 
 Patch0:         neofetch-0001-macos-rpm.patch
 

@@ -1,23 +1,23 @@
 %define system_python 3.9
 
-Name:           aws-cli
-Version:        2.1.17
+Name:           python-wcwidth-0.1
+Version:        0.1.9
 Release:        1%{?dist}
-Summary:        Official AWS command-line interface
+Summary:        Library for building powerful interactive command lines in Python
 
 License:        MIT
-URL:            https://github.com/aws/aws-cli
+URL:            https://github.com/jquast/wcwidth
 %undefine       _disable_source_fetch
 
 # X10-Update-Spec: { "type": "git-tags",
-# X10-Update-Spec:   "repo": "https://github.com/aws/aws-cli.git",
-# X10-Update-Spec:   "pattern": "^(\\d+\\.\\d+(?:\\.\\d+)?)$" }
+# X10-Update-Spec:   "repo": "https://github.com/jquast/wcwidth.git",
+# X10-Update-Spec:   "pattern": "^(0\\.1(?:\\.\\d+)?)$" }
 
 %description
 
 %prep
 %setup -c -T
-git clone https://github.com/aws/aws-cli.git .
+git clone https://github.com/jquast/wcwidth.git .
 git checkout %{version}
 
 %build
@@ -28,7 +28,6 @@ python%{system_python} setup.py install --skip-build --root %{buildroot}
 
 %files
 %license LICENSE.txt
-%{_bindir}/*
 %{_libdir}/python%{system_python}/site-packages/*
 
 %changelog

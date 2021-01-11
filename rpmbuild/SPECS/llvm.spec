@@ -15,7 +15,7 @@ Source0:        https://github.com/llvm/llvm-project/releases/download/llvmorg-%
 
 # X10-Update-Spec: { "type": "git-tags",
 # X10-Update-Spec:   "repo": "https://github.com/llvm/llvm-project.git",
-# X10-Update-Spec:   "pattern": "^llvmorg-(\\d+\\.\\d+\\.\\d+)$" }
+# X10-Update-Spec:   "pattern": "^llvmorg-(\\d+\\.\\d+(?:\\.\\d+)?)$" }
 
 Patch1:         https://github.com/llvm/llvm-project/commit/c86f56e32e724c6018e579bb2bc11e667c96fc96.patch?full_index=1#/llvm-0001-standalone-zlib.patch
 Patch2:         https://github.com/llvm/llvm-project/commit/31e5f7120bdd2f76337686d9d169b1c00e6ee69c.patch?full_index=1#/llvm-0002-zlib-from-cmake.patch

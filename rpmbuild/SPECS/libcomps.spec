@@ -13,7 +13,7 @@ Source0:        https://github.com/rpm-software-management/libcomps/archive/%{na
 
 # X10-Update-Spec: { "type": "git-tags",
 # X10-Update-Spec:   "repo": "https://github.com/rpm-software-management/libcomps.git",
-# X10-Update-Spec:   "pattern": "^libcomps-(\\d+\\.\\d+\\.\\d+)$" }
+# X10-Update-Spec:   "pattern": "^libcomps-(\\d+\\.\\d+(?:\\.\\d+)?)$" }
 
 BuildRequires:  cmake
 

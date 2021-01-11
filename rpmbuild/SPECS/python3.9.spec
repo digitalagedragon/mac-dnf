@@ -5,7 +5,7 @@
 
 Name:           python%{pybasever}
 Version:        %{general_version}
-Release:        10%{?dist}
+Release:        11%{?dist}
 Summary:        The Python programming language
 
 License:        Python-2.0
@@ -30,6 +30,9 @@ Requires:       libpython%{pybasever} = %{version}-%{release}
 Requires:       libintl
 Requires:       libsqlite
 Requires:       libopenssl
+
+Provides:       python3dist(importlib-metadata)
+Provides:       python%{pybasever}dist(importlib-metadata)
 
 # lib2to3 breaks all kinds of stuff on Fedora
 # Turn off the brp-python-bytecompile script
@@ -98,6 +101,9 @@ rm -fv %{buildroot}/%{_mandir}/man1/python3.1*
 %{_prefix}/lib/pkgconfig/*.pc
 
 %changelog
+
+* Sun Jan 10 2021 Morgan Thomas <m@m0rg.dev> 3.9.1-11
+  Provide python3dist(importlib-metadata) (part of stdlib since 3.8)
 
 * Sun Jan 10 2021 Morgan Thomas <m@m0rg.dev> 3.9.1-10
   Rebuilt with pythondistdeps generation (take 2).

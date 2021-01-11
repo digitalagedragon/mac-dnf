@@ -19,7 +19,7 @@ Patch4:         libdnf-0005-posixify-regex.patch
 
 # X10-Update-Spec: { "type": "git-tags",
 # X10-Update-Spec:   "repo": "https://github.com/rpm-software-management/libdnf.git",
-# X10-Update-Spec:   "pattern": "^(\\d+\\.\\d+\\.\\d+)$" }
+# X10-Update-Spec:   "pattern": "^(\\d+\\.\\d+(?:\\.\\d+)?)$" }
 
 BuildRequires:  cmake swig gettext
 BuildRequires:  pkg-config

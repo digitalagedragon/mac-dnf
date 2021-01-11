@@ -1,34 +1,33 @@
 %define system_python 3.9
 
-Name:           aws-cli
-Version:        2.1.17
+Name:           python-six
+Version:        1.15.0
 Release:        1%{?dist}
-Summary:        Official AWS command-line interface
+Summary:        python 2 and 3 compatibility library
 
 License:        MIT
-URL:            https://github.com/aws/aws-cli
+URL:            https://github.com/benjaminp/six
 %undefine       _disable_source_fetch
 
 # X10-Update-Spec: { "type": "git-tags",
-# X10-Update-Spec:   "repo": "https://github.com/aws/aws-cli.git",
+# X10-Update-Spec:   "repo": "https://github.com/benjaminp/six.git",
 # X10-Update-Spec:   "pattern": "^(\\d+\\.\\d+(?:\\.\\d+)?)$" }
 
 %description
 
 %prep
 %setup -c -T
-git clone https://github.com/aws/aws-cli.git .
+git clone https://github.com/benjaminp/six.git .
 git checkout %{version}
 
 %build
 python%{system_python} setup.py build
 
 %install
-python%{system_python} setup.py install --skip-build --root %{buildroot}
+python%{system_python} setup.py install --skip-build --root %{buildroot} --single-version-externally-managed
 
 %files
-%license LICENSE.txt
-%{_bindir}/*
+%license LICENSE
 %{_libdir}/python%{system_python}/site-packages/*
 
 %changelog

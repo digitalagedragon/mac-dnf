@@ -13,7 +13,7 @@ Source0:        https://github.com/miloyip/rapidjson/archive/v%{version}.tar.gz#
 
 # X10-Update-Spec: { "type": "git-tags",
 # X10-Update-Spec:   "repo": "https://github.com/miloyip/rapidjson.git",
-# X10-Update-Spec:   "pattern": "^v(\\d+\\.\\d+\\.\\d+)$" }
+# X10-Update-Spec:   "pattern": "^v(\\d+\\.\\d+(?:\\.\\d+)?)$" }
 
 BuildRequires:  doxygen
 BuildRequires:  cmake%{system_cmake}

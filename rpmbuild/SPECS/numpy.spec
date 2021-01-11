@@ -13,7 +13,7 @@ Source0:        https://github.com/numpy/numpy/releases/download/v%{version}/num
 
 # X10-Update-Spec: { "type": "git-tags",
 # X10-Update-Spec:   "repo": "https://github.com/numpy/numpy.git",
-# X10-Update-Spec:   "pattern": "^v(\\d+\\.\\d+\\.\\d+)$" }
+# X10-Update-Spec:   "pattern": "^v(\\d+\\.\\d+(?:\\.\\d+)?)$" }
 
 BuildRequires:  python%{system_python}
 BuildRequires:  python%{system_python}dist(cython)

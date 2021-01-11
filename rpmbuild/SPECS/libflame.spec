@@ -11,7 +11,7 @@ Source0:        https://github.com/flame/libflame/archive/%{version}.tar.gz#/%{n
 
 # X10-Update-Spec: { "type": "git-tags",
 # X10-Update-Spec:   "repo": "https://github.com/flame/libflame.git",
-# X10-Update-Spec:   "pattern": "^(\\d+\\.\\d+\\.\\d+)$" }
+# X10-Update-Spec:   "pattern": "^(\\d+\\.\\d+(?:\\.\\d+)?)$" }
 
 BuildRequires:  gcc
 

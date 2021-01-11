@@ -16,7 +16,7 @@ Source0:        https://github.com/Kitware/CMake/releases/download/v%{version}/c
 
 # X10-Update-Spec: { "type": "git-tags",
 # X10-Update-Spec:   "repo": "https://github.com/Kitware/CMake.git",
-# X10-Update-Spec:   "pattern": "^v(\\d+\\.\\d+\\.\\d+)$" }
+# X10-Update-Spec:   "pattern": "^v(\\d+\\.\\d+(?:\\.\\d+)?)$" }
 
 %undefine _annotated_build
 %global debug_package %{nil}

@@ -18,7 +18,7 @@ Patch2:         dnf-0003-first-run-mark.patch
 
 # X10-Update-Spec: { "type": "git-tags",
 # X10-Update-Spec:   "repo": "https://github.com/rpm-software-management/dnf.git",
-# X10-Update-Spec:   "pattern": "^(\\d+\\.\\d+\\.\\d+)$" }
+# X10-Update-Spec:   "pattern": "^(\\d+\\.\\d+(?:\\.\\d+)?)$" }
 
 BuildRequires:  librpm-devel
 BuildRequires:  libsolv-devel

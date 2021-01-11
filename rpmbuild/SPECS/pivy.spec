@@ -13,7 +13,7 @@ Source0:        https://github.com/coin3d/pivy/archive/%{version}.tar.gz#/%{name
 
 # X10-Update-Spec: { "type": "git-tags",
 # X10-Update-Spec:   "repo": "https://github.com/coin3d/pivy.git",
-# X10-Update-Spec:   "pattern": "^(\\d+\\.\\d+\\.\\d+)$" }
+# X10-Update-Spec:   "pattern": "^(\\d+\\.\\d+(?:\\.\\d+)?)$" }
 
 BuildRequires:  python%{system_python}
 BuildRequires:  cmake

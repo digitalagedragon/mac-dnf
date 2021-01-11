@@ -13,7 +13,7 @@ Source0:        https://github.com/rpm-software-management/createrepo_c/archive/
 
 # X10-Update-Spec: { "type": "git-tags",
 # X10-Update-Spec:   "repo": "https://github.com/rpm-software-management/createrepo_c.git",
-# X10-Update-Spec:   "pattern": "^(\\d+\\.\\d+\\.\\d+)$" }
+# X10-Update-Spec:   "pattern": "^(\\d+\\.\\d+(?:\\.\\d+)?)$" }
 
 BuildRequires:  libmagic-devel
 BuildRequires:  glib2-devel

@@ -63,15 +63,25 @@ Provides:       python3-%{name} = %{version}-%{release}
 
 # --------
 
+%define system_python 3.9
+
+%build
+python%{system_python} setup.py build
+
+%install
+python%{system_python} setup.py install --skip-build --root %{buildroot} --single-version-externally-managed
+
+# --------
+
 # X10-Update-Spec: { "type": "webscrape", "url": ""}
 
 # X10-Update-Spec: { "type": "git-tags",
 # X10-Update-Spec:   "repo": "",
-# X10-Update-Spec:   "pattern": "^v(\\d+\\.\\d+\\.\\d+)$" }
+# X10-Update-Spec:   "pattern": "^v(\\d+\\.\\d+(?:\\.\\d+)?)$" }
 
 # X10-Update-Spec: { "type": "webscrape",
-# X10-Update-Spec:   "url": "(?:href=\"|/)\\w+-((?:\\d+\\.)*\\d+)\\.tar\\..z2?\"",
-# X10-Update-Spec:   "pattern": "^v(\\d+\\.\\d+\\.\\d+)$" }
+# X10-Update-Spec:   "url": "",
+# X10-Update-Spec:   "pattern": "(?:href=\"|/)\\w+-((?:\\d+\\.)*\\d+)\\.tar\\..z2?\"" }
 
 # --------
 

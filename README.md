@@ -37,7 +37,7 @@ postgresql | ✘ |
 python@3.8 | ✔✘ | `python3.8`, but no library support yet
 imagemagick | ✘ |
 youtube-dl | ✘ |
-awscli | ✘ |
+awscli | ✔ | `aws-cli`
 git | ✘ |
 openssl@1.1 | ✔ | `libopenssl`
 yarn | ✘ |

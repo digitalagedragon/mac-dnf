@@ -13,7 +13,7 @@ Source0:        https://github.com/coin3d/coin/releases/download/Coin-%{version}
 
 # X10-Update-Spec: { "type": "git-tags",
 # X10-Update-Spec:   "repo": "https://github.com/coin3d/coin",
-# X10-Update-Spec:   "pattern": "^Coin-(\\d+\\.\\d+\\.\\d+)$" }
+# X10-Update-Spec:   "pattern": "^Coin-(\\d+\\.\\d+(?:\\.\\d+)?)$" }
 
 BuildRequires:  cmake
 BuildRequires:  cmake3.18

@@ -11,7 +11,7 @@ Source0:        https://gitlab.com/libeigen/eigen/-/archive/%{version}/eigen-%{v
 
 # X10-Update-Spec: { "type": "git-tags",
 # X10-Update-Spec:   "repo": "https://gitlab.com/libeigen/eigen.git",
-# X10-Update-Spec:   "pattern": "^(\\d+\\.\\d+\\.\\d+)$" }
+# X10-Update-Spec:   "pattern": "^(\\d+\\.\\d+(?:\\.\\d+)?)$" }
 
 BuildRequires:  cmake
 
