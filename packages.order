@@ -107,6 +107,7 @@ python-distlib
 python-virtualenv
 python-tox
 python-wheel
+python-pip
 python-ruamel-yaml-0.15
 python-attrs
 python-pyrsistent

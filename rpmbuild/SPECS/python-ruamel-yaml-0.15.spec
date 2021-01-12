@@ -11,6 +11,7 @@ URL:            https://github.com/pypa/wheel
 Source0:        https://files.pythonhosted.org/packages/9a/ee/55cd64bbff971c181e2d9e1c13aba9a27fd4cd2bee545dbe90c44427c757/ruamel.yaml-0.15.100.tar.gz
 %define         SHA256SUM0 8e42f3067a59e819935a2926e247170ed93c8f0b2ab64526f888e026854db2e4
 
+BuildRequires:  python-pip
 BuildRequires:  libpython%{system_python}-devel
 
 %description
