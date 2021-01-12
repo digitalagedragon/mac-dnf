@@ -13,6 +13,8 @@ URL:            https://pip.pypa.io/
 # X10-Update-Spec:   "repo": "https://github.com/pypa/pip.git",
 # X10-Update-Spec:   "pattern": "^(\\d+\\.\\d+(?:\\.\\d+)?)$" }
 
+# RPM-Audit-Skip Audit::MacOSBinaryShadowing (expected package behavior)
+
 %description
 
 %prep
@@ -27,7 +29,8 @@ python%{system_python} setup.py build
 python%{system_python} setup.py install --skip-build --root %{buildroot}
 
 %files
-%license LICENSE
+%license LICENSE.txt
+%{_bindir}/*
 %{_libdir}/python%{system_python}/site-packages/*
 
 %changelog
