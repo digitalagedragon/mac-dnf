@@ -83,6 +83,8 @@ python%{system_python} setup.py install --skip-build --root %{buildroot} --singl
 # X10-Update-Spec:   "url": "",
 # X10-Update-Spec:   "pattern": "(?:href=\"|/)\\w+-((?:\\d+\\.)*\\d+)\\.tar\\..z2?\"" }
 
+# X10-Update-Spec: { "type": "none" }
+
 # --------
 
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 0.21-4
