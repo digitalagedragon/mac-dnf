@@ -1,8 +1,8 @@
 %define system_python 3.9
 
-Name:           python-colorama
+Name:           python-colorama-0.4.3
 Version:        0.4.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Library for building powerful interactive command lines in Python
 
 License:        BSD
@@ -27,3 +27,6 @@ python%{system_python} setup.py install --skip-build --root %{buildroot}
 %{_libdir}/python%{system_python}/site-packages/*
 
 %changelog
+
+* Sun Jan 17 2021 Morgan Thomas <m@m0rg.dev> 0.4.3-2
+  Explicitly call this python-colorama-0.4.3 to avoid DNF errors
