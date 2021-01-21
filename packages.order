@@ -131,3 +131,4 @@ python-s3transfer
 python-colorama
 python-colorama-0.4.3
 aws-cli
+universal-packages-are-deprecated
