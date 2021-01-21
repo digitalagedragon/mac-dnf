@@ -1,6 +1,6 @@
 Name:       universal-packages-are-deprecated
 Version:    1
-Release:    1%{?dist}
+Release:    2%{?dist}
 Summary:    Universal packages are deprecated
 
 License:    Public domain
@@ -11,7 +11,7 @@ Obsoletes:  glib2-universal <= 2.67.1-2
 Obsoletes:  libffi-universal <= 3.3-4
 Obsoletes:  libpcre-universal <= 8.44-4
 Obsoletes:  libpixman-universal <= 0.40.0-3
-Obsoletes:  libgpg-error <= 1.41-2
+Obsoletes:  libgpg-error-universal <= 1.41-2
 Obsoletes:  libgcrypt-universal <= 1.8.7-5
 
 %description
@@ -25,3 +25,6 @@ installing old -universal packages by mistake.
 %files
 
 %changelog
+
+* Thu Jan 21 2021 Morgan Thomas <m@m0rg.dev> 1-2
+  Obsolete libgpg-error-universal, not libgpg-error...
