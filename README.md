@@ -1,13 +1,40 @@
 # macdnf
 
-A port of Fedora's [dnf](https://github.com/rpm-software-management/dnf) package manager to macOS, and a (currently small) package repository.
-Supports both x86_64 and arm64 machines.
+A port of Fedora's [dnf](https://github.com/rpm-software-management/dnf) package
+manager to macOS, and a compatible package repository.
 
-**If you are on arm64 please do not try to install qemu or any `-universal` packages because they're broken**
+Supports both x86_64 and arm64 machines, though some packages (notably `qemu`
+and `gcc`) are not yet operational on arm64 due to lack of upstream support.
 
-(or if you do please do not come put in an issue about how it didn't work)
+Since the package repository is small (but getting bigger!) and I am one person
+working on this, I'm interested to hear about what people want to use! If you've
+decided to try this out (for some reason) and you're missing your favorite
+packages from `brew` or whatever, put in an issue and I'll prioritize porting
+them.
 
 ## Installation
+
+**This conflicts with Homebrew!** I have vague aspirations of changing this, but
+`dnf` and `rpm` are set up to assume that packages will be installed in the same
+place (here `/usr/local`) everywhere, so modifying them to support
+arbitrary-prefix installations is a non-trivial amount of work. I definitely
+think it's possible, I just haven't really sat down and hashed out what needs to
+change yet.
+
+If you do have Homebrew installed, the following commands _should_ get it out of
+the way in a reversible manner:
+
+```
+# Unlink all your Homebrew packages
+brew list -1 | tee brew_previously_linked.txt | xargs -n 1 brew unlink
+# Put them back later (if you want)
+<brew_previously_linked.txt xargs -n 1 brew link
+```
+
+YMMV, though. I don't use `brew` anywhere at the moment (all my macOS machines
+are using `dnf` now) so I haven't tested that.
+
+Then, to install `dnf`:
 
 ```
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/digitalagedragon/mac-dnf/main/install.sh)"
