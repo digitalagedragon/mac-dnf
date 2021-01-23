@@ -1,8 +1,6 @@
-%enable_universal
-
-Name:           %{universal libgpg-error}
+Name:           libgpg-error
 Version:        1.41
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Libgpg-error is a small library that originally defined common error values for all GnuPG components.
 
 License:        LGPLv2+
@@ -15,29 +13,23 @@ Source0:        https://gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-%{version
 # X10-Update-Spec:   "url": "https://gnupg.org/ftp/gcrypt/libgpg-error",
 # X10-Update-Spec:   "pattern": "(?:href=\"|/)libgpg-error-((?:\\d+\\.)*\\d+)\\.tar\\..z2?\""}
 
-BuildRequires:  %{universal libintl}
-
-Requires:       %{universal libintl}
-
-%uprovides libgpg-error
+BuildRequires:  gettext
 
 %description
 
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-%uprovides libgpg-error devel
 
 %description    devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
-%package     -n %{universal gpg-error}
+%package     -n gpg-error
 Summary:        Utility programs for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-%uprovides gpg-error
 
-%description -n %{universal gpg-error}
+%description -n gpg-error
 
 
 %prep
@@ -46,13 +38,11 @@ echo "%SHA256SUM0  %SOURCE0" | shasum -a256 -c -
 
 %build
 
-%ufor
-%configure --libdir=%{_prefix}/lib
+%configure
 %make_build
-%udone
 
 %install
-%uinstall
+%make_install
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 rm -f %{buildroot}%{_infodir}/dir
@@ -76,11 +66,14 @@ rm -f %{buildroot}%{_infodir}/dir
 %{_datadir}/aclocal/*.m4
 %{_datadir}/common-lisp/source/gpg-error
 
-%files -n %{universal gpg-error}
+%files -n gpg-error
 %{_prefix}/bin/gpg-error
 %{_prefix}/bin/yat2m
 
 %changelog
+
+* Fri Jan 22 2021 Morgan Thomas <m@m0rg.dev> 1.41-3
+  Remove -universal package.
 
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 1.41-2
   Rebuilt with dependency generation.

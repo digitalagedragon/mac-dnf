@@ -14,7 +14,7 @@ SPEC=$1
 shift
 
 BUILDREQUIRES=$(rpmspec -q --buildrequires $SPEC $@)
-[ -n "$BUILDREQUIRES" ] && dnf install -y --best --allowerasing $BUILDREQUIRES
+[ -n "$BUILDREQUIRES" ] && dnf install -y  $BUILDREQUIRES
 rpmbuild -ba $SPEC $@
 sh createrepo.sh
 perl maint-tools/audit.pl $SPEC || {

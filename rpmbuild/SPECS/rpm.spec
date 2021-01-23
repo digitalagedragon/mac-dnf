@@ -2,7 +2,7 @@
 
 Name:           rpm
 Version:        4.16.1.2
-Release:        12%{?dist}
+Release:        13%{?dist}
 Summary:        The RPM Package Manager (RPM) is a powerful package management system.
 
 License:        GPLv2
@@ -37,7 +37,6 @@ BuildRequires:  xz
 
 Requires:       xz
 Requires:       librpm = %{version}-%{release}
-Requires:       libintl
 Requires:       libmagic
 Requires:       libpopt
 Requires:       libarchive
@@ -145,6 +144,9 @@ rm %{buildroot}%{_prefix}/lib/rpm/fileattrs/perl*.attr
 %{_prefix}/lib*/python%{system_python}/site-packages/rpm
 
 %changelog
+
+* Fri Jan 22 2021 Morgan Thomas <m@m0rg.dev> 4.16.1.2-13
+  Remove obsolete libintl dependency.
 
 * Sun Jan 10 2021 Morgan Thomas <m@m0rg.dev> 4.16.1.2-12
   Require setuptools as pythondistdeps depends on it.

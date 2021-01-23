@@ -1,10 +1,8 @@
-%enable_universal
-
 %define libname gettext
 
-Name:           %{universal %{libname}}
+Name:           %{libname}
 Version:        0.21
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        An internationalization library
 
 License:        GPLv3+
@@ -15,9 +13,6 @@ Source0:        https://ftp.gnu.org/pub/gnu/%{libname}/%{libname}-%{version}.tar
 
 # X10-Update-Spec: { "type": "webscrape", "url": "https://ftp.gnu.org/gnu/gettext/"}
 
-%uprovides gettext
-%uprovides libintl
-
 %description
 
 %prep
@@ -26,13 +21,12 @@ echo "%SHA256SUM0  %SOURCE0" | shasum -a256 -c -
 
 %build
 
-%ufor
-%configure --disable-static --libdir=%{_prefix}/lib
+%configure --disable-static
 %make_build
-%udone
 
 %install
-%uinstall %{__make} install DESTDIR=%{ubuildroot} INSTALL="%{__install} -p" && chmod +x %{ubuildroot}/%{_libdir}/libintl.8.dylib
+%make_install
+chmod +x %{buildroot}/%{_libdir}/libintl.8.dylib
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 rm -f %{buildroot}%{_infodir}/dir
@@ -78,6 +72,9 @@ rm -f %{buildroot}%{_infodir}/dir
 %doc %{_docdir}/libtextstyle
 %doc %{_docdir}/libasprintf
 %changelog
+
+* Fri Jan 22 2021 Morgan Thomas <m@m0rg.dev> 0.21-5
+  Remove -universal package.
 
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 0.21-4
   Rebuilt with dependency generation.
