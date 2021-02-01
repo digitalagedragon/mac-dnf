@@ -33,7 +33,6 @@ echo "%SHA256SUM0  %SOURCE0" | shasum -a256 -c -
 sed -i.orig -e '/sphinxcontrib/d' setup.py
 
 %build
-bash
 python%{system_python} setup.py build
 
 %install
