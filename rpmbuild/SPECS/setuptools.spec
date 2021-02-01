@@ -1,15 +1,15 @@
 %define system_python 3.9
 
 Name:           setuptools
-Version:        51.1.1
-Release:        2%{?dist}
+Version:        52.0.0
+Release:        1%{?dist}
 Summary:        Easily download, build, install, upgrade, and uninstall Python packages
 
 License:        MIT
 URL:            https://pypi.org/project/setuptools/
 %undefine       _disable_source_fetch
 Source0:        https://github.com/pypa/%{name}/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
-%define         SHA256SUM0 97434f60d427e33cbcbd69003a20596f66a8643079858a8768574a8b73a97dbd
+%define         SHA256SUM0 ff0c74d1b905a224d647f99c6135eacbec2620219992186b81aa20012bc7f882
 BuildArch:      noarch
 
 # X10-Update-Spec: { "type": "git-tags",
@@ -44,12 +44,16 @@ python%{system_python} setup.py install --skip-build --root %{buildroot}
 
 %files
 %license LICENSE
-%{_bindir}/*
+# empty package. i guess easy_install is gone?
 
 %files -n python%{system_python}-%{name}
+%license LICENSE
 %{_prefix}/lib/python%{system_python}/site-packages/*
 
 %changelog
+
+* Mon Jan 25 2021 Morgan Thomas <m@m0rg.dev> 52.0.0-1
+  Updated to version 52.0.0.
 
 * Sun Jan 10 2021 Morgan Thomas <m@m0rg.dev> 51.1.1-2
   Rebuilt with pythondistdeps generation.

@@ -1,17 +1,18 @@
 %define system_cmake 3.19
 
 Name:           libsolv
-Version:        0.7.16
-Release:        5%{?dist}
+Version:        0.7.17
+Release:        1%{?dist}
 Summary:        libsolv is a free package dependency solver using a satisfiability algorithm.
 
 License:        BSD-3-Clause
 URL:            https://github.com/openSUSE/libsolv
 %undefine       _disable_source_fetch
 Source0:        https://github.com/openSUSE/%{name}/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
-%define         SHA256SUM0 ed1753255792e9ae0582a1904c4baba5801036ef3efd559b65027e14ee1ea282
+%define         SHA256SUM0 7567f9e3ff47705d36486797220bddf4e858d5c8deb5167bd77d8d55c761f65b
 
-Patch0:         libsolv-0001-rpmdb-usrlocal.patch
+# detects from RPM configuration as of 0.7.17
+# Patch0:         libsolv-0001-rpmdb-usrlocal.patch
 
 # X10-Update-Spec: { "type": "git-tags",
 # X10-Update-Spec:   "repo": "https://github.com/openSUSE/libsolv.git",
@@ -77,6 +78,9 @@ mv -v %{buildroot}%{_datadir}/cmake %{buildroot}%{_datadir}/cmake-%{system_cmake
 %doc %{_mandir}/man3/*
 
 %changelog
+
+* Mon Jan 25 2021 Morgan Thomas <m@m0rg.dev> 0.7.17-1
+  Updated to version 0.7.17.
 
 * Mon Dec 28 2020 Morgan Thomas <m@m0rg.dev> 0.7.16-5
   Use pkgconfig dependencies.

@@ -1,7 +1,7 @@
 %define system_python 3.9
 
 Name:           python-s3transfer
-Version:        0.3.3
+Version:        0.3.4
 Release:        1%{?dist}
 Summary:        An Amazon S3 Transfer Manager
 
@@ -31,3 +31,6 @@ python%{system_python} setup.py install --skip-build --root %{buildroot}
 %{_libdir}/python%{system_python}/site-packages/*
 
 %changelog
+
+* Mon Jan 25 2021 Morgan Thomas <m@m0rg.dev> 0.3.4-1
+  Updated to version 0.3.4.

@@ -1,13 +1,13 @@
 Name:           asciidoc
-Version:        9.0.4
-Release:        2%{?dist}
+Version:        9.0.5
+Release:        1%{?dist}
 Summary:        An ASCII-based markup format
 
 License:        GPLv2+
 URL:            https://asciidoc.org/
 %undefine       _disable_source_fetch
 Source0:        https://github.com/asciidoc/asciidoc-py3/releases/download/%{version}/%{name}-%{version}.tar.gz
-%define         SHA256SUM0 400368a43f3eee656d7f197382cd3554b50fb370ef2aea6534f431692a356c66
+%define         SHA256SUM0 1a20647eb62ca37bc8107affab968caa0f674f0e962b497d1674391f636c7038
 
 BuildArch:      noarch
 
@@ -38,6 +38,9 @@ sed -e '/^XMLLINT/s/xmllint//' -i.orig a2x.py
 %doc %{_mandir}/man1/*
 
 %changelog
+
+* Mon Jan 25 2021 Morgan Thomas <m@m0rg.dev> 9.0.5-1
+  Updated to version 9.0.5.
 
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 9.0.4-2
   Rebuilt with dependency generation.

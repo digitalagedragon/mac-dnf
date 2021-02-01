@@ -1,5 +1,5 @@
 Name:           wget
-Version:        1.21
+Version:        1.21.1
 Release:        1%{?dist}
 Summary:        Internet file retriever
 
@@ -7,7 +7,7 @@ License:        GPLv3+
 URL:            https://www.gnu.org/software/wget/
 %undefine       _disable_source_fetch
 Source0:        https://ftp.gnu.org/gnu/wget/wget-%{version}.tar.gz
-%define         SHA256SUM0 b3bc1a9bd0c19836c9709c318d41c19c11215a07514f49f89b40b9d50ab49325
+%define         SHA256SUM0 59ba0bdade9ad135eda581ae4e59a7a9f25e3a4bde6a5419632b31906120e26e
 
 # X10-Update-Spec: { "type": "webscrape",
 # X10-Update-Spec:   "url": "https://ftp.gnu.org/gnu/wget/",
@@ -23,17 +23,8 @@ BuildRequires:  pkgconfig(gnutls)
 echo "%SHA256SUM0  %SOURCE0" | shasum -a256 -c -
 %autosetup
 
-patch -p1 <<EOF
---- a/lib/utime.c
-+++ b/lib/utime.c
-@@ -261,6 +261,7 @@ utime (const char *name, const struct utimbuf *ts)
- 
- #else
- 
-+# include <errno.h>
- # include <sys/stat.h>
- # include "filename.h"
-EOF
+# stupid GNU extensions again
+sed -i.orig 's/__nonnull ((1))//' lib/malloc/dynarray-skeleton.c
 
 %build
 %configure \
@@ -62,3 +53,8 @@ echo 'ca_certificate = /etc/ssl/cert.pem' >> %{buildroot}%{_sysconfdir}/wgetrc
 %config %{_sysconfdir}/wgetrc
 %{_mandir}/man1/*
 %{_infodir}/*
+
+%changelog
+
+* Mon Jan 25 2021 Morgan Thomas <m@m0rg.dev> 1.21.1-1
+  Updated to version 1.21.1.

@@ -1,5 +1,5 @@
 Name:           node
-Version:        15.5.1
+Version:        15.6.0
 Release:        1%{?dist}
 Summary:        An asynchronous JavaScript runtime
 
@@ -7,7 +7,7 @@ License:        MIT
 URL:            https://nodejs.org
 %undefine       _disable_source_fetch
 Source0:        https://nodejs.org/dist/v%{version}/node-v%{version}.tar.gz
-%define         SHA256SUM0 9730d3099c051bd8733b3e6d62c54ba9b2d82ec40e6c65ee966ba3f346ff4157
+%define         SHA256SUM0 1dd3681e85bb9c8205a331bfac5121050893defb5ad9d04698239aeef4e736b3
 
 # X10-Update-Spec: { "type": "webscrape", "url": "https://nodejs.org/en/", "pattern": "((?:\\d+\\.?)+) Current"}
 
@@ -45,6 +45,9 @@ LIBTOOL=glibtool ./configure --prefix=%{_prefix}
 %doc %{_mandir}/man1/*
 
 %changelog
+
+* Mon Jan 25 2021 Morgan Thomas <m@m0rg.dev> 15.6.0-1
+  Updated to version 15.6.0.
 
 * Wed Jan 06 2021 Morgan Thomas <m@m0rg.dev> 15.5.1-1
   Updated to version 15.5.1.

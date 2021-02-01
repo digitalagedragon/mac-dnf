@@ -9,6 +9,8 @@ License:        Apache-2.0 or BSD
 URL:            https://github.com/pyca/cryptography
 %undefine       _disable_source_fetch
 
+# this needs to be 2.9, not 2.9.2, because other packages have broken dependencies
+
 # X10-Update-Spec: { "type": "git-tags",
 # X10-Update-Spec:   "repo": "https://github.com/pyca/cryptography.git",
 # X10-Update-Spec:   "pattern": "^(2.9(?:\\.\\d+)?)$" }

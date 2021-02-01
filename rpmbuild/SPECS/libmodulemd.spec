@@ -1,15 +1,15 @@
 %define system_python 3.9
 
 Name:           libmodulemd
-Version:        2.11.1
-Release:        2%{?dist}
+Version:        2.12.0
+Release:        1%{?dist}
 Summary:        C Library for manipulating module metadata files
 
 License:        MIT
 URL:            https://github.com/fedora-modularity/libmodulemd
 %undefine       _disable_source_fetch
 Source0:        https://github.com/fedora-modularity/libmodulemd/releases/download/%{name}-%{version}/modulemd-%{version}.tar.xz
-%define         SHA256SUM0 bbb9ca09fe1a732277386afb9f96d150dc1e62c72bc3c0e556ce605c36b7f769
+%define         SHA256SUM0 98646094948c1dfa8810688036105e91841bf8f5fcba983f0ccac8855b3a0e3d
 
 # X10-Update-Spec: { "type": "git-tags",
 # X10-Update-Spec:   "repo": "https://github.com/fedora-modularity/libmodulemd.git",
@@ -78,6 +78,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_bindir}/modulemd-validator
 
 %changelog
+
+* Mon Jan 25 2021 Morgan Thomas <m@m0rg.dev> 2.12.0-1
+  Updated to version 2.12.0.
 
 * Wed Dec 23 2020 Morgan Thomas <m@m0rg.dev> 2.11.1-2
   Rebuilt with dependency generation.

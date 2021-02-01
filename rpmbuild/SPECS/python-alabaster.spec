@@ -1,23 +1,23 @@
 %define system_python 3.9
 
-Name:           python-prompt-toolkit
-Version:        3.0.14
+Name:           python-alabaster
+Version:        0.7.12
 Release:        1%{?dist}
-Summary:        Library for building powerful interactive command lines in Python
+Summary:        A configurable sidebar-enabled Sphinx theme
 
 License:        BSD
-URL:            https://github.com/prompt-toolkit/python-prompt-toolkit
+URL:            https://alabaster.readthedocs.io/en/latest/
 %undefine       _disable_source_fetch
 
 # X10-Update-Spec: { "type": "git-tags",
-# X10-Update-Spec:   "repo": "https://github.com/prompt-toolkit/python-prompt-toolkit.git",
+# X10-Update-Spec:   "repo": "https://github.com/bitprophet/alabaster.git",
 # X10-Update-Spec:   "pattern": "^(\\d+\\.\\d+(?:\\.\\d+)?)$" }
 
 %description
 
 %prep
 %setup -c -T
-git clone https://github.com/prompt-toolkit/python-prompt-toolkit.git .
+git clone https://github.com/bitprophet/alabaster.git .
 git checkout %{version}
 
 %build

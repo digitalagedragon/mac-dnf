@@ -1,7 +1,7 @@
 %define system_python 3.9
 
 Name:           python-pip
-Version:        20.3.3
+Version:        21.0
 Release:        1%{?dist}
 Summary:        The PyPA recommended tool for installing Python packages.
 
@@ -34,3 +34,6 @@ python%{system_python} setup.py install --skip-build --root %{buildroot}
 %{_libdir}/python%{system_python}/site-packages/*
 
 %changelog
+
+* Mon Jan 25 2021 Morgan Thomas <m@m0rg.dev> 21.0-1
+  Updated to version 21.0.

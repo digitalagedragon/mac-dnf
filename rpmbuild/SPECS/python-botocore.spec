@@ -2,8 +2,8 @@
 
 Name:           python-botocore
 # tag your freakin' dev versions!
-%define commit 962bb5d356096c57e25a5579d09e4b4d928c886d
-Version:        2.0.0dev85
+%define commit a0fa222e296e28b7dcb45944ba218fd3ccc6b25b
+Version:        2.0.0dev89
 Release:        1%{?dist}
 Summary:        A low-level interface to a growing number of Amazon Web Services
 
@@ -35,3 +35,6 @@ python%{system_python} setup.py install --skip-build --root %{buildroot}
 %{_libdir}/python%{system_python}/site-packages/*
 
 %changelog
+
+* Sun Jan 31 2021 Morgan Thomas <m@m0rg.dev> 2.0.0dev89
+  Updated to version 2.0.0dev89.

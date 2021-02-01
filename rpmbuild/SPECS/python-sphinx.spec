@@ -1,7 +1,7 @@
 %define system_python 3.9
 
 Name:           python-sphinx
-Version:        3.4.2
+Version:        3.4.3
 Release:        1%{?dist}
 Summary:        A documentation tool
 
@@ -9,7 +9,7 @@ License:        MIT
 URL:            https://www.sphinx-doc.org/en/master/
 %undefine       _disable_source_fetch
 Source0:        https://github.com/sphinx-doc/sphinx/archive/v%{version}.tar.gz#/sphinx-%{version}.tar.gz
-%define         SHA256SUM0 db9be396a5d82ab40880f89ee87bfc9e8916f884388770707763067039213d71
+%define         SHA256SUM0 3e51e5b1eaf2dffbd8318ee10fc5373459b175923d60b1f20227446d04354c7d
 BuildArch:      noarch
 
 # X10-Update-Spec: { "type": "git-tags",
@@ -29,7 +29,11 @@ Requires:       python-setuptools
 echo "%SHA256SUM0  %SOURCE0" | shasum -a256 -c -
 %autosetup -n sphinx-%{version}
 
+# TODO
+sed -i.orig -e '/sphinxcontrib/d' setup.py
+
 %build
+bash
 python%{system_python} setup.py build
 
 %install
@@ -42,6 +46,9 @@ python%{system_python} setup.py install --skip-build --root %{buildroot}
 %{_prefix}/lib/python%{system_python}/site-packages/*
 
 %changelog
+
+* Mon Jan 25 2021 Morgan Thomas <m@m0rg.dev> 3.4.3-1
+  Updated to version 3.4.3.
 
 * Wed Jan 06 2021 Morgan Thomas <m@m0rg.dev> 3.4.2-1
   Updated to version 3.4.2.

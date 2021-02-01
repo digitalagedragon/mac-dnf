@@ -1,7 +1,7 @@
 %define system_python 3.9
 
 Name:           python-virtualenv
-Version:        20.3.0
+Version:        20.4.0
 Release:        1%{?dist}
 Summary:        Virtual Python Environment builder
 
@@ -32,3 +32,6 @@ python%{system_python} setup.py install --skip-build --root %{buildroot} --singl
 %{_libdir}/python%{system_python}/site-packages/*
 
 %changelog
+
+* Mon Jan 25 2021 Morgan Thomas <m@m0rg.dev> 20.4.0-1
+  Updated to version 20.4.0.

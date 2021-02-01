@@ -13,6 +13,9 @@ Source0:        https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-%{version}.tar.
 
 %uprovides libgcrypt
 
+# 1.9.0 held until libdnf update and/or I come up with a better plan for
+# rebuilding packages that will break dnf if not updated at once
+
 # X10-Update-Spec: { "type": "webscrape", "url": "https://gnupg.org/ftp/gcrypt/libgcrypt/"}
 
 BuildRequires: %{universal libgpg-error}-devel

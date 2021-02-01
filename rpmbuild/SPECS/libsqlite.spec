@@ -2,15 +2,16 @@
 %define real_version %(echo %{version} | perl -nE '@v=split /\\./;$v[3]//=0;print shift@v;say map{sprintf("%02d",$_)}@v;')
 
 Name:           lib%{libname}
-Version:        3.34.0
-Release:        3%{?dist}
+Version:        3.34.1
+Release:        1%{?dist}
 Summary:        SQLite is a C-language library that implements a small, fast, self-contained, high-reliability, full-featured, SQL database engine.
 
 License:        Public domain
 URL:            https://sqlite.org
 %undefine       _disable_source_fetch
-Source0:        https://sqlite.org/2020/sqlite-autoconf-%{real_version}.tar.gz
-%define         SHA256SUM0 bf6db7fae37d51754737747aaaf413b4d6b3b5fbacd52bdb2d0d6e5b2edd9aee
+# if you're updating this in the future and find_checksums.sh doesn't work, it's because it's 2022
+Source0:        https://sqlite.org/2021/sqlite-autoconf-%{real_version}.tar.gz
+%define         SHA256SUM0 2a3bca581117b3b88e5361d0ef3803ba6d8da604b1c1a47d902ef785c1b53e89
 
 # X10-Update-Spec: { "type": "webscrape",
 # X10-Update-Spec:   "url": "https://sqlite.org/index.html",
@@ -73,6 +74,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %doc %{_mandir}/man1/*
 
 %changelog
+
+* Mon Jan 25 2021 Morgan Thomas <m@m0rg.dev> 3.34.1-1
+  Updated to version 3.34.1.
 
 * Thu Dec 31 2020 Morgan Thomas <m@m0rg.dev> 3.34.0-3
   Move sqlite3 to /usr/local/opt.
